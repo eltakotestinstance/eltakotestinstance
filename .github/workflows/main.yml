@@ -5,7 +5,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: Jira Example
+    name: opens Jira issue on pull request
     steps:
     - name: Login
       uses: atlassian/gajira-login@master
