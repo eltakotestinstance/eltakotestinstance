@@ -19,8 +19,8 @@ jobs:
       with:
         project: ES1
         issuetype: pull request
-        summary: Pull request in ${{ github.repository }}
-        description: new pull request
+        summary: Pull request from ${{ github.actor}} in ${{ github.repository }} branch ${{ github.branch }}
+        description: Automatet issue from a new pull request
         
 
     - name: Log created issue
