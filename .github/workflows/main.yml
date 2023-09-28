@@ -17,7 +17,7 @@ jobs:
       id: create
       uses: atlassian/gajira-create@v3
       with:
-        project: Eltako Series 16
+        project: ES1
         issuetype: Build
         summary: Pull Requestin ${{ github.repository }}
         description: Compare branch
