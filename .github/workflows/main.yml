@@ -17,9 +17,9 @@ jobs:
       id: create
       uses: atlassian/gajira-create@v3
       with:
-        project: GA
+        project: Eltako Series 16
         issuetype: Build
-        summary: Build completed for ${{ github.repository }}
+        summary: Pull Requestin ${{ github.repository }}
         description: Compare branch
         fields: '{"customfield_10171": "test"}'
 
