@@ -18,7 +18,7 @@ jobs:
       uses: atlassian/gajira-create@v3
       with:
         project: ES1
-        issuetype: Build
+        issuetype: pull request
         summary: Pull Requestin ${{ github.repository }}
         description: Compare branch
         fields: '{"customfield_10171": "test"}'
