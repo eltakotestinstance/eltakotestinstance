@@ -19,7 +19,7 @@ jobs:
       with:
         project: ES1
         issuetype: pull request
-        summary: Pull request from ${{ github.actor}} in ${{ github.repository }} branch ${{ github.branch }}
+        summary: Pull request from ${{ github.actor}} in ${{ github.repository }} branch ${{ github.ref_name }}
         description: Automatet issue from a new pull request
         
 
