@@ -13,11 +13,15 @@ jobs:
         JIRA_USER_EMAIL: jochen.saige@auticon.de
         JIRA_API_TOKEN: ATATT3xFfGF0cnFZRJ2owoK0iw4m_z2BHJs7Fg6Wi5XgGLYQNW36xsiG9_2waEmuMGcJZETG3b0hZ99Niczf14j9xNWqOHYuLZdeLUh72YBmdUYrTxRQ-Fej9CAE62fb3Cco06KhV-muEjRtESSsy6zXerHRYosTVqgCKNV7W4vKGYHXtqESbAE=81273468
 
-    - name: Jira TODO
-      uses: atlassian/gajira-todo@master
+    - name: Create
+      id: create
+      uses: atlassian/gajira-create@v3
       with:
         project: GA
-        issuetype: Task
-        description: Created automatically via GitHub Actions
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        issuetype: Build
+        summary: Build completed for ${{ github.repository }}
+        description: Compare branch
+        fields: '{"customfield_10171": "test"}'
+
+    - name: Log created issue
+      run: echo "Issue ${{ steps.create.outputs.issue }} was created"
