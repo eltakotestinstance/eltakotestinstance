@@ -1,0 +1,23 @@
+on:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Jira Example
+    steps:
+    - name: Login
+      uses: atlassian/gajira-login@master
+      env:
+        JIRA_BASE_URL: https://eltakotestinstance.atlassian.net/
+        JIRA_USER_EMAIL: jochen.saige@auticon.de
+        JIRA_API_TOKEN: ATATT3xFfGF0taR2wf_6LraAYMdh-RdUZ1871poTMUQhie3clWHwcBvQTf_vHt1UMSheUxedH-zkUt7knrW3WhTvFTMHnbcnFyAoPSfak928dwCDQPtb3dZnTrGvwb-jhhV1-quxM2MoOiuHwWLeOqYKBXx2O2rqc_rNYHqbVFBLT43uP23sN-k=33078349
+
+    - name: Jira TODO
+      uses: atlassian/gajira-todo@master
+      with:
+        project: GA
+        issuetype: Task
+        description: Created automatically via GitHub Actions
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
