@@ -19,9 +19,9 @@ jobs:
       with:
         project: ES1
         issuetype: pull request
-        summary: Pull Requestin ${{ github.repository }}
-        description: Compare branch
-        fields: '{"customfield_10171": "test"}'
+        summary: Pull request in ${{ github.repository }}
+        description: new pull request
+        
 
     - name: Log created issue
       run: echo "Issue ${{ steps.create.outputs.issue }} was created"
