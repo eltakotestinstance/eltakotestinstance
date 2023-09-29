@@ -25,7 +25,7 @@ jobs:
         project: ES1
         issuetype: issue
         summary: New Issue from ${{ github.actor}} named ${{ github.event.issue.title }} in ${{ github.repository }} branch ${{ steps.extract_branch.outputs.branch }}
-        description: ${{ github.event.issue.comment }}
+        description: ${{ github.event.issue.body }}
         
 
     - name: Log created issue
