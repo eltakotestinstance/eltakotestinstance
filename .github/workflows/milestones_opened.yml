@@ -1,6 +1,6 @@
 on:
   milestone:
-    types: [opened]
+    types: [created]
 
 jobs:
   build:
