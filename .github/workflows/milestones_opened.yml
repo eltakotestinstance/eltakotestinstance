@@ -1,0 +1,32 @@
+on:
+  milestone:
+    types: [opened]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: opens Jira issue on Github issue
+    steps:
+    - name: Login
+      uses: atlassian/gajira-login@master
+      env:
+        JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+        JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+        JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+    - name: Extract branch name
+      shell: bash
+      run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+      id: extract_branch
+    
+    - name: Create
+      id: create
+      uses: atlassian/gajira-create@v3
+      with:
+        project: ES1
+        issuetype: issue
+        summary: New Issue from ${{ github.event.milestone.creator }} named ${{ github.event.milestone.title }} in ${{ github.repository }} branch ${{ steps.extract_branch.outputs.branch }}
+        description: ${{ github.event.issue.description }}
+        
+
+    - name: Log created issue
+      run: echo "Issue ${{ steps.create.outputs.issue }} was created"
