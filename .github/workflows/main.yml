@@ -1,5 +1,6 @@
 on:
   issues:
+    types: [opened, reopened]
 
 jobs:
   build:
