@@ -23,8 +23,8 @@ jobs:
       uses: atlassian/gajira-create@v3
       with:
         project: ES1
-        issuetype: pull request
-        summary: Pull request from ${{ github.actor}} named ${{ github.event.issue.title }} in ${{ github.repository }} branch ${{ steps.extract_branch.outputs.branch }}
+        issuetype: issue
+        summary: New Issue from ${{ github.actor}} named ${{ github.event.issue.title }} in ${{ github.repository }} branch ${{ steps.extract_branch.outputs.branch }}
         description: Automatet issue from a new pull request
         
 
