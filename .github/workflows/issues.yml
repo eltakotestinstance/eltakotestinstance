@@ -25,7 +25,7 @@ jobs:
         project: ES1
         issuetype: issue
         summary: New Issue from ${{ github.actor}} named ${{ github.event.issue.title }} in ${{ github.repository }} branch ${{ steps.extract_branch.outputs.branch }}
-        description: Automatet issue from a new pull request
+        description: ${{ github.event.issue.comment }}
         
 
     - name: Log created issue
