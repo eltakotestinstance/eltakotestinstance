@@ -23,7 +23,7 @@ jobs:
       uses: atlassian/gajira-create@v3
       with:
         project: ES1
-        issuetype: Epic
+        issuetype: milestone
         summary: New Issue from ${{ github.event.milestone.creator }} named ${{ github.event.milestone.title }} in ${{ github.repository }} branch ${{ steps.extract_branch.outputs.branch }}
         description: ${{ github.event.issue.description }}
         
