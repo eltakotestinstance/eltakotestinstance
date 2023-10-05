@@ -28,8 +28,8 @@ jobs:
         description: ${{ github.event.issue.body }}
         
     -  name: Add labels
-        uses: actions-cool/issues-helper@v3.5.2
-        with:
+       uses: actions-cool/issues-helper@v3.5.2
+       with:
           actions: 'add-labels'
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.issue.number }}
