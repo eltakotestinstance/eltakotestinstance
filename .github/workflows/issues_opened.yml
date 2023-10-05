@@ -4,6 +4,7 @@ on:
 
 jobs:
   build:
+    permissions: write-all
     runs-on: ubuntu-latest
     name: opens Jira issue on Github issue
     steps:
