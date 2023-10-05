@@ -34,6 +34,6 @@ jobs:
           actions: 'add-labels'
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.issue.number }}
-          labels: steps.create.outputs.issue
+          labels: ${{ steps.create.outputs.issue }}
     - name: Log created issue
       run: echo "Issue ${{ steps.create.outputs.issue }} was created"
