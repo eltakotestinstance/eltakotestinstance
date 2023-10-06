@@ -16,7 +16,9 @@ jobs:
     - name: get all label names
       shell: bash
       run: |
-        for label in ${{ github.event.issue.labels }} ; do
+        for label in $labels ; do
           echo ${label[name]}
         done
+      env: 
+        labels: ${{ github.event.issue.labels }}
     
