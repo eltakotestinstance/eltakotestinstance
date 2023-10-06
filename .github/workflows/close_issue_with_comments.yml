@@ -21,7 +21,7 @@ jobs:
           echo "Comments URL: $COMMENTS_URL"
           COMMENTS=$(curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" $COMMENTS_URL | jq -r '.[].body')
           JOINT_COMMENTS=$(echo $COMMENTS | tr '\n' ' ')
-          echo "$JOINT_COMMENTS" >> $GITHUB_OUTPUT
+          echo "$JOINT_COMMENTS" 
 
     - name: output isue
       run: echo "Found issue key is ${{ steps.find.outputs.issue }}"
