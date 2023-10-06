@@ -14,7 +14,7 @@ jobs:
         JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
         JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
     - name: Extract comments
-      id : find
+      id : extract
       run: |
           ISSUE_NUMBER=${{ github.event.issue.number }}
           COMMENTS_URL=${{ github.event.issue.comments_url }}
@@ -22,8 +22,14 @@ jobs:
           echo "Comments URL: $COMMENTS_URL"
           COMMENTS=$(curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" $COMMENTS_URL | jq -r '.[].body')
           JOINT_COMMENTS=$(echo $COMMENTS | tr '\n' ' ')
-          echo "$JOINT_COMMENTS" 
-          
+          echo "::set-output name=joint_comments::$JOINT_COMMENTS"
+
+    - name: Find in labels
+      id: find
+      uses: atlassian/gajira-find-issue-key@v3
+      with:
+        string: ${{ needs.extract.outputs.joint_comments }}
+
     - name: output isue
       run: echo "Found issue key is ${{ steps.find.outputs.issue }}"
    
