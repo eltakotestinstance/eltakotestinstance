@@ -21,5 +21,12 @@ jobs:
 
     - name: output isue
       run: echo "Found issue key is ${{ steps.find.outputs.issue }}"
+   
+    - name: Transition issue to done
+      uses: atlassian/gajira-transition@master
+      with:
+        issue: ${{ steps.find.outputs.issue }}
+        transition: "Done"
+      
     
     
