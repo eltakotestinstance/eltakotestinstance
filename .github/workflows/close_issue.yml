@@ -13,12 +13,13 @@ jobs:
         JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
         JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
         JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
-    - name: get all label names
-      shell: bash
-      run: |
-        for label in $labels ; do
-          echo ${label[name]}
-        done
-      env: 
-        labels: ${{ github.event.issue.labels }}
+    - name: Find in labels
+      id: find
+      uses: atlassian/gajira-find-issue-key@v3
+      with:
+        string: ${{ join(github.event.issue.labels.*.name, ' ') }}
+
+    - name: output isue
+      run: echo "Found issue key is ${{ steps.find.outputs.issue }}"
+    
     
