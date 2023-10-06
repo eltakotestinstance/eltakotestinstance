@@ -17,13 +17,4 @@ jobs:
       run: |
         for label in ${{ github.event.issue.labels }}
           echo "$label.name"
-    - name: Find in labels
-      id: find
-      uses: atlassian/gajira-find-issue-key@v3
-      with:
-        array: ${{ github.event.issue.labels }}
-    - name: Transition issue
-      uses: atlassian/gajira-transition@v3
-      with:
-        issue: ${{ steps.find.outputs.issue }}
-        transition: "closed"
+    
