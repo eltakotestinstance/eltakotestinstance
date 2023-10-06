@@ -28,7 +28,7 @@ jobs:
       id: find
       uses: atlassian/gajira-find-issue-key@v3
       with:
-        string: ${{ needs.extract.outputs.joint_comments }}
+        string: ${{ steps.extract.outputs.joint_comments }}
 
     - name: output isue
       run: echo "Found issue key is ${{ steps.find.outputs.issue }}"
