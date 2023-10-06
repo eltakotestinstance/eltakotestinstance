@@ -17,6 +17,6 @@ jobs:
       shell: bash
       run: |
         for label in ${{ github.event.issue.labels }} ; do
-          echo ${label.name}
+          echo ${label[name]}
         done
     
