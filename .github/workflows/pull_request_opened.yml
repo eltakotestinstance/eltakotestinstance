@@ -33,6 +33,7 @@ jobs:
           uses: actions-cool/issues-helper@v3
           with:
             actions: 'create-comment'
+            issue-number: ${{ github.event.number }}
             token: ${{ secrets.GITHUB_TOKEN }}
             body: ${{ steps.create.outputs.issue }}
             
