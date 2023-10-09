@@ -24,7 +24,7 @@ jobs:
           JOINT_COMMENTS=$(echo $COMMENTS | tr '\n' ' ')
           echo "::set-output name=joint_comments::$JOINT_COMMENTS"
 
-    - name: Find in labels
+    - name: Find in comments
       id: find
       uses: atlassian/gajira-find-issue-key@v3
       with:
