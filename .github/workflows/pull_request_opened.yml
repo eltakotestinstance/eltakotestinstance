@@ -26,15 +26,15 @@ jobs:
         with:
           project: ES1
           issuetype: issue
-          summary: New Issue from ${{ github.actor}} named ${{ github.event.issue.title }} in ${{ github.repository }} branch ${{ steps.extract_branch.outputs.branch }}
-          description: ${{ github.event.issue.body }}
+          summary: New pull request from ${{ github.actor}} named ${{ github.event.pull_request.title }} in ${{ github.repository }} branch ${{ steps.extract_branch.outputs.branch }}
+          description: ${{ github.event.pull_request.body }}
           
       -   name: Create comment
           uses: actions-cool/issues-helper@v3
           with:
             actions: 'create-comment'
+            issue-number: ${{ github.event.number }}
             token: ${{ secrets.GITHUB_TOKEN }}
-            issue-number: ${{ github.event.issue.number }}
             body: ${{ steps.create.outputs.issue }}
             
             
