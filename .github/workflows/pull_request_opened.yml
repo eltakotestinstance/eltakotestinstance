@@ -26,7 +26,7 @@ jobs:
         with:
           project: ES1
           issuetype: issue
-          summary: New Issue from ${{ github.actor}} named ${{ github.event.pull_request.title }} in ${{ github.repository }} branch ${{ steps.extract_branch.outputs.branch }}
+          summary: New pull request from ${{ github.actor}} named ${{ github.event.pull_request.title }} in ${{ github.repository }} branch ${{ steps.extract_branch.outputs.branch }}
           description: ${{ github.event.pull_request.body }}
           
       -   name: Create comment
