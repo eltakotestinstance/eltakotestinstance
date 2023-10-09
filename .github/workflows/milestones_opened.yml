@@ -25,7 +25,7 @@ jobs:
       with:
         project: ES1
         issuetype: Epic
-        summary: New Milestone named ${{ github.event.milestone.title }} in ${{ github.repository }} branch ${{ steps.extract_branch.outputs.branch }}
+        summary: ${{ github.event.milestone.title }} in ${{ github.repository }} branch ${{ steps.extract_branch.outputs.branch }}
         description: ${{ github.event.milestone.description }} 
         
     - name: Log created issue
