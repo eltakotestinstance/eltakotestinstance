@@ -10,12 +10,13 @@ jobs:
         steps:
             - uses: actions/checkout@v4
 
-            - name: Marp Build (README.pdf)
-              uses: docker://marpteam/marp-cli:v1.7.0
+            - name: convert via pandoc
+              uses: docker://pandoc/core:2.9
               with:
-                args: README.md -o README.pdf --pdf-page-orientation portrait
-              env:
-                MARP_USER: root:root
+                args: >-  # allows you to break string into multiple lines
+                  --standalone
+                  --output=build/README.pdf
+                  README.md
             - name: Commit README.pdf
               run: |
                 git config --global user.email "actions@github.com"
