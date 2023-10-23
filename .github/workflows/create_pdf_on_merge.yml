@@ -16,5 +16,9 @@ jobs:
                 args: README.md -o README.pdf
               env:
                 MARP_USER: root:root
-
+            - name: Upload README.pdf
+              uses: actions/upload-artifact@v2
+              with:
+                name: README.pdf
+                path: README.pdf
         
