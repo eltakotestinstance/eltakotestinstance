@@ -14,6 +14,6 @@ jobs:
             args: >-  # allows you to break string into multiple lines
                 --standalone
                 --output=build/README.pdf
-                readme.txt
+                README.md
 
         
