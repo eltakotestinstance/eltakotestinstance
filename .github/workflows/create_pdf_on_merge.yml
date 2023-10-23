@@ -15,7 +15,7 @@ jobs:
               with:
                 args: >-  # allows you to break string into multiple lines
                   --standalone
-                  --output=build/README.pdf
+                  --output=README.pdf
                   README.md
             - name: Commit README.pdf
               run: |
