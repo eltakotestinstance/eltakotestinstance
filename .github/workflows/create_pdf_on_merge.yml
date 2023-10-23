@@ -9,11 +9,11 @@ jobs:
         
         steps:
             - uses: actions/checkout@v4
-            
+
             - name: Marp Build (README.pdf)
               uses: docker://marpteam/marp-cli:v1.7.0
               with:
-                args: README.md -o build/README.pdf
+                args: README.md -o README.pdf
               env:
                 MARP_USER: root:root
 
