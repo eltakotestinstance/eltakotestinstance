@@ -1,0 +1,19 @@
+name: Convert README to PDF
+
+on:
+    workflow_dispatch:
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        steps:
+        - name: convert via pandoc
+          uses: docker://pandoc/core:2.9
+          with:
+            args: >-  # allows you to break string into multiple lines
+                --standalone
+                --output=build/README.pdf
+                readme.txt
+
+        
