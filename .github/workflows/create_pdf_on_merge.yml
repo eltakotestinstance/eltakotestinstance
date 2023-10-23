@@ -22,4 +22,5 @@ jobs:
                 git config --global user.name "Github Actions"
                 git add README.pdf
                 git commit -m "Add README.pdf"
+                git push origin
         
