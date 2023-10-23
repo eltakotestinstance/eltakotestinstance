@@ -13,7 +13,7 @@ jobs:
             - name: Marp Build (README.pdf)
               uses: docker://marpteam/marp-cli:v1.7.0
               with:
-                args: README.md -o README.pdf
+                args: README.md -o README.pdf --pdf-page-orientation horizontal
               env:
                 MARP_USER: root:root
             - name: Commit README.pdf
