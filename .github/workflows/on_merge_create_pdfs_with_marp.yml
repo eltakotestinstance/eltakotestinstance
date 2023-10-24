@@ -1,0 +1,53 @@
+name: Convert Markdown and Add to Release
+on:
+  push:
+    branches:
+      - main
+    
+permissions: write-all
+jobs:
+    
+    create_release:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - name: Check for modified Markdown files
+              id: check_files
+              run: |
+                if git diff --name-only HEAD^ HEAD | grep -qE '\.md$'; then
+                    echo "::set-output name=modified_files::true"
+                else
+                    echo "::set-output name=modified_files::false"
+                fi
+            - name: Setup Node.js
+              if: steps.check_files.outputs.modified_files == 'true'
+              uses: actions/setup-node@v2
+              with:
+                node-version: '14'
+    
+            - name: Install Marp CLI
+              if: steps.check_files.outputs.modified_files == 'true'
+              run: npm install -g @marp-team/marp-cli
+    
+            - name: Convert Markdown files
+              if: steps.check_files.outputs.modified_files == 'true'
+              run: |
+                for file in $(git diff --name-only HEAD^ HEAD | grep .md$); do
+                    marp $file --pdf --allow-local-files
+                done
+            - name: Get next version
+              if: steps.check_files.outputs.modified_files == 'true'
+              uses: reecetech/version-increment@2023.9.3
+              id: version
+              with:
+                scheme: semver
+                increment: patch
+
+            - name: Create release
+              if: steps.check_files.outputs.modified_files == 'true'
+              run: |
+                gh release create ${{ steps.version.outputs.version }} --title "Release ${{ steps.version.outputs.version }}" --notes "Release notes for ${{ steps.version.outputs.version }}"
+                gh release upload ${{ steps.version.outputs.version }} *.pdf --clobber
+              env:
+                GH_TOKEN: ${{ github.token }}
+           
