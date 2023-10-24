@@ -23,11 +23,6 @@ jobs:
                     echo "::set-output name=modified_files::false"
                     echo "No Markdown files detected"
                 fi
-            - name: Setup Node.js
-              if: steps.check_files.outputs.modified_files == true
-              uses: actions/setup-node@v2
-              with:
-                node-version: '14'
     
             - name: Install Marp CLI
               if: steps.check_files.outputs.modified_files == 'true'
