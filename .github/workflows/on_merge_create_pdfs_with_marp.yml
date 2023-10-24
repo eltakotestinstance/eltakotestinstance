@@ -34,6 +34,7 @@ jobs:
                 for file in $(git diff --name-only HEAD^ HEAD | grep .md$); do
                     marp $file --pdf --allow-local-files
                 done
+                
             - name: Get next version
               if: steps.check_files.outputs.modified_files == 'true'
               uses: reecetech/version-increment@2023.9.3
