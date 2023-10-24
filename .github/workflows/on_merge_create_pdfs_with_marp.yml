@@ -22,7 +22,7 @@ jobs:
                 echo "Listing all commits from origin/main to HEAD"
                 git log --pretty=format:%H origin/main..HEAD
                 modified_files=false
-                for commit in $(git log --pretty=format:%H origin/main..HEAD); do
+                for commit in $(git log --pretty=format:%H); do
                   echo "Checking commit $commit"
                   if git diff --name-only $commit^ $commit | grep -qE '\.md$'; then
                     modified_files=true
