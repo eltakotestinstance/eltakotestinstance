@@ -1,10 +1,10 @@
-name: Convert README to PDF
+name: Convert README to PDF with marp-cli
 
 on:
     workflow_dispatch:
 permissions: write-all
 jobs:
-    build:
+    create_release:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4
