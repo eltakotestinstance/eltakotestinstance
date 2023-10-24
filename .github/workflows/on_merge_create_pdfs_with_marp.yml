@@ -21,6 +21,8 @@ jobs:
                 modified_files=false
                 for commit in $(git log --pretty=format:%H ${{ github.event.before }}..HEAD); do
                   echo "Checking commit $commit"
+                  echo "prevoius commit:"
+                  git rev-parse "$commit^"
                   if git diff --name-only $commit^ $commit | grep -qE '\.md$'; then
                     modified_files=true
                     break
