@@ -13,16 +13,16 @@ jobs:
             - uses: actions/checkout@v4
               with:
                 fetch-depth: 2
-                
+
             - name: Check for modified Markdown files
               id: check_files
               run: |
                 if git diff --name-only HEAD^ HEAD | grep -qE '\.md$'; then
-                    echo "::set-output name=modified_files::true"
-                    echo "Markdown files detected" 
+                  echo "modified_files=true" >> $GITHUB_OUTPUT
+                  echo "Markdown files detected" 
                 else
-                    echo "::set-output name=modified_files::false"
-                    echo "No Markdown files detected"
+                  echo "modified_files=false" >> $GITHUB_OUTPUT
+                  echo "No Markdown files detected"
                 fi
     
             - name: Install Marp CLI
