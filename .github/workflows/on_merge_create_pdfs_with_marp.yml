@@ -10,6 +10,9 @@ jobs:
     create_release:
         runs-on: ubuntu-latest
         steps:
+            - name: Clear old files
+              uses: AutoModality/action-clean@v1
+              
             - uses: actions/checkout@v4
               with:
                 fetch-depth: 0
