@@ -17,6 +17,7 @@ jobs:
             - name: Check for modified Markdown files
               id: check_files
               run: |
+                git fetch --all
                 echo "Listing all commits from origin/main to HEAD"
                 git log --pretty=format:%H origin/main..HEAD
                 modified_files=false
