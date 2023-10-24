@@ -19,6 +19,7 @@ jobs:
               run: |
                 modified_files=false
                 for commit in $(git log --pretty=format:%H origin/main..HEAD); do
+                  echo "Checking commit $commit"
                   if git diff --name-only $commit^ $commit | grep -qE '\.md$'; then
                     modified_files=true
                     break
