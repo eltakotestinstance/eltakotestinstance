@@ -17,16 +17,7 @@ jobs:
                   --standalone
                   --output=README.pdf
                   README.md
-                  name: Get latest release
-                  id: get_release
-                  uses: actions/github-script@v4
-                  with:
-                    script: |
-                      const { data } = await github.repos.getLatestRelease({
-                        owner: context.repo.owner,
-                        repo: context.repo.repo
-                      });
-                      return { version: data.tag_name };
+                  
             - name: Get latest release
               id: get_release
               uses: actions/github-script@v4
