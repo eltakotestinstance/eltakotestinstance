@@ -30,7 +30,7 @@ jobs:
                   fi
                 done
                 echo "modifiles_files=$modified_files"
-                echo "modified_files=$modified_files" >> GITHUB_OUTPUT
+                echo "modified_files=$modified_files" >> $GITHUB_OUTPUT
     
             - name: Install Marp CLI
               if: steps.check_files.outputs.modified_files == 'true'
