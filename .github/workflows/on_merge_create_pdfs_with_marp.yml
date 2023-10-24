@@ -17,6 +17,7 @@ jobs:
             - name: Check for modified Markdown files
               id: check_files
               run: |
+                modified_files=false
                 for commit in $(git log --pretty=format:%H origin/main..HEAD); do
                   if git diff --name-only $commit^ $commit | grep -qE '\.md$'; then
                     modified_files=true
