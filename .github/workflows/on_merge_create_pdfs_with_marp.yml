@@ -17,13 +17,13 @@ jobs:
             - name: Check for modified Markdown files
               id: check_files
               run: |
-                if git diff --name-only HEAD^ HEAD | grep -qE '\.md$'; then
-                  echo "modified_files=true" >> $GITHUB_OUTPUT
-                  echo "Markdown files detected" 
-                else
-                  echo "modified_files=false" >> $GITHUB_OUTPUT
-                  echo "No Markdown files detected"
+                for commit in $(git log --pretty=format:%H origin/main..HEAD); do
+                if git diff --name-only $commit^ $commit | grep -qE '\.md$'; then
+                  modified_files=true
+                  break
                 fi
+                done
+                echo "modified_files=$modified_files" >> GITHUB_OUTPUT
     
             - name: Install Marp CLI
               if: steps.check_files.outputs.modified_files == 'true'
@@ -32,9 +32,11 @@ jobs:
             - name: Convert Markdown files
               if: steps.check_files.outputs.modified_files == 'true'
               run: |
-                for file in $(git diff --name-only HEAD^ HEAD | grep .md$); do
-                    marp $file --pdf --allow-local-files
-                done
+                  for commit in $(git log --pretty=format:%H origin/main..HEAD); do
+                    for file in $(git diff --name-only $commit^ $commit | grep .md$); do
+                      marp $file --pdf --allow-local-files
+                    done
+                  done
 
             - name: Get next version
               if: steps.check_files.outputs.modified_files == 'true'
