@@ -20,7 +20,6 @@ jobs:
             - name: Check for modified Markdown files
               id: check_files
               run: |
-                git fetch --all
                 modified_files=false
                 for commit in $(git log --pretty=format:%H ${{ github.event.before }}..HEAD); do
                   echo "Checking commit $commit"
