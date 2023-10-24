@@ -17,6 +17,30 @@ jobs:
                   --standalone
                   --output=README.pdf
                   README.md
+                  name: Get latest release
+                  id: get_release
+                  uses: actions/github-script@v4
+                  with:
+                    script: |
+                      const { data } = await github.repos.getLatestRelease({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo
+                      });
+                      return { version: data.tag_name };
+            - name: Get latest release
+              id: get_release
+              uses: actions/github-script@v4
+              with:
+                script: |
+                  const { data } = await github.repos.getLatestRelease({
+                      owner: context.repo.owner,
+                      repo: context.repo.repo
+                  });
+                  return { version: data.tag_name };        
+            - name: Increment release version
+              id: increment_version
+              run: echo "::set-output name=version::$(echo ${{ steps.get_release.outputs.version }} | awk -F. '{$NF = $NF + 1;} 1' OFS=.)"
+
             - name: Create release
               run: |
                 gh release create v1.0.0 --title "Release v1.0.0" --notes "Release notes for v1.0.0"
