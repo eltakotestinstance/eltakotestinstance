@@ -20,7 +20,7 @@ jobs:
                     echo "::set-output name=modified_files::false"
                 fi
             - name: Setup Node.js
-              if: steps.check_files.outputs.modified_files == 'true'
+              if: steps.check_files.outputs.modified_files == true
               uses: actions/setup-node@v2
               with:
                 node-version: '14'
