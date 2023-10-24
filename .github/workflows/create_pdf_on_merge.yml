@@ -6,7 +6,6 @@ permissions: write-all
 jobs:
     build:
         runs-on: ubuntu-latest
-        
         steps:
             - uses: actions/checkout@v4
 
@@ -30,12 +29,4 @@ jobs:
                 gh release upload ${{ steps.version.outputs.version }} README.pdf --clobber
               env:
                 GH_TOKEN: ${{ github.token }}
-            - name: Commit README.pdf
-              run: |
-                git config --global user.email "actions@github.com"
-                git config --global user.name "Github Actions"
-                git add README.pdf
-                git commit -m "Add README.pdf"
-                git push origin
-              
-        
+           
