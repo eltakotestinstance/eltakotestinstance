@@ -18,9 +18,6 @@ jobs:
               id: check_files
               run: |
                 git fetch --all
-                git rev-parse HEAD
-                echo "Listing all commits from origin/main to HEAD"
-                git log --pretty=format:%H origin/main..HEAD
                 modified_files=false
                 for commit in $(git log --pretty=format:%H ${{ github.event.before }}..HEAD); do
                   echo "Checking commit $commit"
@@ -38,7 +35,7 @@ jobs:
             - name: Convert Markdown files
               if: steps.check_files.outputs.modified_files == 'true'
               run: |
-                  for commit in $(git log --pretty=format:%H origin/main..HEAD); do
+                  for commit in $(git log --pretty=format:%H ${{ github.event.before }}..HEAD); do
                     for file in $(git diff --name-only $commit^ $commit | grep .md$); do
                       marp $file --pdf --allow-local-files
                     done
