@@ -17,21 +17,17 @@ jobs:
                   --standalone
                   --output=README.pdf
                   README.md
-            - name: Install Dependencies
-              run: npm install semver
-
-            - name: Get latest tag
-              id: latesttag
-              run: echo ::set-output name=tag::$(git describe --tags `git rev-list --tags --max-count=1`)
-          
-            - name: Increment tag
-              id: newtag
-              run: echo ::set-output name=tag::$(npx semver -i patch ${{ steps.latesttag.outputs.tag }})
+            - name: Get next version
+              uses: reecetech/version-increment@2023.9.3
+              id: version
+              with:
+                scheme: semver
+                increment: patch
 
             - name: Create release
               run: |
-                gh release create ${{ steps.newtag.outputs.tag }} --title "Release ${{ steps.newtag.outputs.tag }}" --notes "Release notes for ${{ steps.newtag.outputs.tag }}"
-                gh release upload ${{ steps.newtag.outputs.tag }} README.pdf --clobber
+                gh release create ${{ steps.version.outputs.version }} --title "Release ${{ steps.version.outputs.version }}" --notes "Release notes for ${{ steps.version.outputs.version }}"
+                gh release upload ${{ steps.version.outputs.version }} README.pdf --clobber
               env:
                 GH_TOKEN: ${{ github.token }}
             - name: Commit README.pdf
