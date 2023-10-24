@@ -29,6 +29,7 @@ jobs:
                     break
                   fi
                 done
+                echo "modifiles_files=$modified_files"
                 echo "modified_files=$modified_files" >> GITHUB_OUTPUT
     
             - name: Install Marp CLI
