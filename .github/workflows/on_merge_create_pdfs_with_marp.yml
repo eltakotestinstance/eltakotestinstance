@@ -18,6 +18,7 @@ jobs:
               id: check_files
               run: |
                 git fetch --all
+                git rev-parse HEAD
                 echo "Listing all commits from origin/main to HEAD"
                 git log --pretty=format:%H origin/main..HEAD
                 modified_files=false
