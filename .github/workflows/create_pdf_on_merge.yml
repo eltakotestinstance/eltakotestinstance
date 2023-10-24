@@ -17,6 +17,10 @@ jobs:
                   --standalone
                   --output=README.pdf
                   README.md
+            - name: Create release
+              run: |
+                gh release create v1.0.0 --title "Release v1.0.0" --notes "Release notes for v1.0.0"
+                gh release upload v1.0.0 README.pdf
             - name: Commit README.pdf
               run: |
                 git config --global user.email "actions@github.com"
