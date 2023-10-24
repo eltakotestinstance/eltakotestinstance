@@ -1,0 +1,31 @@
+name: Convert README to PDF
+
+on:
+    workflow_dispatch:
+permissions: write-all
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Marp Build (README.pdf)
+              uses: docker://marpteam/marp-cli:v1.7.0
+              with:
+                args: README.md -o README.pdf --pdf-page-orientation portrait
+              env:
+                MARP_USER: root:root
+            - name: Get next version
+              uses: reecetech/version-increment@2023.9.3
+              id: version
+              with:
+                scheme: semver
+                increment: patch
+
+            - name: Create release
+              run: |
+                gh release create ${{ steps.version.outputs.version }} --title "Release ${{ steps.version.outputs.version }}" --notes "Release notes for ${{ steps.version.outputs.version }}"
+                gh release upload ${{ steps.version.outputs.version }} README.pdf --clobber
+              env:
+                GH_TOKEN: ${{ github.token }}
+           
