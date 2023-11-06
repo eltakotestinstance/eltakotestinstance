@@ -19,18 +19,8 @@ jobs:
         with:
           script: |
             const milestone_number = context.payload.milestone.number;
-            const owner = context.repo.owner;
-            const repo = context.repo.repo;
-
-            // Fetch the milestone details
-            const milestone = await github.issues.getMilestone({
-              owner,
-              repo,
-              milestone_number,
-            });
-
-            // Get the current and previous descriptions
-            const currentDescription = milestone.data.description;
+            
+            const currentDescription = context.payload.milestone.description;
             const previousDescription = context.payload.changes.description.from;
 
             // Split the descriptions at the dividing string
