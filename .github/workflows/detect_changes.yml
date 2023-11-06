@@ -18,7 +18,7 @@ jobs:
         uses: actions/github-script@v5
         with:
           script: |
-            const milestone_number = context.issue.milestone.number;
+            const milestone_number = context.payload.milestone.number;
             const owner = context.repo.owner;
             const repo = context.repo.repo;
 
