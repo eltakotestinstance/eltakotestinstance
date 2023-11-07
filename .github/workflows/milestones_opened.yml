@@ -4,7 +4,7 @@ on:
     types: [created]
 permissions: write-all
 jobs:
-  build:
+  create_issue_on_jira:
     runs-on: ubuntu-latest
     name: opens Jira issue on Github milestone creation
     
@@ -39,7 +39,6 @@ jobs:
 
     - name: Update milestone description
       run: |
-        gh auth token ${{ secrets.PERSONAL_TOKEN_GITHUB }}
         gh api repos/${{ github.repository }}/milestones/${{ github.event.milestone.number }} -X PATCH -f description="---\nEpic ${{ steps.create.outputs.issue }} was created"
     env:
-      GH_TOKEN: ${{ secrets.PERSONAL_TOKEN_GITHUB }}    
+      GH_TOKEN: ${{ secrets.PERSONAL_TOKEN }}    
