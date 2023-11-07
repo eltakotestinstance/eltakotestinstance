@@ -67,7 +67,7 @@ jobs:
                     "content": [
                       {
                         "type": "text",
-                        "text": "'"$new_description"'"
+                        "text": "$new_description"
                       }
                     ]
                   }
