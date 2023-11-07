@@ -7,6 +7,9 @@ jobs:
     runs-on: ubuntu-latest
     name: opens Jira issue on Github milestone creation
     steps:
+    - name: Git checkout
+      uses: actions/checkout@v4
+      
     - name: Login
       uses: atlassian/gajira-login@master
       env:
