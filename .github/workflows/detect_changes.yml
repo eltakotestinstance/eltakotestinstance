@@ -56,7 +56,25 @@ jobs:
             -u ${{ secrets.JIRA_USER_EMAIL }}:${{ secrets.JIRA_API_TOKEN }} \
             -H "Content-Type: application/json" \
             https://eltakotestinstance.atlassian.net/rest/api/3/issue/${{ steps.find_issue_key.outputs.issue }} \
-            -d '{"fields":{"description":"$new_description"}}'
+            -d '{
+              "fields": {
+                "description": {
+                  "type": "doc",
+                  "version": 1,
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": [
+                        {
+                          "type": "text",
+                          "text": "'"$new_description"'"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }'
         env: 
           new_description: ${{ github.event.milestone.description }}  
 
