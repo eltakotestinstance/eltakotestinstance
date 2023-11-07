@@ -39,15 +39,11 @@ jobs:
       - name: Get result
         if: steps.compare_changes.outputs.result == 'true'  
         run: echo "${{steps.compare_changes.outputs.result}}"
-  change_description:
-    runs-on: ubuntu-latest
-    needs: compare_changes
-    if: needs.compare_changes.outputs.result == '"true"'
-    steps:
       - name: find issue key
+        if: steps.compare_changes.outputs.result == 'true'  
         uses: atlassian/gajira-find-issue-key@v3
         with: ${{ github.event.milestone.description }}
-        id: find_issue_key
+        id: find_issue_key  
       - name: change description
         if: steps.find_issue_key.outputs.issue != ''
         run: |
@@ -57,7 +53,10 @@ jobs:
             https://eltakotestinstance.atlassian.net/rest/api/3/issue/${{ steps.find_issue_key.outputs.issue }} \
             -d '{"fields":{"description":"$new_description"}}'
         env: 
-          new_description: ${{ github.event.milestone.description }}
+          new_description: ${{ github.event.milestone.description }}  
+
+
+  
 
     
 
