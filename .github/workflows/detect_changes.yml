@@ -42,7 +42,8 @@ jobs:
       - name: find issue key
         if: steps.compare_changes.outputs.result == 'true'  
         uses: atlassian/gajira-find-issue-key@v3
-        with: ${{ github.event.milestone.description }}
+        with: 
+          string: ${{ github.event.milestone.description }}
         id: find_issue_key  
       - name: change description
         if: steps.find_issue_key.outputs.issue != ''
