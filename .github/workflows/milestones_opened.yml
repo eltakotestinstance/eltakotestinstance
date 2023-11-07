@@ -1,3 +1,4 @@
+name: on_milestone_create
 on:
   milestone:
     types: [created]
@@ -6,10 +7,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     name: opens Jira issue on Github milestone creation
+    
     steps:
     - name: Git checkout
-      uses: actions/checkout@v4
-
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: '0'
     - name: Login
       uses: atlassian/gajira-login@master
       env:
@@ -38,7 +41,5 @@ jobs:
       run: |
         gh auth token ${{ secrets.PERSONAL_TOKEN_GITHUB }}
         gh api repos/${{ github.repository }}/milestones/${{ github.event.milestone.number }} -X PATCH -f description="---\nEpic ${{ steps.create.outputs.issue }} was created"
-      env:
-        GH_TOKEN: ${{ secrets.PERSONAL_TOKEN_GITHUB }} 
-        GITHUB_TOKEN: ${{ secrets.PERSONAL_TOKEN_GITHUB }}
-
+    env:
+      GH_TOKEN: ${{ secrets.PERSONAL_TOKEN_GITHUB }}    
