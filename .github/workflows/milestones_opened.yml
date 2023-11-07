@@ -18,8 +18,7 @@ jobs:
       shell: bash
       run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
       id: extract_branch
-    
-    
+
     - name: Create
       id: create
       uses: atlassian/gajira-create@v3
@@ -36,5 +35,5 @@ jobs:
       run: |
         gh api repos/${{ github.repository }}/milestones/${{ github.event.milestone.number }} -X PATCH -f description="---\nEpic ${{ steps.create.outputs.issue }} was created"
       env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+        GH_TOKEN: ${{ secrets.PERSONAL_TOKEN_GITHUB }} 
 
