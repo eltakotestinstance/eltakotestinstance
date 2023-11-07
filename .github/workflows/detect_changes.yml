@@ -37,11 +37,12 @@ jobs:
                 console.log('The descriptions are the same');
                 return "false";
       - name: Get result
+        if: steps.compare_changes.outputs.result == 'true'  
         run: echo "${{steps.compare_changes.outputs.result}}"
   change_description:
     runs-on: ubuntu-latest
     needs: compare_changes
-    if: needs.compare_changes.outputs.result == true
+    if: needs.compare_changes.outputs.result == '"true"'
     steps:
       - name: find issue key
         uses: atlassian/gajira-find-issue-key@v3
