@@ -9,7 +9,7 @@ jobs:
     steps:
     - name: Git checkout
       uses: actions/checkout@v4
-      
+
     - name: Login
       uses: atlassian/gajira-login@master
       env:
@@ -39,4 +39,5 @@ jobs:
         gh api repos/${{ github.repository }}/milestones/${{ github.event.milestone.number }} -X PATCH -f description="---\nEpic ${{ steps.create.outputs.issue }} was created"
       env:
         GH_TOKEN: ${{ secrets.PERSONAL_TOKEN_GITHUB }} 
+        GITHUB_TOKEN: ${{ secrets.PERSONAL_TOKEN_GITHUB }}
 
