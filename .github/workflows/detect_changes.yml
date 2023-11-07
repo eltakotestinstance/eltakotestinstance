@@ -31,7 +31,7 @@ jobs:
                 console.log(previousDescriptionSplit);
 
                 // Compare the descriptions
-                if (currentDescriptionSplit != previousDescriptionSplit) {
+                if (currentDescriptionSplit.trim() != previousDescriptionSplit.trim()) {
                     console.log('The descriptions are different');
                     return "true";
                 } else {
