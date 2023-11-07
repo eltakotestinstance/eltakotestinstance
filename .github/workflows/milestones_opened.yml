@@ -40,8 +40,8 @@ jobs:
     - name: Update milestone description
       run: |
         gh api repos/${{ github.repository }}/milestones/${{ github.event.milestone.number }} -X PATCH -f description="$CURRENT_DISCRIPTION
-         ---
-          Epic ${{ steps.create.outputs.issue }} was created"
+        ---
+        Epic ${{ steps.create.outputs.issue }} was created"
       env:
         GH_TOKEN: ${{ secrets.PERSONAL_TOKEN }}    
         CURRENT_DISCRIPTION: ${{ github.event.milestone.description }}
