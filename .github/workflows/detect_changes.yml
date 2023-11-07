@@ -26,7 +26,9 @@ jobs:
 
                 // Split the descriptions at the dividing string
                 const currentDescriptionSplit = currentDescription.split('---')[0];
+                console.log(currentDescriptionSplit);
                 const previousDescriptionSplit = previousDescription.split('---')[0];
+                console.log(previousDescriptionSplit);
 
                 // Compare the descriptions
                 if (currentDescriptionSplit !== previousDescriptionSplit) {
