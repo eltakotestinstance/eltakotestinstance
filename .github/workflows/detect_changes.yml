@@ -33,14 +33,14 @@ jobs:
                 if (currentDescriptionSplit.trim() != previousDescriptionSplit.trim()) {
                     console.log('The descriptions are different');
                     return "true";
-                } else {
-                    console.log('The descriptions are the same');
-                    return "false";
-                }
+                } 
+                console.log('The descriptions are the same');
+                return "false";
+      
   change_description:
     runs-on: ubuntu-latest
     needs: compare_changes
-    if: needs.compare_changes.outputs == 'true'
+    if: needs.compare_changes.outputs.result == 'true'
     steps:
       - name: find issue key
         uses: atlassian/gajira-find-issue-key@v3
