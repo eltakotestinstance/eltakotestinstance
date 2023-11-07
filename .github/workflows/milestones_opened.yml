@@ -5,7 +5,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: opens Jira issue on Github issue
+    name: opens Jira issue on Github milestone creation
     steps:
     - name: Login
       uses: atlassian/gajira-login@master
@@ -19,6 +19,7 @@ jobs:
       run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
       id: extract_branch
     
+    
     - name: Create
       id: create
       uses: atlassian/gajira-create@v3
@@ -29,4 +30,11 @@ jobs:
         description: ${{ github.event.milestone.description }} 
         
     - name: Log created issue
-      run: echo "Milestone ${{ steps.create.outputs.issue }} was created"
+      run: echo "Epic ${{ steps.create.outputs.issue }} was created"
+
+    - name: Update milestone description
+      run: |
+        gh api repos/${{ github.repository }}/milestones/${{ github.event.milestone.number }} -X PATCH -f description="---\nEpic ${{ steps.create.outputs.issue }} was created"
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+

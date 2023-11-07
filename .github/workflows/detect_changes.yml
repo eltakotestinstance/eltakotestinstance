@@ -15,21 +15,24 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Compare changes
-        uses: actions/github-script@v5
+        uses: actions/github-script@v6
+        id: compare_changes
         with:
-          script: |
-            const milestone_number = context.payload.milestone.number;
-            
-            const currentDescription = context.payload.milestone.description;
-            const previousDescription = context.payload.changes.description.from;
+            result-encoding: boolean
+            script: |
+                
+                const currentDescription = context.payload.milestone.description;
+                const previousDescription = context.payload.changes.description.from;
 
-            // Split the descriptions at the dividing string
-            const currentDescriptionSplit = currentDescription.split('---')[0];
-            const previousDescriptionSplit = previousDescription.split('---')[0];
+                // Split the descriptions at the dividing string
+                const currentDescriptionSplit = currentDescription.split('---')[0];
+                const previousDescriptionSplit = previousDescription.split('---')[0];
 
-            // Compare the descriptions
-            if (currentDescriptionSplit !== previousDescriptionSplit) {
-              console.log('The descriptions are different');
-            } else {
-              console.log('The descriptions are the same');
-            }
+                // Compare the descriptions
+                if (currentDescriptionSplit !== previousDescriptionSplit) {
+                    console.log('The descriptions are different');
+                    return true;
+                } else {
+                    console.log('The descriptions are the same');
+                    return false;
+                }
