@@ -1,7 +1,3 @@
-
-#diff <(sed '/---/q' file1.txt) <(sed '/---/q' file2.txt)
-
-
 name: Compare milestone changes
 on:
   milestone:
