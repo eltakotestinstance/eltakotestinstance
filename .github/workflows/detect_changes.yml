@@ -56,21 +56,7 @@ jobs:
           --arg new_description "${{ github.event.milestone.description }}" \
           '{
             "fields": {
-              "description": {
-                "type": "doc",
-                "version": 1,
-                "content": [
-                  {
-                    "type": "paragraph",
-                    "content": [
-                      {
-                        "type": "text",
-                        "text": $new_description
-                      }
-                    ]
-                  }
-                ]
-              }
+              "description": $new_description
             }
           }')
           curl -D- \
