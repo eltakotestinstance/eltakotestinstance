@@ -21,6 +21,7 @@ jobs:
             result-encoding: string
             script: |
                 const sender = context.payload.sender.login;
+                console.log('The edit was made by', sender);
                 if (sender === 'GithubJochenS') {
                   console.log('Skipping workflow because the edit was made by', sender);
                   return "false"
