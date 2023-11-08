@@ -30,7 +30,7 @@ jobs:
                 // Compare the descriptions
                 if (currentDescriptionSplit.trim() != previousDescriptionSplit.trim()) {
                     console.log('The descriptions are different');
-                    return "currentDescription.split('[---Jira---]')[0]";
+                    return currentDescription.split('[---Jira---]')[0];
                 } 
                 console.log('The descriptions are the same');
                 return "false";
