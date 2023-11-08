@@ -55,7 +55,7 @@ jobs:
           curl -D- \
             -u ${{ secrets.JIRA_USER_EMAIL }}:${{ secrets.JIRA_API_TOKEN }} \
             -X PUT \
-            --data '{ "fields": { "description": "$new_description" } }' \
+            --data '{ "fields": { "description": "${{ github.event.milestone.description }}" } }' \
             -H "Content-Type: application/json" \
             https://eltakotestinstance.atlassian.net/rest/api/2/issue/${{ steps.find_issue_key.outputs.issue }}
         env: 
