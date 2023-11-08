@@ -38,8 +38,6 @@ jobs:
                   });  
                   return "false"
                 }
-                
-                
                 const previousDescription = context.payload.changes.description.from;
 
                 // Split the descriptions at the dividing string
@@ -53,8 +51,6 @@ jobs:
                 } 
                 console.log('The descriptions are the same');
                 return "false";
-            
-      
     outputs: 
       result: ${{ steps.compare_changes.outputs.result }}
   change_description: 
