@@ -20,6 +20,12 @@ jobs:
         with:
             result-encoding: string
             script: |
+                const sender = context.payload.sender.login;
+                if (sender === 'GithubJochenS') {
+                  console.log('Skipping workflow because the edit was made by', sender);
+                  process.exit(78); // Exit with status 78 to mark the job as skipped
+                }
+
                 const currentDescription = context.payload.milestone.description;
                 const previousDescription = context.payload.changes.description.from;
 
