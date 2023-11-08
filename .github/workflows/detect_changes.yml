@@ -28,13 +28,13 @@ jobs:
                   return "false"
                 }
                 if(currentDescription.includes('[skip]')) {
-                  github.rest.milestones.patch({
+                  github.rest.issues.updateMilestone({
                     owner: context.repo.owner,
                     repo: context.repo.repo,
                     milestone_number: context.payload.milestone.number,
                     title: context.payload.milestone.title,
                     description: currentDescription.split('[skip]')[0]
-                });  
+                  });  
                   return "false"
                 }
                 
