@@ -19,7 +19,7 @@ jobs:
         id: compare_changes
         with:
             result-encoding: string
-            github-token: ${{ secrets.GITHUB_TOKEN }}
+            github-token: ${{ secrets.PERSONAL_TOKEN }}
             script: |
                 const currentDescription = context.payload.milestone.description;
                 const sender = context.payload.sender.login;
