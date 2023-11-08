@@ -69,7 +69,7 @@ jobs:
           --data "$JSON" \
           -H "Content-Type: application/json" \
           https://eltakotestinstance.atlassian.net/rest/api/2/issue/${{ steps.find_issue_key.outputs.issue }})
-        if [ $RESPONSE -ne 200 ]; then
+        if [ $RESPONSE -ne 204 ]; then
           echo "Error: HTTP status code $RESPONSE"
           exit 1
         fi
