@@ -1,4 +1,5 @@
 name: Update milestone description
+
 on:
     workflow_dispatch:
         inputs:
@@ -43,3 +44,5 @@ jobs:
                                 break;
                             }
                         }
+              env:
+                GH_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
