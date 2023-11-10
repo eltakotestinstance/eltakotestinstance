@@ -35,7 +35,7 @@ jobs:
 
                         for (const milestone of milestones.data) {
                             if (milestone.description.includes(issueKey)) {
-                                const newDescription = `${milestone.description}\n---\n${author}: ${text} (${timestamp})`;
+                                const newDescription = `${milestone.description}\n---\n${author}: \n${text}\n(${timestamp})`;
                                 await github.rest.issues.updateMilestone({
                                     owner: context.repo.owner,
                                     repo: context.repo.repo,
