@@ -20,7 +20,7 @@ jobs:
                 const currentDescription = context.payload.milestone.description;
                 const sender = context.payload.sender.login;
                 console.log('The edit was made by', sender);
-                if (sender === 'GithubJochenS') {
+                if (sender === 'github-actions') {
                   console.log('Skipping workflow because the edit was made by', sender);
                   return "false"
                 }
