@@ -20,6 +20,7 @@ jobs:
             - name: Update milestone description
               uses: actions/github-script@v6
               with:
+                    github-token: ${{ secrets.PERSONAL_TOKEN }}
                     script: |
                         const issueKey = "${{ github.event.inputs.issue_key }}";
                         const author = "${{ github.event.inputs.author }}";
@@ -44,5 +45,4 @@ jobs:
                                 break;
                             }
                         }
-              env:
-                GH_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
+              
