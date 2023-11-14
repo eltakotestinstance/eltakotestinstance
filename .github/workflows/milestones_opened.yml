@@ -46,3 +46,19 @@ jobs:
       env:
         GH_TOKEN: ${{ secrets.PERSONAL_TOKEN }}    
         CURRENT_DISCRIPTION: ${{ github.event.milestone.description }}
+    
+    - name: Update milestone description
+      uses: actions/github-script@v6
+      with:
+          github-token: ${{ secrets.PERSONAL_TOKEN }}
+          script: |       
+                const newDescription = `$CURRENT_DISCRIPTION\n---\nAUTOMATICLY GENERATED CONTENT DO NOT EDIT/DELETE BEYOND THIS POINT\n[Issue in Jira](https://eltakotestinstance.atlassian.net/browse/${{ steps.create.outputs.issue }})`;
+                await github.rest.issues.updateMilestone({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    milestone_number: github.event.milestone.number,
+                    description: newDescription,
+                });
+      env: 
+        CURRENT_DISCRIPTION: ${{ github.event.milestone.description }}
+
