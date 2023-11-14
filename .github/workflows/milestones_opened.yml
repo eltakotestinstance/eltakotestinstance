@@ -40,7 +40,9 @@ jobs:
     - name: Update milestone description
       run: |
         gh api repos/${{ github.repository }}/milestones/${{ github.event.milestone.number }} -X PATCH -f description="$CURRENT_DISCRIPTION
-        \n---\nAUTOMATICLY GENERATED CONTENT DO NOT EDIT/DELETE BEYOND THIS POINT\n[Issue in Jira](https://eltakotestinstance.atlassian.net/browse/${{ steps.create.outputs.issue }})"        
+        ---
+        AUTOMATICLY GENERATED CONTENT DO NOT EDIT/DELETE BEYOND THIS POINT
+        [Issue in Jira](https://eltakotestinstance.atlassian.net/browse/${{ steps.create.outputs.issue }})"        
       env:
         GH_TOKEN: ${{ secrets.PERSONAL_TOKEN }}    
         CURRENT_DISCRIPTION: ${{ github.event.milestone.description }}
