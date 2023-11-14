@@ -37,16 +37,7 @@ jobs:
     - name: Log created issue
       run: echo "Epic ${{ steps.create.outputs.issue }} was created"
 
-    - name: Update milestone description
-      run: |
-        gh api repos/${{ github.repository }}/milestones/${{ github.event.milestone.number }} -X PATCH -f description="$CURRENT_DISCRIPTION
-        ---
-        AUTOMATICLY GENERATED CONTENT DO NOT EDIT/DELETE BEYOND THIS POINT
-        [Issue in Jira](https://eltakotestinstance.atlassian.net/browse/${{ steps.create.outputs.issue }})"        
-      env:
-        GH_TOKEN: ${{ secrets.PERSONAL_TOKEN }}    
-        CURRENT_DISCRIPTION: ${{ github.event.milestone.description }}
-    
+        
     - name: Update milestone description
       uses: actions/github-script@v6
       with:
@@ -56,9 +47,10 @@ jobs:
                 await github.rest.issues.updateMilestone({
                     owner: context.repo.owner,
                     repo: context.repo.repo,
-                    milestone_number: github.event.milestone.number,
+                    milestone_number: MILESTONE_NUMBER,
                     description: newDescription,
                 });
       env: 
         CURRENT_DISCRIPTION: ${{ github.event.milestone.description }}
+        MILESTONE_NUMBER: ${{ github.event.milestone.number }}
 
