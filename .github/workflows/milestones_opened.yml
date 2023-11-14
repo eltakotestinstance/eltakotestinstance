@@ -43,14 +43,12 @@ jobs:
       with:
           github-token: ${{ secrets.PERSONAL_TOKEN }}
           script: |       
-                const newDescription = `$CURRENT_DISCRIPTION\n---\nAUTOMATICLY GENERATED CONTENT DO NOT EDIT/DELETE BEYOND THIS POINT\n[Issue in Jira](https://eltakotestinstance.atlassian.net/browse/${{ steps.create.outputs.issue }})`;
+                const newDescription = `${context.payload.milestone.description}\n---\nAUTOMATICLY GENERATED CONTENT DO NOT EDIT/DELETE BEYOND THIS POINT\n[Issue in Jira](https://eltakotestinstance.atlassian.net/browse/${{ steps.create.outputs.issue }})`;
                 await github.rest.issues.updateMilestone({
                     owner: context.repo.owner,
                     repo: context.repo.repo,
-                    milestone_number: MILESTONE_NUMBER,
+                    milestone_number: context.payload.milestone.number,
                     description: newDescription,
                 });
-      env: 
-        CURRENT_DISCRIPTION: ${{ github.event.milestone.description }}
-        MILESTONE_NUMBER: ${{ github.event.milestone.number }}
+      
 
