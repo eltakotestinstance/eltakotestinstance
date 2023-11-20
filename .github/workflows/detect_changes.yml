@@ -37,8 +37,8 @@ jobs:
                 const previousDescription = context.payload.changes.description.from;
 
                 // Split the descriptions at the dividing string
-                const currentDescriptionSplit = currentDescription.split('\n---\nAUTOMATICLY GENERATED CONTENT DO NOT EDIT/DELETE BEYOND THIS POINT')[0];
-                const previousDescriptionSplit = previousDescription.split('\n---\nAUTOMATICLY GENERATED CONTENT DO NOT EDIT/DELETE BEYOND THIS POINT')[0];
+                const currentDescriptionSplit = currentDescription.split('AUTOMATICLY GENERATED CONTENT DO NOT EDIT/DELETE BEYOND THIS POINT')[0];
+                const previousDescriptionSplit = previousDescription.split('AUTOMATICLY GENERATED CONTENT DO NOT EDIT/DELETE BEYOND THIS POINT')[0];
                 
                 // Compare the descriptions
                 if (currentDescriptionSplit.trim() != previousDescriptionSplit.trim()) {
