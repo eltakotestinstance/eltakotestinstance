@@ -20,6 +20,17 @@ jobs:
       run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
       id: extract_branch
     
+    - name: Check milestone and extract issue key
+      id: check_milestone
+      uses: actions/github-script@v6
+      with:
+        script: |
+          
+          let milestoneDescription = '';
+          if (context.payload.issue.data.milestone) {
+            milestoneDescription = context.payload.issue.data.milestone.description;
+          }
+          return milestoneDescription;  
     - name: Create
       id: create
       uses: atlassian/gajira-create@v3
@@ -29,13 +40,14 @@ jobs:
         summary: New Issue from ${{ github.actor}} named ${{ github.event.issue.title }} in ${{ github.repository }} branch ${{ steps.extract_branch.outputs.branch }}
         description: ${{ github.event.issue.body }}
         
-    -   name: Create comment
+    -   name: Create comment 
         uses: actions-cool/issues-helper@v3
         with:
           actions: 'create-comment'
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.issue.number }}
           body: ${{ steps.create.outputs.issue }}
+          
           
           
     - name: Log created issue

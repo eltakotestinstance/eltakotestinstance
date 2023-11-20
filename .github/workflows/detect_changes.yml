@@ -43,7 +43,7 @@ jobs:
                 // Compare the descriptions
                 if (currentDescriptionSplit.trim() != previousDescriptionSplit.trim()) {
                     console.log('The descriptions are different');
-                    return currentDescription.split('\n---\nAUTOMATICLY GENERATED CONTENT DO NOT EDIT/DELETE BEYOND THIS POINT')[0];
+                    return currentDescriptionSplit;
                 } 
                 console.log('The descriptions are the same');
                 return "false";
