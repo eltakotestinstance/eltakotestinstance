@@ -36,27 +36,7 @@ jobs:
         fields: '{"duedate": "${{ github.event.milestone.due_on }}",
                   "customfield_10041" : 1}'
 
-        
-    #- name: set Due date
-    #  run: |
-    #    JSON=$(jq -n \
-    #    --arg due_date "${{ github.event.milestone.due_on }}" \
-    #    '{
-    #      "fields": {
-    #        "duedate": $due_date
-    #      }
-    #    }')
-    #    RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" \
-    #      -u ${{ secrets.JIRA_USER_EMAIL }}:${{ secrets.JIRA_API_TOKEN }} \
-    #      -X PUT \
-    #      --data "$JSON" \
-    #      -H "Content-Type: application/json" \
-    #      https://eltakotestinstance.atlassian.net/rest/api/2/issue/${{ steps.create.outputs.issue }})
-    #    if [ $RESPONSE -ne 204 ]; then
-    #      echo "Error: HTTP status code $RESPONSE"
-    #      exit 1
-    #    fi
-        
+            
     - name: Log created issue
       run: echo "Epic ${{ steps.create.outputs.issue }} was created"
 
