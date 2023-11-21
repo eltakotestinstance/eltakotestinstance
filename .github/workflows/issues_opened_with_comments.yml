@@ -48,7 +48,5 @@ jobs:
           issue-number: ${{ github.event.issue.number }}
           body: ${{ steps.create.outputs.issue }}
           
-          
-          
     - name: Log created issue
       run: echo "Issue ${{ steps.create.outputs.issue }} was created"
