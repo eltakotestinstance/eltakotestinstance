@@ -17,6 +17,14 @@ jobs:
     update_description:
         runs-on: ubuntu-latest
         steps:
+            - name: Set text as output
+              id: set_text
+              run: |
+                text="${{ github.event.inputs.text }}"
+                text="${text//'%'/'%25'}"
+                text="${text//$'\n'/'<br>'}"
+                text="${text//$'\r'/'<br>'}"
+                echo "text=$text" >> $GITHUB_OUTPUT
             - name: Update milestone description
               uses: actions/github-script@v6
               with:
@@ -24,7 +32,8 @@ jobs:
                     script: |
                         const issueKey = "${{ github.event.inputs.issue_key }}";
                         const author = "${{ github.event.inputs.author }}";
-                        const text = "${{ github.event.inputs.text }}";
+                        let text = "${{ steps.set_text.outputs.text }}";
+                        text = text.replace(/<br>/g, '\n');
                         const timestamp = new Date().toISOString();
 
                         const milestones = await github.rest.issues.listMilestones({

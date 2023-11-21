@@ -21,7 +21,8 @@ jobs:
                 text="${text//'%'/'%25'}"
                 text="${text//$'\n'/'<br>'}"
                 text="${text//$'\r'/'<br>'}"
-                echo "::set-output name=text::$text"
+                echo "text=$text" >> $GITHUB_OUTPUT
+              
             - name: Update milestone description
               uses: actions/github-script@v6
               with:
