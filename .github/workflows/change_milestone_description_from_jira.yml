@@ -21,11 +21,11 @@ jobs:
                 debug: true
                 script: |
                     const issueKey = "${{ github.event.inputs.issue_key }}";
-                    let textInput = JSON.stringify("${{ github.event.inputs.text }}");
+                    let textInput = "${{ github.event.inputs.text }}";
                     let text;
 
                     try {
-                        text = JSON.parse(textInput);
+                        text = JSON.parse(JSON.stringifytextInput));
                     } catch (error) {
                         console.error('Invalid JSON:', textInput);
                         throw error;
