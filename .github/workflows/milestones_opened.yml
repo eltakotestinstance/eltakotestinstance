@@ -34,7 +34,7 @@ jobs:
         summary: ${{ github.event.milestone.title }} 
         description: "in ${{ github.repository }} branch ${{ steps.extract_branch.outputs.branch }}\nDescription: ${{ github.event.milestone.description }}"
         fields: '{"duedate": "${{ github.event.milestone.due_on }}",
-                  "customfield_10041" : "1"}'
+                  "customfield_10041" : 1}'
 
         
     #- name: set Due date
