@@ -34,7 +34,8 @@ jobs:
                   const owner = context.repo.owner;
                   const repo = context.repo.repo;
                   const body = "${{ steps.set_text.outputs.text }}".replace(/<br>/g, '\n');
-                  const commentFinal = `*Comment from ${github.event.inputs.author}*\n\n${body}\n\n*Posted from Jira*`;
+                  const author = "${{ github.event.inputs.author }}";
+                  const commentFinal = `*Comment from ${author}*\n\n${body}\n\n*Posted from Jira*`;
 
                   const issues = await github.rest.issues.listForRepo({
                     owner,
