@@ -14,6 +14,9 @@ jobs:
     update_description:
         runs-on: ubuntu-latest
         steps:
+            - name: Set text as output
+              id: set_text
+              run: echo "::set-output name=text::${{ github.event.inputs.text }}"
             - name: Update milestone description
               uses: actions/github-script@v6
               with:
@@ -21,7 +24,7 @@ jobs:
                 debug: true
                 script: |
                     const issueKey = "${{ github.event.inputs.issue_key }}";
-                    let textInput = "${{ github.event.inputs.text }}";
+                    let textInput = "${{ steps.set_text.outputs.text }}";
                     let text;
 
                     try {
