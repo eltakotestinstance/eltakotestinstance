@@ -21,7 +21,7 @@ jobs:
                 debug: true
                 script: |
                     const issueKey = "${{ github.event.inputs.issue_key }}";
-                    const text = JSON.parse("${{ github.event.inputs.text }}");
+                    const text = "deine Mudda";
 
                                                     
                     const milestones = await github.rest.issues.listMilestones({
