@@ -28,7 +28,7 @@ jobs:
                     let text;
 
                     try {
-                        text = JSON.parse(JSON.stringifytextInput));
+                        text = JSON.parse(JSON.stringify(textInput));
                     } catch (error) {
                         console.error('Invalid JSON:', textInput);
                         throw error;
