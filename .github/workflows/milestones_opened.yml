@@ -4,10 +4,36 @@ on:
     types: [created]
 permissions: write-all
 jobs:
+  check_for_skipped :
+    runs-on: ubuntu-latest
+    name: checks if issue comes from Jira
+    steps:
+      - name: Check for [skiped] in description
+        uses: actions/github-script@v6
+        id: compare_changes
+        with:
+            result-encoding: string
+            github-token: ${{ secrets.PERSONAL_TOKEN }}
+            script: |
+                const currentDescription = context.payload.milestone.description;
+                if(currentDescription.includes('[skip]')) {
+                  github.rest.issues.updateMilestone({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    milestone_number: context.payload.milestone.number,
+                    title: context.payload.milestone.title,
+                    description: currentDescription.split('[skip]')[0]
+                  });  
+                  return "false"
+                }
+                return "true";
+    outputs: 
+      result: ${{ steps.compare_changes.outputs.result }}
   create_issue_on_jira:
     runs-on: ubuntu-latest
     name: opens Jira issue on Github milestone creation
-    
+    needs: check_for_skipped
+    if: needs.check_for_skipped.outputs.result != 'false'  
     steps:
     - name: Git checkout
       uses: actions/checkout@v2
