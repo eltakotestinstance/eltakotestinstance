@@ -20,7 +20,4 @@ jobs:
                 github-token: ${{ secrets.PERSONAL_TOKEN }}
                 debug: true
                 script: |
-                    const issueKey = "${{ github.event.inputs.issue_key }}";
-                    const text = "${{ github.event.inputs.text }}";
-
-                    
+                    console.log('Deine Mudda');
