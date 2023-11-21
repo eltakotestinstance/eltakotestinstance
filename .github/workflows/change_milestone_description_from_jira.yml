@@ -20,4 +20,25 @@ jobs:
                 github-token: ${{ secrets.PERSONAL_TOKEN }}
                 debug: true
                 script: |
-                    console.log('Deine Mudda');
+                    const issueKey = "${{ github.event.inputs.issue_key }}";
+                    const text = ${{ github.event.inputs.text }};
+
+                                                    
+                    const milestones = await github.rest.issues.listMilestones({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    state: 'open',
+                    });
+                    for (const milestone of milestones.data) {
+                        if (milestone.description.includes(issueKey)) {
+                            const currentGeneratedSplit = milestone.description.split('AUTOMATICLY GENERATED CONTENT DO NOT EDIT/DELETE BEYOND THIS POINT')[1];
+                            const newDescription = `${text}\nAUTOMATICLY GENERATED CONTENT DO NOT EDIT/DELETE BEYOND THIS POINT\n${currentGeneratedSplit}`;
+                            await github.rest.issues.updateMilestone({
+                                owner: context.repo.owner,
+                                repo: context.repo.repo,
+                                milestone_number: milestone.number,
+                                description: newDescription,
+                            });
+                            break;
+                        }
+                    }
