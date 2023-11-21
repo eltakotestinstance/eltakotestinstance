@@ -28,7 +28,7 @@ jobs:
             - name: Post comment
               uses: actions/github-script@v6
               with:
-                github-token: ${{ secrets.GITHUB_TOKEN }}
+                github-token: ${{ secrets.PERSONAL_TOKEN }}
                 script: |
                   const issueKey = "${{ github.event.inputs.issue_key }}";
                   const owner = context.repo.owner;
