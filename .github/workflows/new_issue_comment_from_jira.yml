@@ -65,7 +65,7 @@ jobs:
                       owner,
                       repo,
                       issue_number: issueNumber,
-                      commentFinal
+                      body: commentFinal
                     });
                   } else {
                     console.log(`No issue found with key: ${issueKey}`);
