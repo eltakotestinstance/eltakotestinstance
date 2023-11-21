@@ -18,11 +18,11 @@ jobs:
               uses: actions/github-script@v6
               with:
                 github-token: ${{ secrets.PERSONAL_TOKEN }}
+                debug: true
                 script: |
                                         const issueKey = "${{ github.event.inputs.issue_key }}";
                                         const text = "${{ github.event.inputs.text }}";
-                                        const timestamp = new Date().toISOString();
-                
+                                                        
                                         const milestones = await github.rest.issues.listMilestones({
                                             owner: context.repo.owner,
                                             repo: context.repo.repo,
