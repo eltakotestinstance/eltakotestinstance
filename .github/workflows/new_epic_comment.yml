@@ -33,16 +33,5 @@ jobs:
                             state: 'open',
                         });
 
-                        for (const milestone of milestones.data) {
-                            if (milestone.description.includes(issueKey)) {
-                                const newDescription = `${milestone.description}\n---\n### ${author}: \n${text}\n(${timestamp})`;
-                                await github.rest.issues.updateMilestone({
-                                    owner: context.repo.owner,
-                                    repo: context.repo.repo,
-                                    milestone_number: milestone.number,
-                                    description: newDescription,
-                                });
-                                break;
-                            }
-                        }
+                        
               
