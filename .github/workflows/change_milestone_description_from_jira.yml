@@ -16,7 +16,12 @@ jobs:
         steps:
             - name: Set text as output
               id: set_text
-              run: echo "::set-output name=text::${{ github.event.inputs.text }}"
+              run: |
+                text="${{ github.event.inputs.text }}"
+                text="${text//'%'/'%25'}"
+                text="${text//$'\n'/'<br>'}"
+                text="${text//$'\r'/'<br>'}"
+                echo "::set-output name=text::$text"
             - name: Update milestone description
               uses: actions/github-script@v6
               with:
@@ -25,6 +30,7 @@ jobs:
                 script: |
                     const issueKey = "${{ github.event.inputs.issue_key }}";
                     let textInput = "${{ steps.set_text.outputs.text }}";
+                    textInput = textInput.replace(/<br>/g, '\n');
                     let text;
 
                     try {
