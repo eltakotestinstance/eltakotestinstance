@@ -40,7 +40,7 @@ jobs:
         --arg due_date "${{ github.event.milestone.due_on }}" \
         '{
           "fields": {
-            "description": $due_date
+            "duedate": $due_date
           }
         }')
         RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" \
