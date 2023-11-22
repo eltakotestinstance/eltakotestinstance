@@ -17,23 +17,16 @@ jobs:
     update_description:
         runs-on: ubuntu-latest
         steps:
-            - name: Set text as output
-              id: set_text
-              run: |
-                text="${{ github.event.inputs.text }}"
-                text="${text//'%'/'%25'}"
-                text="${text//$'\n'/'<br>'}"
-                text="${text//$'\r'/'<br>'}"
-                echo "text=$text" >> $GITHUB_OUTPUT
             - name: Update milestone description
               uses: actions/github-script@v6
+              env:
+                TEXT: ${{ github.event.inputs.text }}
               with:
                     github-token: ${{ secrets.PERSONAL_TOKEN }}
                     script: |
                         const issueKey = "${{ github.event.inputs.issue_key }}";
                         const author = "${{ github.event.inputs.author }}";
-                        let text = "${{ steps.set_text.outputs.text }}";
-                        text = text.replace(/<br>/g, '\n');
+                        const {TEXT} = process.env;
                         const timestamp = new Date().toISOString();
 
                         const milestones = await github.rest.issues.listMilestones({
@@ -44,7 +37,7 @@ jobs:
 
                         for (const milestone of milestones.data) {
                             if (milestone.description.includes(issueKey)) {
-                                const newDescription = `${milestone.description}\n---\n### ${author}: \n${text}\n(${timestamp})`;
+                                const newDescription = `${milestone.description}\n---\n### ${author}: \n${TEXT}\n(${timestamp})`;
                                 await github.rest.issues.updateMilestone({
                                     owner: context.repo.owner,
                                     repo: context.repo.repo,
