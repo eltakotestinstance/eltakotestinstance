@@ -67,7 +67,21 @@ jobs:
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        body: comment,
+                        body: {
+                            "type": "doc",
+                            "version": 1,
+                            "content": [
+                                {
+                                    "type": "paragraph",
+                                    "content": [
+                                        {
+                                            "text": comment,
+                                            "type": "text"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
                     }),
                 });
                 console.log(await response.text());
