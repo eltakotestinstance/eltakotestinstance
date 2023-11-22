@@ -17,14 +17,6 @@ jobs:
     new_comment:
         runs-on: ubuntu-latest
         steps:
-            - name: Set text as output
-              id: set_text
-              run: |
-                text="${{ github.event.inputs.text }}"
-                text="${text//'%'/'%25'}"
-                text="${text//$'\n'/'<br>'}"
-                text="${text//$'\r'/'<br>'}"
-                echo "text=$text" >> $GITHUB_OUTPUT                
             - name: Post comment
               uses: actions/github-script@v6
               env:
@@ -35,7 +27,6 @@ jobs:
                   const issueKey = "${{ github.event.inputs.issue_key }}";
                   const owner = context.repo.owner;
                   const repo = context.repo.repo;
-                  const body = "${{ steps.set_text.outputs.text }}".replace(/<br>/g, '\n');
                   const {TEXT} = process.env; 
                   const author = "${{ github.event.inputs.author }}";
                   const commentFinal = `*Comment from ${author}*\n\n${TEXT}\n\n*Posted from Jira*`;
