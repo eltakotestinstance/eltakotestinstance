@@ -4,7 +4,7 @@ on:
 
 jobs:
     new_comment:
-      if: ! contains(github.event.comment.body, '*Posted from Jira*')
+      if: ${{ !contains(github.event.comment.body, '*Posted from Jira*') }}
       runs-on: ubuntu-latest
       steps:
         - name: Get issue key
@@ -52,7 +52,7 @@ jobs:
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                    body: comment,
+                        body: comment,
                     }),
                 });
 
