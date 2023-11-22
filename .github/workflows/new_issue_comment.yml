@@ -18,16 +18,15 @@ jobs:
                 const repo = context.repo.repo;
                 const issue_number = context.issue.number;
                 let allComments;
-                for (const issue of issues.data) {
-                        const comments = await github.rest.issues.listComments({
+                const comments = await github.rest.issues.listComments({
                         owner,
                         repo,
                         issue_number: issue_number,
-                    });
-                    const commentBodies = comments.data.map(comment => comment.body);
-                    allComments += commentBodies.join('\n');
+                });
+                const commentBodies = comments.data.map(comment => comment.body);
+                allComments += commentBodies.join('\n');
                     
-                }
+                
                 return allComments;
         - name: Find in comments
           id: extract_issue_key
