@@ -50,20 +50,7 @@ jobs:
                 const jiraToken = "${{ secrets.JIRA_API_TOKEN }}"; 
                 const jiraEmail = "${{ secrets.JIRA_USER_EMAIL }}"; 
 
-                const response = await fetch(`${jiraUrl}/rest/api/3/issue/${issueKey}/comment`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Basic ${Buffer.from(`${jiraEmail}:${jiraToken}`).toString('base64')}`,
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        body: comment,
-                    }),
-                });
-
-                if (!response.ok) {
-                    throw new Error(`Failed to post comment to Jira: ${response.statusText}`);
-                }
+                
           
 
     
