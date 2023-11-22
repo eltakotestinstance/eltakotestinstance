@@ -39,14 +39,7 @@ jobs:
           uses: atlassian/gajira-find-issue-key@v3
           with:
             string: ${{ steps.get_issue_key.outputs.result }}
-        - name: Set text as output
-          id: set_comment_text
-          run: |
-              text="${{ github.event.comment.body }}"
-              text="${text//'%'/'%25'}"
-              text="${text//$'\n'/'<br>'}"
-              text="${text//$'\r'/'<br>'}"
-              echo "text=$text" >> $GITHUB_OUTPUT
+        
         - name: Post to Jira
           uses: actions/github-script@v6
           env: 
@@ -57,9 +50,7 @@ jobs:
             script: |
                 const issueKey = "${{ steps.extract_issue_key.outputs.issue }}";
                 const userName = "${{ github.event.comment.user.login }}";
-                let commentBody = "${{ steps.set_comment_text.outputs.text }}";
                 
-                commentBody = commentBody.replace(/<br>/g, '\n');
                 const {COMMENT_TEXT} = process.env;
                 const comment = `${userName} posted :\n${COMMENT_TEXT}\n*Posted from GitHub*`;
                 
