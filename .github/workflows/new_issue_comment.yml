@@ -39,18 +39,41 @@ jobs:
           uses: atlassian/gajira-find-issue-key@v3
           with:
             string: ${{ steps.get_issue_key.outputs.result }}
+        - name: Set text as output
+          id: set_comment_text
+          run: |
+              text="${{ github.event.comment.body }}"
+              text="${text//'%'/'%25'}"
+              text="${text//$'\n'/'<br>'}"
+              text="${text//$'\r'/'<br>'}"
+              echo "text=$text" >> $GITHUB_OUTPUT
         - name: Post to Jira
           uses: actions/github-script@v6
           with:
             github-token: ${{ secrets.GITHUB_TOKEN }}
             script: |
                 const issueKey = "${{ steps.extract_issue_key.outputs.issue }}";
-                const comment = "${{ github.event.comment.user.name }} posted :\n${{ github.event.comment.body }}\n*Posted from GitHub*";
+                let comment_body = "${{ steps.set_comment_text.outputs.text }}";
+                comment_body = text.replace(/<br>/g, '\n');
+                const comment = "${{ github.event.comment.user.name }} posted :\n$comment_body\n*Posted from GitHub*";
                 const jiraUrl = "${{ secrets.JIRA_BASE_URL }}"; 
                 const jiraToken = "${{ secrets.JIRA_API_TOKEN }}"; 
                 const jiraEmail = "${{ secrets.JIRA_USER_EMAIL }}"; 
 
-                
+                const response = await fetch(`${jiraUrl}/rest/api/3/issue/${issueKey}/comment`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Basic ${Buffer.from(`${jiraEmail}:${jiraToken}`).toString('base64')}`,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        body: comment,
+                    }),
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Failed to post comment to Jira: ${response.statusText}`);
+                }
           
 
     
