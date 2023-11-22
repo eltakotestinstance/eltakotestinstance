@@ -17,7 +17,7 @@ jobs:
                 const owner = context.repo.owner;
                 const repo = context.repo.repo;
                 const issue_number = context.issue.number;
-                let allComments;
+                let allComments = "";
                 const comments = await github.rest.issues.listComments({
                         owner,
                         repo,
