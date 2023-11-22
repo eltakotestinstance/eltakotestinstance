@@ -53,7 +53,7 @@ jobs:
             github-token: ${{ secrets.GITHUB_TOKEN }}
             script: |
                 const issueKey = "${{ steps.extract_issue_key.outputs.issue }}";
-                const userName = "${{ github.event.comment.user.name }}";
+                const userName = "${{ github.event.comment.user.login }}";
                 let commentBody = "${{ steps.set_comment_text.outputs.text }}";
                 
                 commentBody = commentBody.replace(/<br>/g, '\n');
