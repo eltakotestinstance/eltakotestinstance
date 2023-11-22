@@ -39,7 +39,7 @@ jobs:
             github-token: ${{ secrets.GITHUB_TOKEN }}
             script: |
                 const issueKey = "${{ steps.extract_issue_key.outputs.issue }}";
-                const comment = "${{ github.event.comment.user.name }} posted :\n${{ github.event.comment.body }}\n*Posted from Github*" ";
+                const comment = "${{ github.event.comment.user.name }} posted :\n${{ github.event.comment.body }}\n*Posted from GitHub*" ";
                 const jiraUrl = "${{ secrets.JIRA_BASE_URL }}"; 
                 const jiraToken = "${{ secrets.JIRA_API_TOKEN }}"; 
                 const jiraEmail = "${{ secrets.JIRA_USER_EMAIL }}"; 
