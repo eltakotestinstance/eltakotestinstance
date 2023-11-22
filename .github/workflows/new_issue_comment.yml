@@ -49,15 +49,18 @@ jobs:
               echo "text=$text" >> $GITHUB_OUTPUT
         - name: Post to Jira
           uses: actions/github-script@v6
+          env: 
+            COMMENT_TEXT: ${{ github.event.comment.body }}
           with:
             github-token: ${{ secrets.GITHUB_TOKEN }}
+            
             script: |
                 const issueKey = "${{ steps.extract_issue_key.outputs.issue }}";
                 const userName = "${{ github.event.comment.user.login }}";
                 let commentBody = "${{ steps.set_comment_text.outputs.text }}";
                 
                 commentBody = commentBody.replace(/<br>/g, '\n');
-                const comment = `${userName} posted :\n${commentBody}\n*Posted from GitHub*`;
+                const comment = `${userName} posted :\n${process.env}\n*Posted from GitHub*`;
                 const jiraUrl = "${{ secrets.JIRA_BASE_URL }}"; 
                 const jiraToken = "${{ secrets.JIRA_API_TOKEN }}"; 
                 const jiraEmail = "${{ secrets.JIRA_USER_EMAIL }}"; 
