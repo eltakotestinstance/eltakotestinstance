@@ -70,7 +70,7 @@ jobs:
                         body: comment,
                     }),
                 });
-
+                console.log(await response.text());
                 if (!response.ok) {
                     throw new Error(`Failed to post comment to Jira: ${response.statusText}`);
                 }
