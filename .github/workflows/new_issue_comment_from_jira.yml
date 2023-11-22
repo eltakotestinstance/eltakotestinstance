@@ -27,6 +27,8 @@ jobs:
                 echo "text=$text" >> $GITHUB_OUTPUT                
             - name: Post comment
               uses: actions/github-script@v6
+              env:
+               TEXT:  ${{ github.event.inputs.text }}
               with:
                 github-token: ${{ secrets.PERSONAL_TOKEN }}
                 script: |
@@ -34,8 +36,9 @@ jobs:
                   const owner = context.repo.owner;
                   const repo = context.repo.repo;
                   const body = "${{ steps.set_text.outputs.text }}".replace(/<br>/g, '\n');
+                  const {TEXT} = process.env; 
                   const author = "${{ github.event.inputs.author }}";
-                  const commentFinal = `*Comment from ${author}*\n\n${body}\n\n*Posted from Jira*`;
+                  const commentFinal = `*Comment from ${author}*\n\n${TEXT}\n\n*Posted from Jira*`;
 
                   const issues = await github.rest.issues.listForRepo({
                     owner,
