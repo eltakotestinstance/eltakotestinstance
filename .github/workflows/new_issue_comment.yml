@@ -60,7 +60,9 @@ jobs:
                 let commentBody = "${{ steps.set_comment_text.outputs.text }}";
                 
                 commentBody = commentBody.replace(/<br>/g, '\n');
-                const comment = `${userName} posted :\n${process.env}\n*Posted from GitHub*`;
+                const {COMMENT_TEXT} = process.env;
+                const comment = `${userName} posted :\n${COMMENT_TEXT}\n*Posted from GitHub*`;
+                
                 const jiraUrl = "${{ secrets.JIRA_BASE_URL }}"; 
                 const jiraToken = "${{ secrets.JIRA_API_TOKEN }}"; 
                 const jiraEmail = "${{ secrets.JIRA_USER_EMAIL }}"; 
