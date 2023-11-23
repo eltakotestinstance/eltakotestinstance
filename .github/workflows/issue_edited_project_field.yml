@@ -1,0 +1,47 @@
+name : Transfer estimate to project
+on:
+  issues:
+    types: [edited]
+
+jobs:
+  estimate:
+    runs-on: ubuntu-latest
+    steps: 
+        - name: Get project fields
+          uses: actions/github-script@v6
+          with:
+            github-token: ${{ secrets.GITHUB_TOKEN }}
+            script: |
+                const issueNumber = context.issue.number;
+                const fieldName = 'Your Field Name'; // replace with your field name
+                const query = `
+                query($owner: String!, $repo: String!, $issueNumber: Int!) {
+                    repository(owner: $owner, name: $repo) {
+                    issue(number: $issueNumber) {
+                        projectCards(first: 100) {
+                        nodes {
+                            project {
+                            fields(first: 100) {
+                                nodes {
+                                name
+                                value
+                                }
+                            }
+                            }
+                        }
+                        }
+                    }
+                    }
+                }
+                `;
+                const variables = {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issueNumber: issueNumber,
+                };
+                const result = await github.graphql(query, variables);
+                const field = result.repository.issue.projectCards.nodes
+                .flatMap(node => node.project.fields.nodes)
+                .find(node => node.name === fieldName);
+                console.log(field);
+            
