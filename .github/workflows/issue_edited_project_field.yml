@@ -1,7 +1,6 @@
 name : Transfer estimate to project
 on:
   issues:
-    types: [edited]
   project_column:
   project_card:
   project:  
