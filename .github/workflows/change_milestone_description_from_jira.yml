@@ -23,7 +23,7 @@ jobs:
                 script: |
                     const issueKey = "${{ github.event.inputs.issue_key }}";
                     const {text} = process.env;
-                                                    
+                    console.log('Text: ', text);                                
                     const milestones = await github.rest.issues.listMilestones({
                     owner: context.repo.owner,
                     repo: context.repo.repo,
@@ -31,6 +31,7 @@ jobs:
                     });
                     for (const milestone of milestones.data) {
                         if (milestone.description.includes(issueKey)) {
+                            console.log('Found issue Key', issueKey);
                             const currentGeneratedSplit = milestone.description.split('AUTOMATICALLY GENERATED CONTENT DO NOT EDIT/DELETE BEYOND THIS POINT')[1];
                             const newDescription = `${text}\nAUTOMATICALLY GENERATED CONTENT DO NOT EDIT/DELETE BEYOND THIS POINT\n${currentGeneratedSplit}`;
                             await github.rest.issues.updateMilestone({
