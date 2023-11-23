@@ -3,7 +3,7 @@ on:
     types: [opened]
 
 jobs:
-  build:
+  prepare:
     permissions: write-all
     runs-on: ubuntu-latest
     name: opens Jira issue on Github issue
@@ -20,17 +20,26 @@ jobs:
       run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
       id: extract_branch
     
-    #- name: Check milestone and extract issue key
-    #  id: check_milestone
-    #  uses: actions/github-script@v6
-    #  with:
-    #    script: |
-    #      
-    #      let milestoneDescription = '';
-    #      if (context.payload.issue.data.milestone) {
-    #        milestoneDescription = context.payload.issue.data.milestone.description;
-    #      }
-    #      return milestoneDescription;  
+    - name: Check milestone and extract issue key
+      id: check_milestone
+      uses: actions/github-script@v6
+      with:
+        script: |
+          
+          let milestoneDescription = '';
+          if (context.payload.issue.data.milestone) {
+            milestoneDescription = context.payload.issue.data.milestone.description;
+          }
+          return milestoneDescription; 
+    outputs: 
+      result: ${{ steps.check_milestone.outputs.result }}
+      branch_name: ${{ steps.extract_branch.outputs.branch }}      
+  create_issue_without_parent:
+    permissions: write-all
+    runs-on: ubuntu-latest
+    needs: prepare
+    if: needs.prepare.outputs.result == '' 
+    steps:
     - name: Create
       id: create
       uses: atlassian/gajira-create@v3
@@ -38,7 +47,7 @@ jobs:
         project: ES1
         issuetype: issue
         summary:  named ${{ github.event.issue.title }} 
-        description: "New Issue from ${{ github.actor}} in ${{ github.repository }} branch ${{ steps.extract_branch.outputs.branch }}\nDescription:\n${{ github.event.issue.body }}"
+        description: "New Issue from ${{ github.actor}} in ${{ github.repository }} branch ${{ needs.prepare.outputs.branch_name }}\nDescription:\n${{ github.event.issue.body }}"
     - name: Create comment
       uses: actions/github-script@v6
       with:
@@ -54,4 +63,43 @@ jobs:
           });    
              
     - name: Log created issue
-      run: echo "Issue ${{ steps.create.outputs.issue }} was created"
+      run: echo "Issue ${{ steps.create.outputs.issue }} without parent was created"
+
+  create_issue_with_parent:
+    permissions: write-all
+    runs-on: ubuntu-latest
+    needs: prepare
+    if: needs.prepare.outputs.result != '' 
+    steps:
+    - name: Find in comments
+      id: find
+      uses: atlassian/gajira-find-issue-key@v3
+      with:
+        string: ${{ needs.prepare.outputs.result }}
+      
+    - name: Create
+      id: create
+      uses: atlassian/gajira-create@v3
+      with:
+        project: ES1
+        issuetype: issue
+        summary:  named ${{ github.event.issue.title }} 
+        description: "New Issue from ${{ github.actor}} in ${{ github.repository }} branch ${{ needs.prepare.outputs.branch_name }}\nDescription:\n${{ github.event.issue.body }}"
+        fields: '{"parent":{"key":"${{ steps.find.outputs.issue }}"}}'
+        
+    - name: Create comment
+      uses: actions/github-script@v6
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const issueNumber = context.issue.number;
+          const commentBody = '${{ steps.create.outputs.issue }}'; 
+          await github.rest.issues.createComment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: issueNumber,
+            body: commentBody,
+          });    
+             
+    - name: Log created issue
+      run: echo "Issue ${{ steps.create.outputs.issue }} with parent ${{ steps.find.outputs.issue }} was created"
