@@ -46,7 +46,6 @@ jobs:
   create_issue_with_parent:
     permissions: write-all
     runs-on: ubuntu-latest
-    
     if: github.event.issue.milestone != null   
     steps:
     - name: Extract branch name
