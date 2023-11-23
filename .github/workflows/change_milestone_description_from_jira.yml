@@ -14,33 +14,15 @@ jobs:
     update_description:
         runs-on: ubuntu-latest
         steps:
-            - name: Set text as output
-              id: set_text
-              run: |
-                text="${{ github.event.inputs.text }}"
-                text="${text//'%'/'%25'}"
-                text="${text//$'\n'/'<br>'}"
-                text="${text//$'\r'/'<br>'}"
-                echo "text=$text" >> $GITHUB_OUTPUT
-              
             - name: Update milestone description
               uses: actions/github-script@v6
+              env:
+                TEXT: ${{ github.event.inputs.text }}
               with:
                 github-token: ${{ secrets.PERSONAL_TOKEN }}
-                debug: true
                 script: |
                     const issueKey = "${{ github.event.inputs.issue_key }}";
-                    let textInput = "${{ steps.set_text.outputs.text }}";
-                    textInput = textInput.replace(/<br>/g, '\n');
-                    let text;
-
-                    try {
-                        text = JSON.parse(JSON.stringify(textInput));
-                    } catch (error) {
-                        console.error('Invalid JSON:', textInput);
-                        throw error;
-                    }
-
+                    const {text} = process.env;
                                                     
                     const milestones = await github.rest.issues.listMilestones({
                     owner: context.repo.owner,
