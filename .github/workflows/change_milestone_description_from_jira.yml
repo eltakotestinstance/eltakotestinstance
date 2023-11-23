@@ -22,8 +22,8 @@ jobs:
                 github-token: ${{ secrets.PERSONAL_TOKEN }}
                 script: |
                     const issueKey = "${{ github.event.inputs.issue_key }}";
-                    const {text} = process.env;
-                    console.log('Text: ', text);                                
+                    const {TEXT} = process.env;
+                    console.log('Text: ', TEXT);                                
                     const milestones = await github.rest.issues.listMilestones({
                     owner: context.repo.owner,
                     repo: context.repo.repo,
@@ -33,7 +33,7 @@ jobs:
                         if (milestone.description.includes(issueKey)) {
                             console.log('Found issue Key', issueKey);
                             const currentGeneratedSplit = milestone.description.split('AUTOMATICALLY GENERATED CONTENT DO NOT EDIT/DELETE BEYOND THIS POINT')[1];
-                            const newDescription = `${text}\nAUTOMATICALLY GENERATED CONTENT DO NOT EDIT/DELETE BEYOND THIS POINT\n${currentGeneratedSplit}`;
+                            const newDescription = `${TEXT}\nAUTOMATICALLY GENERATED CONTENT DO NOT EDIT/DELETE BEYOND THIS POINT\n${currentGeneratedSplit}`;
                             await github.rest.issues.updateMilestone({
                                 owner: context.repo.owner,
                                 repo: context.repo.repo,
