@@ -39,14 +39,19 @@ jobs:
         issuetype: issue
         summary:  named ${{ github.event.issue.title }} 
         description: "New Issue from ${{ github.actor}} in ${{ github.repository }} branch ${{ steps.extract_branch.outputs.branch }}\nDescription:\n${{ github.event.issue.body }}"
-        
-    -   name: Create comment 
-        uses: actions-cool/issues-helper@v3
-        with:
-          actions: 'create-comment'
-          token: ${{ secrets.GITHUB_TOKEN }}
-          issue-number: ${{ github.event.issue.number }}
-          body: ${{ steps.create.outputs.issue }}
-          
+    - name: Create comment
+      uses: actions/github-script@v6
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const issueNumber = context.issue.number;
+          const commentBody = '${{ steps.create.outputs.issue }}'; 
+          await github.rest.issues.createComment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: issueNumber,
+            body: commentBody,
+          });    
+             
     - name: Log created issue
       run: echo "Issue ${{ steps.create.outputs.issue }} was created"
