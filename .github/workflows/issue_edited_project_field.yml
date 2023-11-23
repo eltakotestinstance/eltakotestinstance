@@ -13,7 +13,7 @@ jobs:
             github-token: ${{ secrets.GITHUB_TOKEN }}
             script: |
                 const issueNumber = context.issue.number;
-                const fieldName = 'Your Field Name'; // replace with your field name
+                const fieldName = 'work estimate in days'; // replace with your field name
                 const query = `
                 query($owner: String!, $repo: String!, $issueNumber: Int!) {
                     repository(owner: $owner, name: $repo) {
