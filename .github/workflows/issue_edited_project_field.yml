@@ -2,6 +2,7 @@ name : Transfer estimate to project
 on:
   issues:
     types: [edited]
+  project_column :
 
 jobs:
   estimate:
