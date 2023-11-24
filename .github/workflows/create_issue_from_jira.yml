@@ -24,7 +24,7 @@ jobs:
               id: create_issue
               with:
                 result-encoding: string
-                github-token: ${{ secrets.PERSONAL_TOKEN }}
+                github-token: ${{ secrets.GITHUB_TOKEN }}
                 script: |
                     let issue;
                     const {BODY} = process.env;
