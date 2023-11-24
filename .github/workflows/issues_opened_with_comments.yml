@@ -24,7 +24,7 @@ jobs:
       with:
         project: ES1
         issuetype: issue
-        summary:  named ${{ github.event.issue.title }} 
+        summary:  ${{ github.event.issue.title }} 
         description: "New Issue from ${{ github.actor}} in ${{ github.repository }} branch ${{ steps.extract_branch.outputs.branch }}\nDescription:\n${{ github.event.issue.body }}"
     - name: Create comment
       uses: actions/github-script@v6

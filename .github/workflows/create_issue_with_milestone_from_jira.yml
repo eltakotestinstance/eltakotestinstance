@@ -13,7 +13,7 @@ on:
                 description: 'Title of the issue'
                 required: true
             epic:
-                description: 'Epic issue key of the issue'
+                description: 'Epic issue key'
                 required: true
 jobs:
     create_issue:
@@ -28,14 +28,15 @@ jobs:
                 github-token: ${{ secrets.GITHUB_TOKEN }}
                 script: |
                     const {BODY} = process.env;
-                    const issueKey = '${{ github.event.inputs.epic }}';
+                    const epicKey = '${{ github.event.inputs.epic }}';
+                    console.log('Epic Key', epicKey);
                     const milestones = await github.rest.issues.listMilestones({
                         owner: context.repo.owner,
                         repo: context.repo.repo,
                     });
                     for (const milestone of milestones.data) {
-                        if (milestone.description.includes(issueKey)) {
-                            console.log('Found issue Key', issueKey);
+                        if (milestone.description.includes(epicKey)) {
+                            console.log('Found issue Key', epicKey);
                             const issue = await github.rest.issues.create({
                                 owner: context.repo.owner,
                                 repo: context.repo.repo,
