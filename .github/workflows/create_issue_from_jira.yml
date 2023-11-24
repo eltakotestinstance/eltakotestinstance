@@ -32,7 +32,7 @@ jobs:
                                 owner: context.repo.owner,
                                 repo: context.repo.repo,
                                 title: '${{ github.event.inputs.title }}', 
-                                body: "*created from Jira*"
+                                body: "*Posted from Jira*"
                         });    
                     }
                     else {
@@ -40,7 +40,7 @@ jobs:
                                 owner: context.repo.owner,
                                 repo: context.repo.repo,
                                 title: '${{ github.event.inputs.title }}', 
-                                body: `${BODY}\n*created from Jira*`,
+                                body: `${BODY}\n*Posted from Jira*`,
                         });    
                     }
                     if(issue) {
