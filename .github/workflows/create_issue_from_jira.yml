@@ -20,11 +20,13 @@ jobs:
               uses: actions/github-script@v6
               env:
                 BODY: ${{ github.event.inputs.body }}
-                  
+              id: create_issue
               with:
-                github-token: ${{ secrets.GITHUB_TOKEN }}
+                result-encoding: string
+                github-token: ${{ secrets.PERSONAL_TOKEN }}
                 script: |
                     let issue;
+                    const {BODY} = process.env;
                     if('${{ github.event.inputs.body }}' == '') {
                         issue = await github.rest.issues.create({
                                 owner: context.repo.owner,
@@ -41,17 +43,27 @@ jobs:
                         });    
                     }
                     if(issue) {
-                        const commentBody = '${{ github.event.inputs.issue_key }}'; 
-                        await github.rest.issues.createComment({
-                            owner: context.repo.owner,
-                            repo: context.repo.repo,
-                            issue_number: issue.data.number,
-                            body: commentBody,
-                        });
+                        console.log('Issue created');
+                        return issue.data.number;
                     }
                     else {
                         console.log('Error: Issue not created');
+                        return "";
                     }
+            - name: Create issue with milestone
+              uses: actions/github-script@v6
+              if: steps.create_issue.outputs.result != ''
+              with:
+                github-token: ${{ secrets.GITHUB_TOKEN }}
+                script: |
+                    const commentBody = '${{ github.event.inputs.issue_key }}'; 
+                    await github.rest.issues.createComment({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        issue_number: issue.data.number,
+                        body: commentBody,
+                    });
+                    
 
                     
                     
