@@ -19,7 +19,8 @@ jobs:
         permissions: write-all
         runs-on: ubuntu-latest
         steps:
-            
+            - name: Delay
+              run: sleep 10 
             - name: Create issue with milestone
               uses: actions/github-script@v6
               env:
@@ -79,7 +80,7 @@ jobs:
                         });
                     }
                     else {
-                        Console.log('Issue or Milestone not found');
+                        console.log('Issue or Milestone not found');
                     }
 
                     
