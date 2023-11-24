@@ -30,33 +30,51 @@ jobs:
                     const {BODY} = process.env;
                     const epicKey = '${{ github.event.inputs.epic }}';
                     console.log('Epic Key', epicKey);
+                    const milestoneNumber = -1;
                     const milestones = await github.rest.issues.listMilestones({
                         owner: context.repo.owner,
                         repo: context.repo.repo,
                     });
+                    
                     for (const milestone of milestones.data) {
                         if (milestone.description.includes(epicKey)) {
+                            milestoneNumber = milestone.number;
                             console.log('Found issue Key', epicKey);
-                            const issue = await github.rest.issues.create({
+                            break;
+                        }
+                    }
+                    let issue;
+                    if(milestoneNumber == -1) {
+                        issue = await github.rest.issues.create({
                                 owner: context.repo.owner,
                                 repo: context.repo.repo,
                                 title: '${{ github.event.inputs.title }}', 
                                 body: BODY,
-                                milestone: milestone.number,
-                            });
-                            if(issue) {
-                                const commentBody = '${{ github.event.inputs.issue_key }}'; 
-                                await github.rest.issues.createComment({
-                                    owner: context.repo.owner,
-                                    repo: context.repo.repo,
-                                    issue_number: issue.data.number,
-                                    body: commentBody,
-                                });
-                            }
-                            
-                            break;
-                        }
+                        });    
                     }
+                    else {
+                        issue = await github.rest.issues.create({
+                                owner: context.repo.owner,
+                                repo: context.repo.repo,
+                                title: '${{ github.event.inputs.title }}', 
+                                body: BODY,
+                                milestone: milestoneNumber,
+                        });
+                    }
+                    
+                    if(issue) {
+                        const commentBody = '${{ github.event.inputs.issue_key }}'; 
+                        await github.rest.issues.createComment({
+                            owner: context.repo.owner,
+                            repo: context.repo.repo,
+                            issue_number: issue.data.number,
+                            body: commentBody,
+                        });
+                    }
+                    else {
+                        console.log('Error: Issue not created');
+                    }
+
                     
                     
                     
