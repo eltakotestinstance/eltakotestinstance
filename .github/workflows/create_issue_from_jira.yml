@@ -27,7 +27,7 @@ jobs:
                 script: |
                     let issue;
                     const {BODY} = process.env;
-                    if('${{ github.event.inputs.body }}' == '') {
+                    if( !BODY || BODY == '') {
                         issue = await github.rest.issues.create({
                                 owner: context.repo.owner,
                                 repo: context.repo.repo,
