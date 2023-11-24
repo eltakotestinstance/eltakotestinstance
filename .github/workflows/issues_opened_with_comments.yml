@@ -59,7 +59,7 @@ jobs:
         JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
         JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
         JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
-    - name: Find in comments
+    - name: Find in description
       id: find
       uses: atlassian/gajira-find-issue-key@v3
       with:
