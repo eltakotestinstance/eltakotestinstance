@@ -7,7 +7,7 @@ jobs:
   create_issue_without_parent:
     permissions: write-all
     runs-on: ubuntu-latest
-    if: github.event.issue.milestone == null && ${{ !contains(github.event.issue.body, '*Posted from Jira*') }}
+    if:  ${{ github.event.issue.milestone == null && !contains(github.event.issue.body, '*Posted from Jira*') }}
     steps:
     - name: Extract branch name
       shell: bash
@@ -47,7 +47,7 @@ jobs:
   create_issue_with_parent:
     permissions: write-all
     runs-on: ubuntu-latest
-    if: github.event.issue.milestone != null && ${{ !contains(github.event.issue.body, '*Posted from Jira*') }} 
+    if:  ${{ github.event.issue.milestone != null && !contains(github.event.issue.body, '*Posted from Jira*') }} 
     steps:
     - name: Extract branch name
       shell: bash
