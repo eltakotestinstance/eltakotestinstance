@@ -33,7 +33,7 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
           const issueNumber = context.issue.number;
-          const commentBody = '${{ steps.create.outputs.issue }}'; 
+          const commentBody = '${{ steps.create.outputs.issue }}\n*Posted from Github*'; 
           await github.rest.issues.createComment({
             owner: context.repo.owner,
             repo: context.repo.repo,
@@ -81,7 +81,7 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
           const issueNumber = context.issue.number;
-          const commentBody = '${{ steps.create.outputs.issue }}'; 
+          const commentBody = '${{ steps.create.outputs.issue }}\n*Posted from Github*'; 
           await github.rest.issues.createComment({
             owner: context.repo.owner,
             repo: context.repo.repo,
