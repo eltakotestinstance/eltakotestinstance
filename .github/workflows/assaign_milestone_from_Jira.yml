@@ -1,0 +1,91 @@
+
+on:
+    workflow_dispatch:
+        inputs:
+            issue_key:
+                description: 'Jira issue key'
+                required: true
+            body:
+                description: 'Description of the issue'
+                required: false
+            title:
+                description: 'Title of the issue'
+                required: true
+            epic:
+                description: 'Epic issue key'
+                required: true
+jobs:
+    create_issue:
+        permissions: write-all
+        runs-on: ubuntu-latest
+        steps:
+            
+            - name: Create issue with milestone
+              uses: actions/github-script@v6
+              env:
+                BODY: ${{ github.event.inputs.body }}
+                  
+              with:
+                github-token: ${{ secrets.GITHUB_TOKEN }}
+                script: |
+                    const {BODY} = process.env;
+                    const issueKey = "${{ github.event.inputs.issue_key }}";
+                    const owner = context.repo.owner;
+                    const repo = context.repo.repo;
+                    const epicKey = '${{ github.event.inputs.epic }}';
+                    
+                    let milestoneNumber = null;
+                    const milestones = await github.rest.issues.listMilestones({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                    });
+                    
+                    for (const milestone of milestones.data) {
+                        if (milestone.description.includes(epicKey)) {
+                            milestoneNumber = milestone.number;
+                            console.log('Found Epic issue Key', epicKey);
+                            break;
+                        }
+                    }
+                    
+                    const issues = await github.rest.issues.listForRepo({
+                        owner,
+                        repo,
+                        state: 'all',
+                    });
+
+                    let issueNumber;
+
+                    for (const issue of issues.data) {
+                        const comments = await github.rest.issues.listComments({
+                            owner,
+                            repo,
+                            issue_number: issue.number,
+                        });
+
+                        const commentWithKey = comments.data.find(comment => comment.body.includes(issueKey));
+
+                        if (commentWithKey) {
+                        issueNumber = issue.number;
+                        break;
+                        }
+                    }
+                    if(issueNumber && milestoneNumber){
+                        issue = await github.rest.issues.update({
+                                owner: context.repo.owner,
+                                repo: context.repo.repo,
+                                issue_number: issueNumber,
+                                milestone: milestoneNumber,
+                        });
+                    }
+                    else {
+                        Console.log('Issue or Milestone not found');
+                    }
+
+                    
+                    
+                    
+                    
+                    
+
+                    
