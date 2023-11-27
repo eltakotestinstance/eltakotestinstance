@@ -71,7 +71,7 @@ jobs:
                                 break;
                             }
                         }
-                        
+                        console.log('Issue not found, try again in 500ms(try: ' + numberTrys + ')');
                         numberTrys++;
                         await new Promise(r => setTimeout(r, 500));
                     }
@@ -87,11 +87,3 @@ jobs:
                     else {
                         console.log('Issue or Milestone not found');
                     }
-
-                    
-                    
-                    
-                    
-                    
-
-                    
