@@ -19,8 +19,6 @@ jobs:
         permissions: write-all
         runs-on: ubuntu-latest
         steps:
-            - name: Delay
-              run: sleep 5 
             - name: assign issue to milestone
               uses: actions/github-script@v6
               env:
@@ -77,12 +75,7 @@ jobs:
                         numberTrys++;
                         await new Promise(r => setTimeout(r, 500));
                     }
-
-                    
-
-                    
-                    
-                    
+                
                     if(issueNumber && milestoneNumber){
                         issue = await github.rest.issues.update({
                                 owner: context.repo.owner,
