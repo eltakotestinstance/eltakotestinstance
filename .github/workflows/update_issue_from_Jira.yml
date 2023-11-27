@@ -57,7 +57,7 @@ jobs:
                             repo,
                             issue_number: issueNumber,
                             title,
-                            body: `${BODY}\n\n*Posted from Jira*`,
+                            body: `${BODY}[skip]`,
                         });
                     }
                     else {

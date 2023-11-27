@@ -3,10 +3,31 @@ on:
       types: [edited]
   
 jobs:
-    compare_changes:
+    delete_posted_from_Jira:
         permissions: write-all
         runs-on: ubuntu-latest
-        if: ${{ !contains(github.event.issue.body, '*Posted from Jira*') }}
+        if: ${{ contains(github.event.issue.body, '[skip]') }}
+        steps:
+            - name: delete posted from Jira
+              uses: actions/github-script@v6
+              with:
+                script: |
+                    const currentDescription = context.payload.issue.body;
+                    if(currentDescription.includes('[skip]')) {
+                    github.rest.issues.updateMilestone({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        milestone_number: context.payload.milestone.number,
+                        title: context.payload.milestone.title,
+                        description: currentDescription.split('[skip]')[0]
+                    });  
+
+
+
+    change_in_jira:
+        permissions: write-all
+        runs-on: ubuntu-latest
+        if: ${{ !contains(github.event.issue.body, '[skip]') }}
         steps:
             - name: join all issue comments
               id: join_comments
