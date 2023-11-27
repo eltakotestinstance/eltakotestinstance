@@ -39,10 +39,7 @@ jobs:
                 string: ${{ steps.join_comments.outputs.result }}
             
             - name: change description in Jira
-              uses: actions/github-script@v6
-              with:
-                github-token: ${{ secrets.GITHUB_TOKEN }}
-                script: |
+              run: |
                     JSON=$(jq -n \
                     --arg new_description "${{ github.event.issue.body }}\n\n*Posted from Github*" \
                     '{
