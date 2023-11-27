@@ -21,9 +21,7 @@ jobs:
                             title: context.payload.milestone.title,
                             description: currentDescription.split('[skip]')[0]
                     });  
-
-
-
+                    
     change_in_jira:
         permissions: write-all
         runs-on: ubuntu-latest
