@@ -17,11 +17,11 @@ jobs:
                 script: |
                     const comments = await github.rest.issues.listComments({
                         context.repo.owner,
-                        repo: context.repo.repo,
+                        context.repo.repo,
                         issue_number: context.issue.number,
                     });
                     
-                    return comments.data.map(comment => comment.body).join('\n')
+                    return comments.data.map(comment => comment.body).join('\n');
             - name: Login
               uses: atlassian/gajira-login@master
               env:
