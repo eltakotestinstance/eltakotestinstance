@@ -49,7 +49,7 @@ jobs:
                     const jiraEmail = '${{ secrets.JIRA_USER_EMAIL }}'; // get Jira email from secrets
                     const jiraToken = '${{ secrets.JIRA_API_TOKEN }}'; // get Jira API token from secrets
                     const newSummary = '${{ github.event.issue.title}}'; // replace with your new summary
-                    const newDescription = '${{ github.event.issue.body }}\n\n*Posted from Github*'; // replace with your new description
+                    const newDescription = "${{ github.event.issue.body }}\n\n*Posted from Github*"; // replace with your new description
                     const response = await fetch(`${jiraBaseURL}/rest/api/3/issue/${issueKey}`, {
                         method: 'PUT',
                         headers: {
@@ -61,7 +61,7 @@ jobs:
                             fields: {
                                 summary: newSummary,
                                 description: newDescription,
-                                "customfield_10045" : "1",
+                                customfield_10045: 1,
                             },
                         }),
                     });
