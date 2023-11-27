@@ -44,12 +44,12 @@ jobs:
                 github-token: ${{ secrets.GITHUB_TOKEN }}
                 script: |
                     
-                    const issueKey = '${{ steps.find_issue_key.outputs.issue }}'; // get issue key from previous step
-                    const jiraBaseURL = "${{ secrets.JIRA_BASE_URL }}"; // replace with your Jira instance URL
-                    const jiraEmail = '${{ secrets.JIRA_USER_EMAIL }}'; // get Jira email from secrets
-                    const jiraToken = '${{ secrets.JIRA_API_TOKEN }}'; // get Jira API token from secrets
-                    const newSummary = '${{ github.event.issue.title}}'; // replace with your new summary
-                    const newDescription = "${{ github.event.issue.body }}\n\n*Posted from Github*"; // replace with your new description
+                    const issueKey = `${{ steps.find_issue_key.outputs.issue }}`; // get issue key from previous step
+                    const jiraBaseURL = `${{ secrets.JIRA_BASE_URL }}`; // replace with your Jira instance URL
+                    const jiraEmail = `${{ secrets.JIRA_USER_EMAIL }}`; // get Jira email from secrets
+                    const jiraToken = `${{ secrets.JIRA_API_TOKEN }}`; // get Jira API token from secrets
+                    const newSummary = `${{ github.event.issue.title }}`; // replace with your new summary
+                    const newDescription = `${{ github.event.issue.body }}\n\n*Posted from Github*`; // replace with your new description
                     const response = await fetch(`${jiraBaseURL}/rest/api/3/issue/${issueKey}`, {
                         method: 'PUT',
                         headers: {
