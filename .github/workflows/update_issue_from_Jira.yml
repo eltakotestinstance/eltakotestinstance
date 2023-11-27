@@ -1,0 +1,63 @@
+on:
+    workflow_dispatch:
+        inputs:
+            issue_key:
+                description: 'Jira issue key'
+                required: true
+            body:
+                description: 'Description of the issue'
+                required: false
+            title:
+                description: 'Title of the issue'
+                required: true
+
+jobs:
+    update_issue:
+        runs-on: ubuntu-latest
+        steps: 
+            - name: Update Github Issue
+              uses: actions/github-script@v6
+              env:
+                BODY: ${{ github.event.inputs.body }}
+                
+              with:
+                github-token: ${{ secrets.GITHUB_TOKEN }}
+                script: |
+                    const issueKey = '${{ github.event.inputs.issue_key }}';
+                    const {BODY} = process.env;
+                    const title = '${{ github.event.inputs.title }}';
+                    const owner = context.repo.owner;
+                    const repo = context.repo.repo;
+                    const issues = await github.rest.issues.listForRepo({
+                        owner,
+                        repo,
+                        state: 'all',
+                    });
+
+                    let issueNumber;
+
+                    for (const issue of issues.data) {
+                        const comments = await github.rest.issues.listComments({
+                            owner,
+                            repo,
+                            issue_number: issue.number,
+                        });
+
+                        const commentWithKey = comments.data.find(comment => comment.body.includes(issueKey));
+
+                        if (commentWithKey) {
+                        issueNumber = issue.number;
+                        break;
+                        }
+                    }
+                    if(issueNumber){
+                        await github.rest.issues.update({
+                            owner,
+                            repo,
+                            issue_number: issueNumber,
+                            title,
+                            body: `${BODY}\n\n*Posted from Jira*`,
+                        });
+
+
+            

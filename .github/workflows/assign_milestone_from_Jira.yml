@@ -20,8 +20,8 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Delay
-              run: sleep 10 
-            - name: Create issue with milestone
+              run: sleep 5 
+            - name: assign issue to milestone
               uses: actions/github-script@v6
               env:
                 BODY: ${{ github.event.inputs.body }}
