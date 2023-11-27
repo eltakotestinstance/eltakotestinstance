@@ -35,7 +35,22 @@ jobs:
                     const repo = context.repo.repo;
                     const epicKey = '${{ github.event.inputs.epic }}';
              
-                    let issueNumber;
+                    
+                    let milestoneNumber = null;
+                    const milestones = await github.rest.issues.listMilestones({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                    });
+                    
+                    for (const milestone of milestones.data) {
+                        if (milestone.description.includes(epicKey)) {
+                            milestoneNumber = milestone.number;
+                            console.log('Found Epic issue Key', epicKey);
+                            break;
+                        }
+                    }
+
+                    let issueNumber == null;
                     let numberTrys = 0;
                     const maxTrys = 10;
                     while(issueNumber == null && numberTrys < maxTrys){
@@ -54,8 +69,8 @@ jobs:
                             const commentWithKey = comments.data.find(comment => comment.body.includes(issueKey));
 
                             if (commentWithKey) {
-                            issueNumber = issue.number;
-                            break;
+                                issueNumber = issue.number;
+                                break;
                             }
                         }
                         
@@ -65,19 +80,7 @@ jobs:
 
                     
 
-                    let milestoneNumber = null;
-                    const milestones = await github.rest.issues.listMilestones({
-                        owner: context.repo.owner,
-                        repo: context.repo.repo,
-                    });
                     
-                    for (const milestone of milestones.data) {
-                        if (milestone.description.includes(epicKey)) {
-                            milestoneNumber = milestone.number;
-                            console.log('Found Epic issue Key', epicKey);
-                            break;
-                        }
-                    }
                     
                     
                     if(issueNumber && milestoneNumber){
