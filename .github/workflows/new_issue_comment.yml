@@ -4,7 +4,7 @@ on:
 
 jobs:
     new_comment:
-      if: ${{ !contains(github.event.comment.body, '*Posted from Jira*') }}
+      if: ${{ !contains(github.event.comment.body, '*Posted from Jira*') && github.event.comment.user.login != 'github-actions[bot]'}}
       runs-on: ubuntu-latest
       steps:
         - name: Get issue key
@@ -48,6 +48,7 @@ jobs:
             github-token: ${{ secrets.GITHUB_TOKEN }}
             
             script: |
+            
                 const issueKey = "${{ steps.extract_issue_key.outputs.issue }}";
                 const userName = "${{ github.event.comment.user.login }}";
                 

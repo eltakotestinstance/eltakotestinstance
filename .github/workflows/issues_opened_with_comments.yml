@@ -23,10 +23,11 @@ jobs:
       id: create
       uses: atlassian/gajira-create@v3
       with:
-        project: ES1
-        issuetype: issue
+        project: ES1 #the project key on the Jira side
+        issuetype: issue #i created the issue type "issue" on the Jira side
         summary:  ${{ github.event.issue.title }} 
         description: "New Issue from ${{ github.actor}} in ${{ github.repository }} branch ${{ steps.extract_branch.outputs.branch }}\nDescription:\n${{ github.event.issue.body }}"
+        fields: '{"customfield_10045" : "1"}' #the custom field is fromGithub on the Jira side, you need to create it and get the id https://confluence.atlassian.com/jirakb/how-to-find-any-custom-field-s-ids-744522503.html
     - name: Create comment
       uses: actions/github-script@v6
       with:
@@ -69,11 +70,12 @@ jobs:
       id: create
       uses: atlassian/gajira-create@v3
       with:
-        project: ES1
-        issuetype: issue
+        project: ES1 #the project key on the Jira side
+        issuetype: issue #i created the issue type "issue" on the Jira side
         summary:  named ${{ github.event.issue.title }} 
         description: "New Issue from ${{ github.actor}} in ${{ github.repository }} branch ${{ steps.extract_branch.outputs.branch }}\nDescription:\n${{ github.event.issue.body }}"
-        fields: '{"parent":{"key":"${{ steps.find.outputs.issue }}"}}'
+        fields: '{"parent":{"key":"${{ steps.find.outputs.issue }}"},
+                  "customfield_10045" : "1"}' #the custom field is fromGithub on the Jira side, you need to create it and get the id https://confluence.atlassian.com/jirakb/how-to-find-any-custom-field-s-ids-744522503.html
         
     - name: Create comment
       uses: actions/github-script@v6
@@ -81,7 +83,7 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
           const issueNumber = context.issue.number;
-          const commentBody = '${{ steps.create.outputs.issue }}\n*Posted from Github*'; 
+          const commentBody = '${{ steps.create.outputs.issue }}'; 
           await github.rest.issues.createComment({
             owner: context.repo.owner,
             repo: context.repo.repo,

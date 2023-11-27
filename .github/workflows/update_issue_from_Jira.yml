@@ -47,8 +47,8 @@ jobs:
                         const commentWithKey = comments.data.find(comment => comment.body.includes(issueKey));
 
                         if (commentWithKey) {
-                        issueNumber = issue.number;
-                        break;
+                            issueNumber = issue.number;
+                            break;
                         }
                     }
                     if(issueNumber){

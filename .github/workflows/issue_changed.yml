@@ -1,0 +1,59 @@
+on:
+    issues:
+      types: [edited]
+  
+jobs:
+    compare_changes:
+        permissions: write-all
+        runs-on: ubuntu-latest
+        if: ${{ !contains(github.event.issue.body, '*Posted from Jira*') }}
+        steps:
+            - name: join all issue comments
+              id: join_comments
+              uses: actions/github-script@v6
+              with:
+                result-encoding: string
+                github-token: ${{ secrets.GITHUB_TOKEN }}
+                script: |
+                    const comments = await github.issues.listComments({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: context.issue.number
+                    });
+                    return comments.data.map(comment => comment.body).join('\n')
+            - name: Login
+              uses: atlassian/gajira-login@master
+              env:
+                JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+                JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+                JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+            - name: find issue key
+              uses: atlassian/gajira-find-issue-key@v3
+              id: find_issue_key  
+              with: 
+                string: ${{ steps.join_comments.outputs.result }}
+            
+            - name: change description in Jira
+              uses: actions/github-script@v6
+              with:
+                github-token: ${{ secrets.GITHUB_TOKEN }}
+                script: |
+                    JSON=$(jq -n \
+                    --arg new_description "${{ github.event.issue.body }}\n\n*Posted from Github*" \
+                    '{
+                    "fields": {
+                        "description": $new_description,
+                        "customfield_10045" : "1"
+                    }
+                    }')
+                    RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" \
+                    -u ${{ secrets.JIRA_USER_EMAIL }}:${{ secrets.JIRA_API_TOKEN }} \
+                    -X PUT \
+                    --data "$JSON" \
+                    -H "Content-Type: application/json" \
+                    https://eltakotestinstance.atlassian.net/rest/api/2/issue/${{ steps.find_issue_key.outputs.issue }})
+                    if [ $RESPONSE -ne 204 ]; then
+                        echo "Error: HTTP status code $RESPONSE"
+                        exit 1
+                    fi
+
