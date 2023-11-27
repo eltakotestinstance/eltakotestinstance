@@ -58,6 +58,10 @@ jobs:
                             title,
                             body: `${BODY}\n\n*Posted from Jira*`,
                         });
+                    }
+                    else {
+                        console.log('Issue not found');
+                    }
 
 
             
