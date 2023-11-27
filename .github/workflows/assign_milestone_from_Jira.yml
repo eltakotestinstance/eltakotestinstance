@@ -77,12 +77,7 @@ jobs:
                         numberTrys++;
                         await new Promise(r => setTimeout(r, 500));
                     }
-
-                    
-
-                    
-                    
-                    
+                
                     if(issueNumber && milestoneNumber){
                         issue = await github.rest.issues.update({
                                 owner: context.repo.owner,
