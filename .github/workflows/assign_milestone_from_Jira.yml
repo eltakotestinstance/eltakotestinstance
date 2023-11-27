@@ -34,7 +34,37 @@ jobs:
                     const owner = context.repo.owner;
                     const repo = context.repo.repo;
                     const epicKey = '${{ github.event.inputs.epic }}';
+             
+                    let issueNumber;
+                    let numberTrys = 0;
+                    const maxTrys = 10;
+                    while(issueNumber == null && numberTrys < maxTrys){
+                        const issues = await github.rest.issues.listForRepo({
+                            owner,
+                            repo,
+                            state: 'all',
+                        });
+                        for (const issue of issues.data) {
+                            const comments = await github.rest.issues.listComments({
+                                owner,
+                                repo,
+                                issue_number: issue.number,
+                            });
+
+                            const commentWithKey = comments.data.find(comment => comment.body.includes(issueKey));
+
+                            if (commentWithKey) {
+                            issueNumber = issue.number;
+                            break;
+                            }
+                        }
+                        
+                        numberTrys++;
+                        await new Promise(r => setTimeout(r, 500));
+                    }
+
                     
+
                     let milestoneNumber = null;
                     const milestones = await github.rest.issues.listMilestones({
                         owner: context.repo.owner,
@@ -49,28 +79,7 @@ jobs:
                         }
                     }
                     
-                    const issues = await github.rest.issues.listForRepo({
-                        owner,
-                        repo,
-                        state: 'all',
-                    });
-
-                    let issueNumber;
-
-                    for (const issue of issues.data) {
-                        const comments = await github.rest.issues.listComments({
-                            owner,
-                            repo,
-                            issue_number: issue.number,
-                        });
-
-                        const commentWithKey = comments.data.find(comment => comment.body.includes(issueKey));
-
-                        if (commentWithKey) {
-                        issueNumber = issue.number;
-                        break;
-                        }
-                    }
+                    
                     if(issueNumber && milestoneNumber){
                         issue = await github.rest.issues.update({
                                 owner: context.repo.owner,
