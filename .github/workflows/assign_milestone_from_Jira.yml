@@ -48,7 +48,7 @@ jobs:
                         }
                     }
 
-                    let issueNumber == null;
+                    let issueNumber = null;
                     let numberTrys = 0;
                     const maxTrys = 10;
                     while(issueNumber == null && numberTrys < maxTrys){
