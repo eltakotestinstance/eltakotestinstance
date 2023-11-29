@@ -15,6 +15,7 @@ on:
 
 jobs:
     new_comment:
+        permissions: write-all
         runs-on: ubuntu-latest
         steps:
             - name: Post comment
@@ -22,7 +23,7 @@ jobs:
               env:
                TEXT:  ${{ github.event.inputs.text }}
               with:
-                github-token: ${{ secrets.PERSONAL_TOKEN }}
+                github-token: ${{ secrets.GITHUB_TOKEN }} 
                 script: |
                   const issueKey = "${{ github.event.inputs.issue_key }}";
                   const owner = context.repo.owner;
