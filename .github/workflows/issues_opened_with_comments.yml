@@ -33,7 +33,7 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
           const issueNumber = context.issue.number;
-          const commentBody = '[Issue ${{ steps.create.outputs.issue }} in Jira](${{ secrets.JIRA_BASE_URL }}/browse/${{ steps.create.outputs.issue }})'; 
+          const commentBody = '[Issue *${{ steps.create.outputs.issue }}* in Jira](${{ secrets.JIRA_BASE_URL }}/browse/${{ steps.create.outputs.issue }})'; 
           await github.rest.issues.createComment({
             owner: context.repo.owner,
             repo: context.repo.repo,
@@ -82,7 +82,7 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
           const issueNumber = context.issue.number;
-          const commentBody = '[Issue ${{ steps.create.outputs.issue }} in Jira](${{ secrets.JIRA_BASE_URL }}/browse/${{ steps.create.outputs.issue }})'; 
+          const commentBody = '[Issue *${{ steps.create.outputs.issue }}* in Jira](${{ secrets.JIRA_BASE_URL }}/browse/${{ steps.create.outputs.issue }})'; 
           await github.rest.issues.createComment({
             owner: context.repo.owner,
             repo: context.repo.repo,
