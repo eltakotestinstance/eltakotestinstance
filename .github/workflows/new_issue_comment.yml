@@ -4,6 +4,7 @@ on:
 
 jobs:
     new_comment:
+      permissions: write-all
       if: ${{ !contains(github.event.comment.body, '*Posted from Jira*') && github.event.comment.user.login != 'github-actions[bot]'}}
       runs-on: ubuntu-latest
       steps:
@@ -11,7 +12,7 @@ jobs:
           uses: actions/github-script@v6
           id: get_issue_key
           with:
-            github-token: ${{ secrets.PERSONAL_TOKEN }}
+            github-token: ${{ secrets.GITHUB_TOKEN }}
             result-encoding: string
             script: |
                 const owner = context.repo.owner;
