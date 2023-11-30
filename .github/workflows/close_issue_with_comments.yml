@@ -13,22 +13,30 @@ jobs:
         JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
         JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
         JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
-    - name: Extract comments
-      id : extract
-      run: |
-          ISSUE_NUMBER=${{ github.event.issue.number }}
-          COMMENTS_URL=${{ github.event.issue.comments_url }}
-          echo "Issue number: $ISSUE_NUMBER"
-          echo "Comments URL: $COMMENTS_URL"
-          COMMENTS=$(curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" $COMMENTS_URL | jq -r '.[].body')
-          JOINT_COMMENTS=$(echo $COMMENTS | tr '\n' ' ')
-          echo "::set-output name=joint_comments::$JOINT_COMMENTS"
+    - name: join all issue comments
+      id: join_comments
+      uses: actions/github-script@v6
+      with:
+        result-encoding: string
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: | #join all comments in one string for the "atlassian/gajira-find-issue-key" action
+          const owner = context.repo.owner;
+          const repo = context.repo.repo;
+          const issue_number = context.issue.number;
+          const comments = await github.rest.issues.listComments({
+            owner,
+            repo,
+            issue_number: issue_number,
+          });
+          const result = comments.data.map(comment => comment.body).join('\n');
+                    
+          return result;
 
     - name: Find in comments
       id: find
       uses: atlassian/gajira-find-issue-key@v3
       with:
-        string: ${{ steps.extract.outputs.joint_comments }}
+        string: ${{ steps.join_comments.outputs.result }}
 
     - name: output isue
       run: echo "Found issue key is ${{ steps.find.outputs.issue }}"
