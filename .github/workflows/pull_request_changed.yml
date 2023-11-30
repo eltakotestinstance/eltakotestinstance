@@ -14,12 +14,12 @@ jobs:
                 script: |
                     const currentDescription = ${{ github.event.pull_request.body }};
                     if(currentDescription.includes('[skip]')) {
-                        github.rest.issues.update({
+                        github.rest.pulls.update({
                             owner: context.repo.owner,
                             repo: context.repo.repo,
-                            issue_number: ${{ github.event.pull_request.number }};,
+                            pull_number: ${{ github.event.pull_request.number }};,
                             title: ${{ github.event.pull_request.title }},
-                            description: currentDescription.split('[skip]')[0]
+                            body: currentDescription.split('[skip]')[0]
                     });  
                     
     change_in_jira:
