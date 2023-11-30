@@ -1,31 +1,31 @@
 on:
-    issues:
+    pull_request:
       types: [edited]
   
 jobs:
     delete_posted_from_Jira:
         permissions: write-all
         runs-on: ubuntu-latest
-        if: ${{ contains(github.event.issue.body, '[skip]') }}
+        if: ${{ contains(github.event.pull_request.body, '[skip]') }}
         steps:
             - name: delete posted from Jira
               uses: actions/github-script@v6
               with:
                 script: |
-                    const currentDescription = context.payload.issue.body;
+                    const currentDescription = ${{ github.event.pull_request.body }};
                     if(currentDescription.includes('[skip]')) {
                         github.rest.issues.update({
                             owner: context.repo.owner,
                             repo: context.repo.repo,
-                            issue_number: context.issue.number;,
-                            title: context.issue.title,
+                            issue_number: ${{ github.event.pull_request.number }};,
+                            title: ${{ github.event.pull_request.title }},
                             description: currentDescription.split('[skip]')[0]
                     });  
                     
     change_in_jira:
         permissions: write-all
         runs-on: ubuntu-latest
-        if: ${{ !contains(github.event.issue.body, '[skip]') }}
+        if: ${{ !contains(github.event.pull_request.body, '[skip]') }}
         steps:
             - name: join all issue comments
               id: join_comments
@@ -36,7 +36,7 @@ jobs:
                 script: |
                     const owner = context.repo.owner;
                     const repo = context.repo.repo;
-                    const issue_number = context.issue.number;
+                    const issue_number = ${{ github.event.pull_request.number }};
                     const comments = await github.rest.issues.listComments({
                         owner,
                         repo,
@@ -67,7 +67,7 @@ jobs:
                     const jiraBaseURL = `${{ secrets.JIRA_BASE_URL }}`; // replace with your Jira instance URL
                     const jiraEmail = `${{ secrets.JIRA_USER_EMAIL }}`; // get Jira email from secrets
                     const jiraToken = `${{ secrets.JIRA_API_TOKEN }}`; // get Jira API token from secrets
-                    const newSummary = `${{ github.event.issue.title }}`; // replace with your new summary
+                    const newSummary = `${{ github.event.pull_request.title }}`; 
                     const newDescription = {
                         version: 1,
                         type: 'doc',
@@ -77,7 +77,7 @@ jobs:
                             content: [
                             {
                                 type: 'text',
-                                text: `${{ github.event.issue.body }}\n\n*Posted from Github*`,
+                                text: `${{ github.event.pull_request.body }}\n\n*Posted from Github*`,
                             },
                             ],
                         },
