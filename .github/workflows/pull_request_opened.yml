@@ -25,7 +25,7 @@ jobs:
               project: ES1 #the project key on the Jira side
               issuetype: pull request #i created the issue type "pull request" on the Jira side
               summary:  ${{ github.event.pull_request.title }} 
-              description: "New Pull request from ${{ github.actor}} in ${{ github.repository }} branch ${{ steps.extract_branch.outputs.branch }}\nDescription:\n${{ github.event.issue.body }}"
+              description: "New Pull request from ${{ github.actor}} in ${{ github.repository }} branch ${{ steps.extract_branch.outputs.branch }}\nDescription:\n${{ github.event.pull_request.body }}"
               fields: '{"customfield_10046" : 1}' #the custom field is pullRequestFromGithub on the Jira side, you need to create it and get the id https://confluence.atlassian.com/jirakb/how-to-find-any-custom-field-s-ids-744522503.html
           - name: Create comment
             uses: actions/github-script@v6
@@ -72,7 +72,7 @@ jobs:
               project: ES1 #the project key on the Jira side
               issuetype: pull request #i created the issue type "pull request" on the Jira side
               summary:  named ${{ github.event.pull_request.title }} 
-              description: "New Pull request from ${{ github.actor}} in ${{ github.repository }} branch ${{ steps.extract_branch.outputs.branch }}\nDescription:\n${{ github.event.issue.body }}"
+              description: "New Pull request from ${{ github.actor}} in ${{ github.repository }} branch ${{ steps.extract_branch.outputs.branch }}\nDescription:\n${{ github.event.pull_request.body }}"
               fields: '{"parent":{"key":"${{ steps.find.outputs.issue }}"},
                         "customfield_10046" : 1}' #the custom field is pullRequestFromGithub on the Jira side, you need to create it and get the id https://confluence.atlassian.com/jirakb/how-to-find-any-custom-field-s-ids-744522503.html
               
