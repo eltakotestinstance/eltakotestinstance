@@ -45,5 +45,5 @@ jobs:
       uses: atlassian/gajira-transition@master
       with:
         issue: ${{ steps.find.outputs.issue }}
-        transition: "Fertig"
+        transitionId: 31
       
