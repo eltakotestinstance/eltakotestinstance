@@ -32,7 +32,7 @@ jobs:
             with:
               github-token: ${{ secrets.GITHUB_TOKEN }}
               script: |
-                const issueNumber = context.pull_request.number;
+                const issueNumber = ${{ github.event.pull_request.number }};
                 const commentBody = '[Pull request *${{ steps.create.outputs.issue }}* in Jira](${{ secrets.JIRA_BASE_URL }}/browse/${{ steps.create.outputs.issue }})'; 
                 await github.rest.issues.createComment({
                   owner: context.repo.owner,
@@ -81,7 +81,7 @@ jobs:
             with:
               github-token: ${{ secrets.GITHUB_TOKEN }}
               script: |
-                const issueNumber = context.pull_request.number;
+                const issueNumber = ${{ github.event.pull_request.number }};
                 const commentBody = '[Pull request *${{ steps.create.outputs.issue }}* in Jira](${{ secrets.JIRA_BASE_URL }}/browse/${{ steps.create.outputs.issue }})'; 
                 await github.rest.issues.createComment({
                   owner: context.repo.owner,
