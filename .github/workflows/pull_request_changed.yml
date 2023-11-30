@@ -94,7 +94,7 @@ jobs:
                             fields: {
                                 summary: newSummary,
                                 description: newDescription,
-                                customfield_10045: 1,
+                                customfield_10046: 1,
                             },
                         }),
                     });
