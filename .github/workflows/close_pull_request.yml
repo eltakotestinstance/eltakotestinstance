@@ -4,7 +4,7 @@ on:
 jobs:
     build:
       permissions: write-all
-      name: closes Jira issue on Github issue Closure
+      name: closes Jira issue on Github pull-request Closure
       runs-on: ubuntu-latest
       steps:
       - name: Login
