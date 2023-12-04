@@ -1,6 +1,6 @@
 on:
     pull_request:
-      types: [edited]
+      types: [edited, milestoned]
   
 jobs:
     delete_posted_from_Jira:
@@ -20,12 +20,13 @@ jobs:
                             pull_number: ${{ github.event.pull_request.number }};,
                             title: ${{ github.event.pull_request.title }},
                             body: currentDescription.split('[skip]')[0]
-                    });  
+                        }); 
+                    } 
                     
-    change_in_jira:
+    change_in_jira_without_parent:
         permissions: write-all
         runs-on: ubuntu-latest
-        if: ${{ !contains(github.event.pull_request.body, '[skip]') }}
+        if: ${{ github.event.pull_request.milestone == null && !contains(github.event.pull_request.body, '[skip]') }}
         steps:
             - name: join all issue comments
               id: join_comments
@@ -102,4 +103,90 @@ jobs:
                     if (!response.ok) {
                         throw new Error(`Failed to update issue on Jira: ${response.statusText}`);
                     }
+    change_in_jira_with_parent:
+        permissions: write-all
+        runs-on: ubuntu-latest
+        if: ${{ github.event.pull_request.milestone == null && !contains(github.event.pull_request.body, '[skip]') }}
+        steps:
+                            - name: join all issue comments
+                              id: join_comments
+                              uses: actions/github-script@v6
+                              with:
+                                result-encoding: string
+                                github-token: ${{ secrets.GITHUB_TOKEN }}
+                                script: |
+                                    const owner = context.repo.owner;
+                                    const repo = context.repo.repo;
+                                    const issue_number = ${{ github.event.pull_request.number }};
+                                    const comments = await github.rest.issues.listComments({
+                                        owner,
+                                        repo,
+                                        issue_number: issue_number,
+                                    });
+                                    const result = comments.data.map(comment => comment.body).join('\n');
+                                    
+                                    return result;
+                            - name: Login
+                              uses: atlassian/gajira-login@master
+                              env:
+                                JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+                                JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+                                JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+                            - name: find issue key
+                              uses: atlassian/gajira-find-issue-key@v3
+                              id: find_issue_key  
+                              with: 
+                                string: ${{ steps.join_comments.outputs.result }}
+                            - name: Find in Epic description
+                              id: find_epic
+                              uses: atlassian/gajira-find-issue-key@v3
+                              with:
+                                  string: ${{ github.event.pull_request.milestone.description }}
+                            - name: change description in Jira
+                              uses: actions/github-script@v6
+                              with:
+                                github-token: ${{ secrets.GITHUB_TOKEN }}
+                                script: |
+                                    
+                                    const issueKey = `${{ steps.find_issue_key.outputs.issue }}`; // get issue key from previous step
+                                    const jiraBaseURL = `${{ secrets.JIRA_BASE_URL }}`; // replace with your Jira instance URL
+                                    const jiraEmail = `${{ secrets.JIRA_USER_EMAIL }}`; // get Jira email from secrets
+                                    const jiraToken = `${{ secrets.JIRA_API_TOKEN }}`; // get Jira API token from secrets
+                                    const newSummary = `${{ github.event.pull_request.title }}`; 
+                                    const newDescription = {
+                                        version: 1,
+                                        type: 'doc',
+                                        content: [
+                                        {
+                                            type: 'paragraph',
+                                            content: [
+                                            {
+                                                type: 'text',
+                                                text: `${{ github.event.pull_request.body }}\n\n*Posted from Github*`,
+                                            },
+                                            ],
+                                        },
+                                        ],
+                                    };
+                                    const response = await fetch(`${jiraBaseURL}/rest/api/3/issue/${issueKey}`, {
+                                        method: 'PUT',
+                                        headers: {
+                                            'Authorization': `Basic ${Buffer.from(jiraEmail + ':' + jiraToken).toString('base64')}`,
+                                            'Accept': 'application/json',
+                                            'Content-Type': 'application/json',
+                                        },
+                                        body: JSON.stringify({
+                                            fields: {
+                                                summary: newSummary,
+                                                description: newDescription,
+                                                customfield_10046: 1,
+                                                "parent":{"key":"${{ steps.find_epic.outputs.issue }}"}
+                                            },
+                                        }),
+                                    });
+                                    console.log(await response.text());
+                                    if (!response.ok) {
+                                        throw new Error(`Failed to update issue on Jira: ${response.statusText}`);
+                                    }
+                
 

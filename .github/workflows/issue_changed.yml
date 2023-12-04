@@ -180,7 +180,7 @@ jobs:
                                 summary: newSummary,
                                 description: newDescription,
                                 customfield_10045: 1,
-                                "parent":{"key":"${{ steps.find_epic.outputs.issue }}"},
+                                "parent":{"key":"${{ steps.find_epic.outputs.issue }}"}
                             },
                         }),
                     });
