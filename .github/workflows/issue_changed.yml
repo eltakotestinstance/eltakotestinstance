@@ -20,7 +20,8 @@ jobs:
                             issue_number: context.issue.number;,
                             title: context.issue.title,
                             description: currentDescription.split('[skip]')[0]
-                    });  
+                        });
+                    }  
                     
     change_in_jira_without_parent:
         permissions: write-all
