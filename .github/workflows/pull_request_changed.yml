@@ -106,7 +106,7 @@ jobs:
     change_in_jira_with_parent:
         permissions: write-all
         runs-on: ubuntu-latest
-        if: ${{ github.event.pull_request.milestone == null && !contains(github.event.pull_request.body, '[skip]') }}
+        if: ${{ github.event.pull_request.milestone != null && !contains(github.event.pull_request.body, '[skip]') }}
         steps:
                             - name: join all issue comments
                               id: join_comments
