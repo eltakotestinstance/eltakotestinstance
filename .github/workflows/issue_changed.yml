@@ -1,6 +1,6 @@
 on:
     issues:
-      types: [edited]
+      types: [edited, milestoned]
   
 jobs:
     delete_posted_from_Jira:
