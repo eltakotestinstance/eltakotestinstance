@@ -1,12 +1,12 @@
 on:
     issues:
-      types: [edited] #, milestoned
+      types: [edited, milestoned] #
   
 jobs:
     delete_posted_from_Jira:
         permissions: write-all
         runs-on: ubuntu-latest
-        if: ${{ contains(github.event.issue.body, '[skip]') }}
+        if: ${{ contains(github.event.issue.body, '[skip]') &&  github.event.issue.pull_request == null }}
         steps:
             - name: delete posted from Jira
               uses: actions/github-script@v6
@@ -26,7 +26,7 @@ jobs:
     change_in_jira_without_parent:
         permissions: write-all
         runs-on: ubuntu-latest
-        if: ${{ github.event.issue.milestone == null && !contains(github.event.issue.body, '[skip]') }}
+        if: ${{ github.event.issue.milestone == null && !contains(github.event.issue.body, '[skip]')  &&  github.event.issue.pull_request == null}}
         steps:
             - name: join all issue comments
               id: join_comments
@@ -106,7 +106,7 @@ jobs:
     change_in_jira_with_parent:
         permissions: write-all
         runs-on: ubuntu-latest
-        if: ${{ github.event.issue.milestone != null && !contains(github.event.issue.body, '[skip]') }}
+        if: ${{ github.event.issue.milestone != null && !contains(github.event.issue.body, '[skip]') &&  github.event.issue.pull_request == null }}
         steps:
             - name: join all issue comments
               id: join_comments
