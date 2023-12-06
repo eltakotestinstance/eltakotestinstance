@@ -19,7 +19,7 @@ jobs:
               env:
                 TEXT: ${{ github.event.inputs.text }}
               with:
-                github-token: ${{ secrets.ENVTESTSECRET }}
+                github-token: ${{ secrets.ENVTESTSECRET  }}
                 script: |
                     const issueKey = "${{ github.event.inputs.issue_key }}";
                     const {TEXT} = process.env;
