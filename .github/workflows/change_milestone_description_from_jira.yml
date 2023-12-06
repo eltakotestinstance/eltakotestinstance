@@ -13,13 +13,15 @@ on:
 jobs:
     update_description:
         runs-on: ubuntu-latest
+        environment: 'test'
         steps:
             - name: Update milestone description
+              
               uses: actions/github-script@v6
               env:
                 TEXT: ${{ github.event.inputs.text }}
               with:
-                github-token: ${{ env.ENVTESTSECRET  }}
+                github-token: ${{ secrets.ENVTESTSECRET  }}
                 script: |
                     const issueKey = "${{ github.event.inputs.issue_key }}";
                     const {TEXT} = process.env;
