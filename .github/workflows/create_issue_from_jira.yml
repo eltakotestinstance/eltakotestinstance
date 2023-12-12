@@ -49,7 +49,7 @@ jobs:
                         return issue.data.number;
                     }
                     else {
-                        console.log('Error: Issue not created');
+                        throw new Error('Error: Issue not created');
                         return "";
                     }
             - name: Create commment

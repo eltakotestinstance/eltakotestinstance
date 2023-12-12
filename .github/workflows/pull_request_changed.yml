@@ -3,10 +3,10 @@ on:
       types: [edited, milestoned]
   
 jobs:
-    delete_posted_from_Jira:
+    delete_posted_from_Jira: 
         permissions: write-all
-        runs-on: ubuntu-latest
-        if: ${{ contains(github.event.pull_request.body, '[skip]') }}
+        runs-on: ubuntu-latest #checks if [skip] is in the description and deletes it
+        if: ${{ contains(github.event.pull_request.body, '[skip]') }} 
         steps:
             - name: delete posted from Jira
               uses: actions/github-script@v6
@@ -30,7 +30,7 @@ jobs:
         steps:
             - name: join all issue comments
               id: join_comments
-              uses: actions/github-script@v6
+              uses: actions/github-script@v6 #searches for the Jira issue key in the comments
               with:
                 result-encoding: string
                 github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -59,7 +59,7 @@ jobs:
                 string: ${{ steps.join_comments.outputs.result }}
             
             - name: change description in Jira
-              uses: actions/github-script@v6
+              uses: actions/github-script@v6 #uses the Jira api to make the changes
               with:
                 github-token: ${{ secrets.GITHUB_TOKEN }}
                 script: |

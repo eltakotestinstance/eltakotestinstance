@@ -29,7 +29,7 @@ jobs:
                     const title = '${{ github.event.inputs.title }}';
                     const owner = context.repo.owner;
                     const repo = context.repo.repo;
-                    const issues = await github.rest.issues.listForRepo({
+                    const issues = await github.rest.issues.listForRepo({ // get all issues for the repo
                         owner,
                         repo,
                         state: 'all',
@@ -38,13 +38,13 @@ jobs:
                     let issueNumber;
 
                     for (const issue of issues.data) {
-                        const comments = await github.rest.issues.listComments({
+                        const comments = await github.rest.issues.listComments({ // get all comments for the issue
                             owner,
                             repo,
                             issue_number: issue.number,
                         });
 
-                        const commentWithKey = comments.data.find(comment => comment.body.includes(issueKey));
+                        const commentWithKey = comments.data.find(comment => comment.body.includes(issueKey)); // find the comment with the issue key
 
                         if (commentWithKey) {
                             issueNumber = issue.number;
@@ -52,7 +52,7 @@ jobs:
                         }
                     }
                     if(issueNumber){
-                        await github.rest.issues.update({
+                        await github.rest.issues.update({ // update the issue with the data from Jira
                             owner,
                             repo,
                             issue_number: issueNumber,
@@ -61,7 +61,7 @@ jobs:
                         });
                     }
                     else {
-                        console.log('Issue not found');
+                        throw new Error('Issue not found');
                     }
 
 

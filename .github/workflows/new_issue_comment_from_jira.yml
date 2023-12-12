@@ -19,7 +19,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Post comment
-              uses: actions/github-script@v6
+              uses: actions/github-script@v6 # searches for the issue key and posts the comment under the issue
               env:
                TEXT:  ${{ github.event.inputs.text }}
               with:

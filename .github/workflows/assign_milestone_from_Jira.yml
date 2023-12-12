@@ -34,8 +34,8 @@ jobs:
                     const epicKey = '${{ github.event.inputs.epic }}';
              
                     
-                    let milestoneNumber = null;
-                    const milestones = await github.rest.issues.listMilestones({
+                    let milestoneNumber = null; //searches for the Epic issue key in the description of all milestones
+                    const milestones = await github.rest.issues.listMilestones({ 
                         owner: context.repo.owner,
                         repo: context.repo.repo,
                     });
@@ -51,8 +51,8 @@ jobs:
                     let issueNumber = null;
                     let numberTrys = 0;
                     const maxTrys = 10;
-                    while(issueNumber == null && numberTrys < maxTrys){
-                        const issues = await github.rest.issues.listForRepo({
+                    while(issueNumber == null && numberTrys < maxTrys){ //makes a loop because if a issue is created with an epic in Jira, the isse created and assign milestone action are triggered at the same time
+                        const issues = await github.rest.issues.listForRepo({ //searches for the issue key in all comments of all issues
                             owner,
                             repo,
                             state: 'all',
@@ -71,9 +71,12 @@ jobs:
                                 break;
                             }
                         }
-                        console.log('Issue not found, try again in 500ms(try: ' + numberTrys + ')');
-                        numberTrys++;
-                        await new Promise(r => setTimeout(r, 500));
+                        if(issueNumber == null) { //if the issue is not found, it waits 500ms and tries again
+                            console.log('Issue not found, try again in 500ms(try: ' + numberTrys + ')');
+                            numberTrys++;
+                            await new Promise(r => setTimeout(r, 500));
+                        }
+                        
                     }
                 
                     if(issueNumber && milestoneNumber){

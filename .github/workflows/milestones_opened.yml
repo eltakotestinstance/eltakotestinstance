@@ -13,7 +13,7 @@ jobs:
         id: compare_changes
         with:
             result-encoding: string
-            github-token: ${{ secrets.PERSONAL_TOKEN }}
+            github-token: ${{ secrets.PERSONAL_TOKEN }} #needs a pesonal token for changing the milestone description
             script: |
                 const currentDescription = context.payload.milestone.description;
                 if(currentDescription.includes('[skip]')) {
@@ -60,7 +60,7 @@ jobs:
         summary: ${{ github.event.milestone.title }} 
         description: "in ${{ github.repository }} branch ${{ steps.extract_branch.outputs.branch }}\nDescription: ${{ github.event.milestone.description }}"
         fields: '{"duedate": "${{ github.event.milestone.due_on }}",
-                  "customfield_10041" : 1}'
+                  "customfield_10041" : 1}' #customfield fromGithub in Jira
 
             
     - name: Log created issue
@@ -68,7 +68,7 @@ jobs:
 
         
     - name: Update milestone description
-      uses: actions/github-script@v6
+      uses: actions/github-script@v6 #updates the milestone description with the Jira issue link and a warning not to edit/delete 
       with:
           github-token: ${{ secrets.PERSONAL_TOKEN }}
           script: |       

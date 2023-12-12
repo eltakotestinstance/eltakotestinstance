@@ -11,7 +11,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Compare changes
-        uses: actions/github-script@v6
+        uses: actions/github-script@v6 
         id: compare_changes
         with:
             result-encoding: string
@@ -20,11 +20,11 @@ jobs:
                 const currentDescription = context.payload.milestone.description;
                 const sender = context.payload.sender.login;
                 console.log('The edit was made by', sender);
-                if (sender === 'github-actions') {
+                if (sender === 'github-actions') { // Ignore edits made by a workflow
                   console.log('Skipping workflow because the edit was made by', sender);
                   return "false"
                 }
-                if(currentDescription.includes('[skip]')) {
+                if(currentDescription.includes('[skip]')) { //Ignore edits made from Jira and delete the [skip] tag
                   github.rest.issues.updateMilestone({
                     owner: context.repo.owner,
                     repo: context.repo.repo,
@@ -41,7 +41,7 @@ jobs:
                 const previousDescriptionSplit = previousDescription.split('AUTOMATICALLY GENERATED CONTENT DO NOT EDIT/DELETE BEYOND THIS POINT')[0];
                 
                 // Compare the descriptions
-                if (currentDescriptionSplit.trim() != previousDescriptionSplit.trim()) {
+                if (currentDescriptionSplit.trim() != previousDescriptionSplit.trim()) { //compares the descriptions before the phrase: "AUTOMATICALLY GENERATED CONTENT DO NOT EDIT/DELETE BEYOND THIS POINT"
                     console.log('The descriptions are different');
                     return currentDescriptionSplit;
                 } 
@@ -65,8 +65,8 @@ jobs:
       with: 
         string: ${{ github.event.milestone.description }}
       id: find_issue_key  
-    - name: change description
-      if: steps.find_issue_key.outputs.issue != ''
+    - name: change description #uses the Jira api to change the description of the Epic
+      if: steps.find_issue_key.outputs.issue != '' 
       run: |
         JSON=$(jq -n \
         --arg new_description "${{ needs.compare_changes.outputs.result }}" \

@@ -18,7 +18,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Update milestone description
-              uses: actions/github-script@v6
+              uses: actions/github-script@v6 # Adds the Comment from Jira to the Description of the Milestone
               env:
                 TEXT: ${{ github.event.inputs.text }}
               with:

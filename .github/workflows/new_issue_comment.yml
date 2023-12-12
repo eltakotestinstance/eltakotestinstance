@@ -9,7 +9,7 @@ jobs:
       runs-on: ubuntu-latest
       steps:
         - name: Get issue key
-          uses: actions/github-script@v6
+          uses: actions/github-script@v6 #joins all comments into one string for the find issue key action
           id: get_issue_key
           with:
             github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -42,7 +42,7 @@ jobs:
             string: ${{ steps.get_issue_key.outputs.result }}
         
         - name: Post to Jira
-          uses: actions/github-script@v6
+          uses: actions/github-script@v6 #uses the Jira api to post a comment to the issue
           env: 
             COMMENT_TEXT: ${{ github.event.comment.body }}
           with:
