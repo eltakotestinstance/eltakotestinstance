@@ -17,7 +17,7 @@ jobs:
           id: compare_changes
           run: |
             pip install -r python/requirements.txt;
-            OUTPUT=$(python python/new_epic_comment_from_Jira.py);
+            OUTPUT=$(python python/milestones_opened_skip_github.py);
             echo result=$OUTPUT >> $GITHUB_OUTPUT;
           env:
             MILESTONE_NUMBER: ${{ github.event.milestone.number }}
