@@ -23,7 +23,7 @@ jobs:
                 python-version: '3.9'
                 cache: 'pip' # caching pip dependencies
             - run: |
-                    pip install -r python/new_epic_comment_req.txt;
+                    pip install -r python/requirements.txt;
                     python python/new_epic_comment_from_Jira.py;
               env:
                 INPUT_ISSUE_KEY: ${{ github.event.inputs.issue_key }}
