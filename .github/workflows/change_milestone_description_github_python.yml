@@ -46,7 +46,7 @@ jobs:
         string: ${{ github.event.milestone.description }}
         
     
-      if: ${{ steps.find_issue_key.outputs.issue != '' }} 
+      
     - uses: actions/checkout@v4
       if: ${{ steps.find_issue_key.outputs.issue != '' }} 
     - name: setup python
