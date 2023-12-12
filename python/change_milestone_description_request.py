@@ -22,7 +22,7 @@ data = {
 
 # make the PUT request
 response = requests.put(
-    f"https:{jira_instance_url}rest/api/2/issue/{issue}",
+    f"{jira_instance_url}rest/api/2/issue/{issue}",
     data=json.dumps(data),
     headers={"Content-Type": "application/json"},
     auth=(jira_user_email, jira_api_token)
