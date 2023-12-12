@@ -47,6 +47,8 @@ jobs:
         
     
       if: ${{ steps.find_issue_key.outputs.issue != '' }} 
+    - uses: actions/checkout@v4
+      if: ${{ steps.find_issue_key.outputs.issue != '' }} 
     - name: setup python
       uses: actions/setup-python@v4
       with:
@@ -55,7 +57,8 @@ jobs:
     
       if: steps.find_issue_key.outputs.issue != '' 
     - name: change description #uses the Jira api to change the description of the Epic
-      run: | # pip install -r python/requirements.txt;
+      run: | 
+              pip install -r python/requirements.txt;
               python python/change_milestone_description_request.py;
       env:
         JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
