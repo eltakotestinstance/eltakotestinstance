@@ -16,7 +16,8 @@ milestones = repo.get_milestones(state='open')
 for milestone in milestones:
     if issue_key in milestone.description:
         new_description = f"{milestone.description}\n---\n### {author}: \n{text}\n({timestamp})"
-        milestone.edit(description=new_description)
+        milestone.edit(description=new_description,
+                       title=milestone.title)
         break
 
 
