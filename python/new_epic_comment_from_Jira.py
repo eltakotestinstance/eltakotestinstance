@@ -5,7 +5,7 @@ import os
 # assuming issue_key and author are passed as environment variables
 issue_key = os.getenv('INPUT_ISSUE_KEY')
 author = os.getenv('INPUT_AUTHOR')
-text = os.getenv('TEXT')
+text = os.getenv('INPUT_TEXT')
 timestamp = datetime.now().isoformat()
 
 g = Github(os.getenv('GITHUB_TOKEN'))  # replace with your GitHub token
