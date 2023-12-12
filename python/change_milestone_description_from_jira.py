@@ -4,8 +4,8 @@ import os
 # assuming GITHUB_TOKEN, GITHUB_REPOSITORY, ISSUE_KEY, and TEXT are passed as environment variables
 g = Github(os.getenv('GITHUB_TOKEN'))  # replace with your GitHub token
 repo = g.get_repo(os.getenv('GITHUB_REPOSITORY'))  # get the repository
-issue_key = os.getenv('ISSUE_KEY')  # get the issue key
-text = os.getenv('TEXT')  # get the text
+issue_key = os.getenv('INPUT_ISSUE_KEY')  # get the issue key
+text = os.getenv('INPUT_TEXT')  # get the text
 
 milestones = repo.get_milestones(state='open')
 
