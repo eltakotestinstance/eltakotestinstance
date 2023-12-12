@@ -1,0 +1,30 @@
+name: Update milestone description from Jira
+
+on:
+    workflow_dispatch:
+        inputs:
+            issue_key:
+                description: 'Jira issue key'
+                required: true
+            text:
+                description: 'Text'
+                required: true
+
+jobs:
+    update_description:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-python@v4
+              with:
+                python-version: '3.9'
+                cache: 'pip' # caching pip dependencies
+            - name: Update milestone description
+              run: |
+                    pip install -r python/requirements.txt;
+                    python python/change_milestone_description_from_jira.py;
+              env:
+                INPUT_ISSUE_KEY: ${{ github.event.inputs.issue_key }}
+                INPUT_TEXT: ${{ github.event.inputs.text }}
+                GITHUB_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
+            

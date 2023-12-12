@@ -13,7 +13,6 @@ on:
 jobs:
     update_description:
         runs-on: ubuntu-latest
-        environment: 'test'
         steps:
             - name: Update milestone description
               
@@ -21,7 +20,7 @@ jobs:
               env:
                 TEXT: ${{ github.event.inputs.text }}
               with:
-                github-token: ${{ secrets.ENVTESTSECRET  }}
+                github-token: ${{ secrets.PERSONAL_TOKEN  }}
                 script: |
                     const issueKey = "${{ github.event.inputs.issue_key }}";
                     const {TEXT} = process.env;
