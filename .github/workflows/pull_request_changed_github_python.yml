@@ -65,6 +65,7 @@ jobs:
                   ISSUE_KEY: ${{ steps.find_issue_key.outputs.issue }}
                   NEW_DESCRIPTION: ${{ github.event.pull_request.body }}
                   NEW_SUMMARY: ${{ github.event.pull_request.title }}
+                  CUSTOM_FIELD: "customfield_10046"
     change_in_jira_with_parent:
         permissions: write-all
         runs-on: ubuntu-latest
@@ -114,4 +115,5 @@ jobs:
                 NEW_DESCRIPTION: ${{ github.event.pull_request.body }}
                 NEW_SUMMARY: ${{ github.event.pull_request.title }}
                 EPIC_KEY: ${{ steps.find_epic.outputs.issue }}
+                CUSTOM_FIELD: "customfield_10046"
                 

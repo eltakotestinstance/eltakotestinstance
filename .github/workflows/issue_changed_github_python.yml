@@ -54,9 +54,6 @@ jobs:
               id: find_issue_key  
               with: 
                 string: ${{ steps.join_comments.outputs.result }}
-              
-
-              
             - name: change description in Jira
               if: ${{ steps.find_issue_key.outputs.issue != '' }}
               run: | 
@@ -68,6 +65,7 @@ jobs:
                 ISSUE_KEY: ${{ steps.find_issue_key.outputs.issue }}
                 NEW_DESCRIPTION: ${{ github.event.issue.body }}
                 NEW_SUMMARY: ${{ github.event.issue.title }}
+                CUSTOM_FIELD: "customfield_10045"
 
     change_in_jira_with_parent:
         permissions: write-all
@@ -121,4 +119,5 @@ jobs:
                     NEW_DESCRIPTION: ${{ github.event.issue.body }}
                     NEW_SUMMARY: ${{ github.event.issue.title }}
                     EPIC_KEY: ${{ steps.find_epic.outputs.issue }}
+                    CUSTOM_FIELD: "customfield_10045"
                 
