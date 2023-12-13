@@ -69,7 +69,7 @@ headers = {
 
 # make the PUT request
 response = requests.put(
-    f"{jira_base_url}/rest/api/3/issue/{issue_key}",
+    f"{jira_base_url}rest/api/3/issue/{issue_key}",
     data=json.dumps(data),
     headers=headers
 )
@@ -77,4 +77,5 @@ response = requests.put(
 # check the response
 if response.status_code != 204:
     print(f"Error: HTTP status code {response.status_code}")
+    print(response.text)
     exit(1)
