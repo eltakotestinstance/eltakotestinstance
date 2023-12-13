@@ -1,0 +1,45 @@
+on:
+    pull_request:
+      types: [closed]
+jobs:
+    build:
+      permissions: write-all
+      name: closes Jira issue on Github pull-request Closure
+      runs-on: ubuntu-latest
+      steps:
+      - name: Login
+        uses: atlassian/gajira-login@master
+        env:
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+          JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+            python-version: '3.9'
+            cache: 'pip' # caching pip dependencies
+      - name: join all issue comments
+        id: join_comments
+        run: |
+          pip install -r python/requirements.txt;
+          OUTPUT=$(python python/join_issue_comments.py);
+          echo result=$OUTPUT >> $GITHUB_OUTPUT;
+        env:
+            ISSUE_NUMBER: ${{ github.event.pull_request.number }}
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Find in comments
+        id: find
+        uses: atlassian/gajira-find-issue-key@v3
+        with:
+          string: ${{ steps.join_comments.outputs.result }}
+  
+      - name: output isue
+        run: echo "Found issue key is ${{ steps.find.outputs.issue }}"
+     
+      - name: Transition issue to done
+        uses: atlassian/gajira-transition@master
+        with:
+          issue: ${{ steps.find.outputs.issue }}
+          transitionId: 31
+        
