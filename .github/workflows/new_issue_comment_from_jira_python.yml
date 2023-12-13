@@ -1,20 +1,20 @@
+name: new Comment from Jira
+
 on:
     workflow_dispatch:
         inputs:
             issue_key:
                 description: 'Jira issue key'
                 required: true
-            body:
-                description: 'Description of the issue'
-                required: false
-            title:
-                description: 'Title of the issue'
+            author:
+                description: 'Author'
                 required: true
-            epic:
-                description: 'Epic issue key'
+            text:
+                description: 'Text'
                 required: true
+
 jobs:
-    create_issue:
+    new_comment:
         permissions: write-all
         runs-on: ubuntu-latest
         steps:
@@ -24,12 +24,13 @@ jobs:
               with:
                   python-version: '3.9'
                   cache: 'pip' # caching pip dependencies
-            - name: assign issue to milestone
+            - name: Post comment
               run: |
                   pip install -r python/requirements.txt;
-                  python python/assign_milestone.py;
+                  python python/new_issue_comment.py;
                   
               env:
                   ISSUE_KEY: ${{ github.event.inputs.issue_key }}
-                  EPIC_KEY: ${{ github.event.inputs.epic }}
+                  AUTHOR: ${{ github.event.inputs.author }}
+                  TEXT: ${{ github.event.inputs.text }}
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
