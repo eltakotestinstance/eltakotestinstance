@@ -57,8 +57,9 @@ jobs:
                 string: ${{ steps.join_comments.outputs.result }}
               
 
-              if: ${{ steps.find_issue_key.outputs.issue != '' }}
+              
             - name: change description in Jira
+              if: ${{ steps.find_issue_key.outputs.issue != '' }}
               run: | 
                 python python/post_issue_changes_to_jira.py;
               env:
@@ -101,14 +102,16 @@ jobs:
               id: find_issue_key  
               with: 
                 string: ${{ steps.join_comments.outputs.result }}
+            
             - name: Find in Epic description
               id: find_epic
               uses: atlassian/gajira-find-issue-key@v3
               with:
                 string: ${{ github.event.issue.milestone.description }}
                                 
-              if: ${{ steps.find_issue_key.outputs.issue != '' && steps.find_epic.outputs.issue != ''}}
+              
             - name: change description in Jira
+              if: ${{ steps.find_issue_key.outputs.issue != '' && steps.find_epic.outputs.issue != ''}}
               run: | 
                 python python/post_issue_changes_to_jira.py;
               env:
