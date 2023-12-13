@@ -1,0 +1,36 @@
+on:
+    workflow_dispatch:
+        inputs:
+            issue_key:
+                description: 'Jira issue key'
+                required: true
+            body:
+                description: 'Description of the issue'
+                required: false
+            title:
+                description: 'Title of the issue'
+                required: true
+            epic:
+                description: 'Epic issue key'
+                required: true
+jobs:
+    create_issue:
+        permissions: write-all
+        runs-on: ubuntu-latest
+        steps:
+            
+            - uses: actions/checkout@v4
+            - uses: actions/setup-python@v4
+              with:
+                  python-version: '3.9'
+                  cache: 'pip' # caching pip dependencies
+            - name: assign issue to milestone
+              id: join_comments
+              run: |
+                  pip install -r python/requirements.txt;
+                  python python/assign_milestone.py;
+                  
+              env:
+                  ISSUE_KEY: ${{ github.event.inputs.issue_key }}
+                  EPIC_KEY: ${{ github.event.inputs.epic }}
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
