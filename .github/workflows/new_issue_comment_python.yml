@@ -1,0 +1,52 @@
+on:
+    issue_comment:
+      types: [created]
+
+jobs:
+    new_comment:
+      permissions: write-all
+      if: ${{ !contains(github.event.comment.body, '*Posted from Jira*') && github.event.comment.user.login != 'github-actions[bot]'}}
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v4
+        - uses: actions/setup-python@v4
+          with:
+            python-version: '3.9'
+            cache: 'pip' # caching pip dependencies
+        - name: join all issue comments
+          id: join_comments
+          run: |
+            pip install -r python/requirements.txt;
+            OUTPUT=$(python python/join_issue_comments.py);
+            echo result=$OUTPUT >> $GITHUB_OUTPUT;
+          env:
+            ISSUE_NUMBER: ${{ github.event.issue.number }}
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+        - name: Login
+          uses: atlassian/gajira-login@master
+          env:
+            JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+            JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+            JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+
+        - name: Find in comments
+          id: extract_issue_key
+          uses: atlassian/gajira-find-issue-key@v3
+          with:
+            string: ${{ steps.join_comments.outputs.result }}
+        
+        - name: change description in Jira
+          if: ${{ steps.extract_issue_key.outputs.issue != '' }}
+          run: | 
+            python python/post_issue_comment_to_Jira.py;
+          env:
+              JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+              JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+              JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+              ISSUE_KEY: ${{ steps.extract_issue_key.outputs.issue }}
+              COMMENT_TEXT: ${{ github.event.comment.body }}
+              USER_NAME: ${{ github.event.comment.user.login }}
+              
+              
+    
