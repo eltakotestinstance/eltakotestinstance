@@ -27,7 +27,7 @@ jobs:
                 pip install -r python/requirements.txt;
                 python python/change_issue_from_Jira.py;
               env:
-                ISSUE_NUMBER: ${{ github.event.inputs.issue_key }}
+                ISSUE_KEY: ${{ github.event.inputs.issue_key }}
                 ISSUE_TITLE: ${{ github.event.inputs.title }}
                 ISSUE_BODY: ${{ github.event.inputs.body }}
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
