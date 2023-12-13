@@ -11,6 +11,7 @@ jira_token = os.getenv('JIRA_API_TOKEN')  # get the Jira API token
 new_summary = os.getenv('NEW_SUMMARY')  # get the new summary
 new_description = os.getenv('NEW_DESCRIPTION')  # get the new description
 epic_issue_key = os.getenv('EPIC_KEY')
+custom_field = os.getenv('CUSTOM_FIELD')
 
 data = None
 
@@ -33,7 +34,7 @@ if epic_issue_key is None and epic_issue_key != '':
                     }
                 ],
             },
-            "customfield_10045": 1,
+            custom_field: 1,
         }
     }
 else:
@@ -55,7 +56,7 @@ else:
                     }
                 ],
             },
-            "customfield_10045": 1,
+            custom_field: 1,
             "parent": {"key": f"{epic_issue_key}"}
         }
     }
@@ -79,4 +80,3 @@ if response.status_code != 204:
     print(f"Error: HTTP status code {response.status_code}")
     print(response.text)
     exit(1)
-    
