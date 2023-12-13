@@ -23,6 +23,6 @@ for issue in issues:
 
 if issue_number is not None:
     issue = repo.get_issue(number=issue_number)
-    issue.edit(title=title, body=f"{body}[skip]")
+    issue.edit(title=title, body=f"{body}")
 else:
     raise Exception('Issue not found')
