@@ -115,8 +115,8 @@ jobs:
                     JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
                     JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
                     JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
-                    ISSUE: ${{ steps.find_issue_key.outputs.issue }}
+                    ISSUE_KEY: ${{ steps.find_issue_key.outputs.issue }}
                     NEW_DESCRIPTION: ${{ github.event.issue.body }}
                     NEW_SUMMARY: ${{ github.event.issue.title }}
-                    EPIC: ${{ steps.find_epic.outputs.issue }}
+                    EPIC_KEY: ${{ steps.find_epic.outputs.issue }}
                 
