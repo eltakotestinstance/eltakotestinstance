@@ -14,7 +14,7 @@ epic_issue_key = os.getenv('EPIC_KEY')
 
 data = None
 
-if epic_issue_key is None:
+if epic_issue_key is None and epic_issue_key != '':
     data = {
         "fields": {
             "summary": new_summary,
@@ -79,3 +79,4 @@ if response.status_code != 204:
     print(f"Error: HTTP status code {response.status_code}")
     print(response.text)
     exit(1)
+    
