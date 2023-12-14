@@ -1,0 +1,48 @@
+name: create an issue from Jira with a Milestone
+
+on:
+    workflow_dispatch:
+        inputs:
+            issue_key:
+                description: 'Jira issue key'
+                required: true
+            body:
+                description: 'Description of the issue'
+                required: false
+            title:
+                description: 'Title of the issue'
+                required: true
+jobs:
+    create_issue:
+        permissions: write-all
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - uses: actions/setup-python@v4
+              with:
+                python-version: '3.9'
+                cache: 'pip' # caching pip dependencies
+            - name: Create issue
+              id: create_issue
+              run: |
+                pip install -r python/requirements.txt;
+                OUTPUT=$(python python/issue_create_from_jira.py);
+                echo result=$OUTPUT >> $GITHUB_OUTPUT;
+              env:
+                TITLE: ${{ github.event.inputs.title }}
+                BODY: ${{ github.event.inputs.body }}  
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                
+            - name: post comment with issue number
+              run: |
+                    python python/issue_post_comment.py;
+              env:
+                ISSUE_NUMBER: ${{ steps.create_issue.outputs.issue_number }}
+                JIRA_ISSUE: ${{ github.event.inputs.issue_key }}
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                    
+
+                    
+                    
+                    
