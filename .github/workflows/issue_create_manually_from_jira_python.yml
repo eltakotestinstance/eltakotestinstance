@@ -38,7 +38,7 @@ jobs:
               run: |
                     python python/issue_post_comment.py;
               env:
-                ISSUE_NUMBER: ${{ steps.create_issue.outputs.issue_number }}
+                ISSUE_NUMBER: ${{ steps.create_issue.outputs.result}}
                 JIRA_ISSUE: ${{ github.event.inputs.issue_key }}
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                     
