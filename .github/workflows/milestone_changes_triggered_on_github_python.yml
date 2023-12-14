@@ -18,7 +18,7 @@ jobs:
         id: compare_changes
         run: |
           pip install -r python/requirements.txt;
-          OUTPUT=$(python python/change_milestone_description_compare_github.py);
+          OUTPUT=$(python python/milestone_changes_compare_github.py);
           echo result=$OUTPUT >> $GITHUB_OUTPUT;
         env:
           MILESTONE_NUMBER: ${{ github.event.milestone.number }}
@@ -59,7 +59,7 @@ jobs:
     - name: change description #uses the Jira api to change the description of the Epic
       run: | 
               pip install -r python/requirements.txt;
-              python python/change_milestone_description_request.py;
+              python python/milestone_changes_request.py;
       env:
         JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
         JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}

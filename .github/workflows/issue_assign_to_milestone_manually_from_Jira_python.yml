@@ -27,7 +27,7 @@ jobs:
             - name: assign issue to milestone
               run: |
                   pip install -r python/requirements.txt;
-                  python python/assign_milestone.py;
+                  python python/issue_milestone_assign.py;
               env:
                   ISSUE_KEY: ${{ github.event.inputs.issue_key }}
                   EPIC_KEY: ${{ github.event.inputs.epic }}

@@ -24,7 +24,7 @@ jobs:
                 cache: 'pip' # caching pip dependencies
             - run: |
                     pip install -r python/requirements.txt;
-                    python python/new_epic_comment_from_Jira.py;
+                    python python/milestone_new_epic_comment_from_Jira.py;
               env:
                 INPUT_ISSUE_KEY: ${{ github.event.inputs.issue_key }}
                 INPUT_AUTHOR: ${{ github.event.inputs.author }}

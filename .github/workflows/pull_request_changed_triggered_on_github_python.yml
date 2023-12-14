@@ -16,7 +16,7 @@ jobs:
             - name: delete [skip] from Jira    
               run: |
                 pip install -r python/requirements.txt;
-                python python/delete_skip_issue.py;
+                python python/issue_delete_skip.py;
               env:
                 ISSUE_NUMBER: ${{ github.event.pull_request.number }}
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -37,7 +37,7 @@ jobs:
               id: join_comments
               run: |
                 pip install -r python/requirements.txt;
-                OUTPUT=$(python python/join_issue_comments.py);
+                OUTPUT=$(python python/issue_join_comments.py);
                 echo result=$OUTPUT >> $GITHUB_OUTPUT;
               env:
                 ISSUE_NUMBER: ${{ github.event.pull_request.number }}
@@ -57,7 +57,7 @@ jobs:
             - name: change description in Jira
               if: ${{ steps.find_issue_key.outputs.issue != '' }}
               run: | 
-                  python python/post_issue_changes_to_jira.py;
+                  python python/issue_post_changes_to_jira.py.py;
               env:
                   JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
                   JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
@@ -80,7 +80,7 @@ jobs:
               id: join_comments
               run: |
                     pip install -r python/requirements.txt;
-                    OUTPUT=$(python python/join_issue_comments.py);
+                    OUTPUT=$(python python/issue_join_comments.py);
                     echo result=$OUTPUT >> $GITHUB_OUTPUT;
               env:
                 ISSUE_NUMBER: ${{ github.event.pull_request.number }}
@@ -106,7 +106,7 @@ jobs:
             - name: change description in Jira
               if: ${{ steps.find_issue_key.outputs.issue != '' && steps.find_epic.outputs.issue != ''}}
               run: | 
-                python python/post_issue_changes_to_jira.py;
+                python python/issue_post_changes_to_jira.py.py;
               env:
                 JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
                 JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}

@@ -27,7 +27,7 @@ jobs:
             - name: Post comment
               run: |
                   pip install -r python/requirements.txt;
-                  python python/new_issue_comment.py;
+                  python python/issue_new_comment.py;
                   
               env:
                   ISSUE_KEY: ${{ github.event.inputs.issue_key }}

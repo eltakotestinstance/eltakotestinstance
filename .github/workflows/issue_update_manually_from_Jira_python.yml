@@ -25,7 +25,7 @@ jobs:
             - name: Update Github Issue    
               run: |
                 pip install -r python/requirements.txt;
-                python python/change_issue_from_Jira.py;
+                python python/issue_update_from_Jira.py;
               env:
                 ISSUE_KEY: ${{ github.event.inputs.issue_key }}
                 ISSUE_TITLE: ${{ github.event.inputs.title }}

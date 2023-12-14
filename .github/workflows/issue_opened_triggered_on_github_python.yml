@@ -35,7 +35,7 @@ jobs:
       - name: post comment with issue number    
         run: |
             pip install -r python/requirements.txt;
-            python python/post_issue_comment.py;
+            python python/issue_post_comment.py;
         env:
             ISSUE_NUMBER: ${{ github.event.issue.number }}
             JIRA_ISSUE: ${{ steps.create.outputs.issue }}
@@ -84,7 +84,7 @@ jobs:
       - name: post comment with issue number
         run: |
             pip install -r python/requirements.txt;
-            python python/post_issue_comment.py;
+            python python/issue_post_comment.py;
         env:
             ISSUE_NUMBER: ${{ github.event.issue.number }}
             JIRA_ISSUE: ${{ steps.create.outputs.issue }}

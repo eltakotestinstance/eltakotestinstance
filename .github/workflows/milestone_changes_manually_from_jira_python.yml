@@ -22,7 +22,7 @@ jobs:
             - name: Update milestone description
               run: |
                     pip install -r python/requirements.txt;
-                    python python/change_milestone_description_from_jira.py;
+                    python python/milestone_changes_from_jira.py.py;
               env:
                 INPUT_ISSUE_KEY: ${{ github.event.inputs.issue_key }}
                 INPUT_TEXT: ${{ github.event.inputs.text }}
