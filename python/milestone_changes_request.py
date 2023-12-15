@@ -16,7 +16,8 @@ new_description = new_description.split('AUTOMATICALLY GENERATED CONTENT DO NOT 
 data = {
     "fields": {
         "description": new_description,
-        "duedate": due_date
+        "duedate": due_date,
+        "customfield_10041" : 1
     }
 }
 

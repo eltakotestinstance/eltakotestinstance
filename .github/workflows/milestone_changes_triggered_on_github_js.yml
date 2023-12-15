@@ -72,7 +72,9 @@ jobs:
         --arg new_description "${{ needs.compare_changes.outputs.result }}" \
         '{
           "fields": {
-            "description": $new_description
+            "description": $new_description,
+            "duedate": due_date,
+            "customfield_10041" : 1
           }
         }')
         RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" \
