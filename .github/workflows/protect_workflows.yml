@@ -7,7 +7,7 @@ on:
 jobs:
   check_modified_files:
     runs-on: ubuntu-latest
-    
+    permissions: write-all
     if: github.event.pusher.name != 'allowed_username'
     steps:
       - name: Checkout repository
@@ -35,7 +35,7 @@ jobs:
       - name: reset commits
         if: steps.check_files.outputs.modified_files == 'true'
         run: |
-              git config --global url."https://x-access-token:${{ secrets.PERSONAL_TOKEN }}@github.com/".insteadOf "https://github.com/"
+              
               git reset --hard ${{ github.event.before }}
               git push origin HEAD:$(git rev-parse --abbrev-ref HEAD) --force
     env:
