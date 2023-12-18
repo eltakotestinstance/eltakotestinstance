@@ -1,0 +1,20 @@
+name: Protect Workflows
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/**'
+
+jobs:
+  check_author:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Check author
+        run: |
+          PR_AUTHOR=$(jq -r ".pull_request.user.login" "$GITHUB_EVENT_PATH")
+          if [ "$PR_AUTHOR" != "allowed_username" ]; then
+            echo "Only allowed_username can modify workflow files"
+            exit 1
+          fi
