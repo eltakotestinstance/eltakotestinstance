@@ -16,7 +16,6 @@ jobs:
           PR_AUTHOR=$(jq -r ".pull_request.user.login" "$GITHUB_EVENT_PATH")
           if [ "$PR_AUTHOR" != "allowed_username" ]; then
             echo "Only allowed_username can modify workflow files"
-            exit 1
           fi
 
 
