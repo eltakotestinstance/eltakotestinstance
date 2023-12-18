@@ -1,5 +1,5 @@
-from git import Repo
-from git import Git
+from git import Repo, Git, exc  # import the exc module from git
+import git  # import the git module
 import os
 
 # assuming PERSONAL_TOKEN is passed as an environment variable
