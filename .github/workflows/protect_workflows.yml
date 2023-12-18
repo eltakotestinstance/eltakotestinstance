@@ -33,12 +33,16 @@ jobs:
                 echo "modifiles_files=$modified_files"
                 echo "modified_files=$modified_files" >> $GITHUB_OUTPUT
       
+      
       - name: reset commits
         if: steps.check_files.outputs.modified_files == 'true'
         run: |
-              git config --global url."https://x-access-token:${{ secrets.PERSONAL_TOKEN }}@github.com/".insteadOf "https://github.com/"
-              git reset --hard ${{ github.event.before }}
-              git push origin HEAD:$(git rev-parse --abbrev-ref HEAD) --force
+            pip install -r python/requirements.txt;
+            python python/revert_push.py;
+        env:
+            PERSONAL_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
+            BEFORE_HASH: ${{ github.event.before }}
+            BRANCH: ${{ github.ref }}
     env:
       GH_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
                
