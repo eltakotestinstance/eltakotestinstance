@@ -12,6 +12,8 @@ g = Git(repo_dir)
 
 # configure the url
 g.config('--global', 'url."https://x-access-token:' + token + '@github.com/".insteadOf', 'https://github.com/')
+g.config('--global', 'user.email', 'github-actions[bot]@users.noreply.github.com')
+g.config('--global', 'user.name', 'github-actions[bot]')
 
 repo = Repo(repo_dir)
 
