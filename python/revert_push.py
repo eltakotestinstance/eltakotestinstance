@@ -21,7 +21,15 @@ repo = Repo(repo_dir)
 
 
 # revert the last commit
-repo.git.revert('--no-commit', before_hash)
+try:
+    # try to revert the commit
+    repo.git.revert('--no-commit', before_hash)
+except g.exc.GitCommandError as e:
+    if 'is a merge' in str(e):
+        # if the commit is a merge commit, revert with -m option
+        repo.git.revert('--no-commit', '-m', '1', before_hash)
+    else:
+        raise e
 
 # commit the revert
 repo.git.commit('-m', 'Revert last commit')
