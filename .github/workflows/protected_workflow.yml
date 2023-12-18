@@ -1,4 +1,4 @@
-on: #testedit
+on:
     workflow_dispatch:
         inputs:
             issue_key:
