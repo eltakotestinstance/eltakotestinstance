@@ -6,7 +6,7 @@ import os
 token = os.getenv('PERSONAL_TOKEN')  # get the token
 before_hash = os.getenv('BEFORE_HASH')  # get the hash of the commit to revert to 
 branch = os.getenv('GITHUB_REF').split('/')[-1]  # get the branch that triggered the workflow
-repo_dir = '../'  # directory of your repository
+repo_dir = '.'  # directory of your repository
 
 g = Git(repo_dir)
 
