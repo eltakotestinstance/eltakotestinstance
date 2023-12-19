@@ -63,4 +63,3 @@ jobs:
                     else {
                         console.log('Issue not found');
                     }
-
