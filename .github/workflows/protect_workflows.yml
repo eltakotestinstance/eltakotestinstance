@@ -5,7 +5,7 @@ on:
       - '.github/workflows/**'
 
 jobs:
-  check_modified_files:
+  check_modified_files_and_revert:
     runs-on: ubuntu-latest
     permissions: write-all
     if: github.event.pusher.username != 'allowed_user'
