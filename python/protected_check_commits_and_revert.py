@@ -18,6 +18,8 @@ modified_files = False
 # get the commits between the previous commit and the current commit
 commits = list(repo.iter_commits('HEAD...{}'.format(before_hash)))
 
+search_strings = ["secrets.PERSONAL_TOKEN"]
+
 for commit in commits:
     print("Checking commit {}".format(commit))
     print("Previous commit:")
@@ -28,18 +30,19 @@ for commit in commits:
     modified_file_names = [diff.a_path for diff in diff_index.iter_change_type('M')]
     for file_name in modified_file_names:
         # check if the file name matches the pattern
-        if re.search(r'protected_.*\.yml$', file_name):
+        if re.search(r'protected_.*', file_name):
             print("Found modified protected github workflow files")
             modified_files = True
             break
     diff_index = commit.diff(commit.parents[0])
     # iterate over each diff
     for diff in diff_index.iter_change_type('M'):
-        # check if the diff contains the phrase "secrets.PERSONAL_TOKEN"
-        if "secrets.PERSONAL_TOKEN" in diff.a_blob.data_stream.read().decode():
-            print("Found 'secrets.PERSONAL_TOKEN' in commit modifications")
-            modified_files = True
-            break
+        content = diff.a_blob.data_stream.read().decode()
+        for search_string in search_strings:
+            if search_string in content:
+                print("Found '{}' in commit modifications".format(search_string))
+                modified_files = True
+                break
     if modified_files:
         break
 

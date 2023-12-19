@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - '.github/workflows/**'
+      - 'python/protected_*'
 
 jobs:
   check_modified_files_and_revert:
