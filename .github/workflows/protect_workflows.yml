@@ -8,7 +8,7 @@ jobs:
   check_modified_files:
     runs-on: ubuntu-latest
     permissions: write-all
-    if: github.event.pusher.name != 'allowed_username'
+    if: github.event.pusher.username != 'allowed_user'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -16,29 +16,10 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Check for modified github action files
-        id: check_files
-        run: |
-                modified_files=false
-                for commit in $(git log --pretty=format:%H ${{ github.event.before }}..HEAD); do
-                  echo "Checking commit $commit"
-                  echo "prevoius commit:"
-                  git rev-parse "$commit^"
-                  if git diff --name-only $commit^ $commit | grep -qE 'protected_.*\.yml$'; then
-                    echo "Found modified protected github workflow files"
-                    modified_files=true
-                    break
-                  fi
-                done
-                echo "modifiles_files=$modified_files"
-                echo "modified_files=$modified_files" >> $GITHUB_OUTPUT
-      
-      
-      - name: reset commits
-        if: steps.check_files.outputs.modified_files == 'true'
+      - name: check commits
         run: |
             pip install -r python/requirements.txt;
-            python python/revert_push.py;
+            python python/protected_check_commits_and_revert.py;
         env:
             PERSONAL_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
             BEFORE_HASH: ${{ github.event.before }}
