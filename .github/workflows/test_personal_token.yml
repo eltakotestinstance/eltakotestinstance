@@ -22,7 +22,7 @@ jobs:
                 BODY: ${{ github.event.inputs.body }}
                 
               with:
-                github-token: ${{ secrets.GITHUB_TOKEN }}
+                github-token: ${{ secrets.PERSONAL_TOKEN }}
                 script: |
                     const issueKey = '${{ github.event.inputs.issue_key }}';
                     const {BODY} = process.env;
@@ -63,4 +63,3 @@ jobs:
                     else {
                         console.log('Issue not found');
                     }
-                    
