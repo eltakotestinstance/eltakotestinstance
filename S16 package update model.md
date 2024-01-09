@@ -6,17 +6,17 @@ flowchart LR
    managment server"]
    connect-->successConnect{successful}
    successConnect-->|yes|checkSSL["check ssl certificate
-   of connection"]
+   of connection"]:::wait
    successConnect-->|no|waitConnect[wait for x seconds]
    waitConnect-->maxTries{"max number of
    tries reached"}
    maxTries-->|no|connect
    maxTries-->|yes|errorLog(["error log/
-   message to app"])
+   message to app"]):::failed
    errorLog-->consent{"has user consented
-   for diagnostic data"}
+   for diagnostic data"}:::failed
    consent-->sendDiagData(["send dignostic
-   data"])
+   data"]):::failed
    checkSSL-->validSSL{valid}
    validSSL-->authenticate[authenticate]
    authenticate-->authSuccess{successful}
@@ -26,19 +26,19 @@ flowchart LR
   successRepo-->|yes|newPackages{"new Packages
   availible"}
   newPackages-->|no|waitForPackages["wait for 
-  x hours/days"]
+  x hours/days"]:::wait
   waitForPackages-->connect
   newPackages-->|yes|notify["notify the user
   that updates
   are availible"]
   notify-->prioUpdate{priority Update}
   prioUpdate-->|no|waitForUser["wait for user to
-  initiate update"]
+  initiate update"]:::wait
   waitForUser-->updatePackages[(update packages)]
   prioUpdate-->|yes|updatePackages
   updatePackages-->successPackages{successful}
   successPackages-->|yes|needMigration{need migration}
-  successPackages-->|no|revertUpdates[revert updates]
+  successPackages-->|no|revertUpdates[revert updates]:::failed
   revertUpdates-->errorLog
   needMigration-->|yes|backup["backup 
   migration data"]
@@ -48,7 +48,7 @@ flowchart LR
   pUMigration-->successMigration{successful}
   successMigration-->|yes|reload[reload services]
   successMigration-->|no|revertMigration["revert migration
-  data"]
+  data"]:::failed
   revertMigration-->revertUpdates
   reload-->successReload{successful}
   successReload-->migrationMade{"migration
@@ -56,5 +56,8 @@ flowchart LR
   migrationMade-->|yes|revertMigration
   migrationMade-->|no|revertUpdates
   successReload-->|yes|endSuccess(["log success/
-  message to app"])
+  message to app"]):::success
+  classDef success fill:#006400
+  classDef failed fill:#cd0000
+  classDef wait fill:#ffd700,color:#000000
 ```
