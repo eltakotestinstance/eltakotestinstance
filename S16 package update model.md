@@ -1,4 +1,4 @@
-´´´mermaid
+```mermaid
 flowchart LR
    nSystem([normal system]) 
    nSystem-->connect["connect to 
@@ -57,5 +57,4 @@ flowchart LR
   migrationMade-->|no|revertUpdates
   successReload-->|yes|endSuccess(["log success/
   message to app"])
-
-´´´
+```
