@@ -1,3 +1,4 @@
+```mermaid
 flowchart LR
    nSystem([normal system]) 
    nSystem-->connect["connect to 
@@ -67,3 +68,4 @@ flowchart LR
   classDef success fill:#006400
   classDef failed fill:#cd0000
   classDef wait fill:#ffd700,color:#000000
+```
