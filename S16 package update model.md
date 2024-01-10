@@ -18,13 +18,16 @@ flowchart LR
    consent-->sendDiagData(["send dignostic
    data"]):::failed
    checkSSL-->validSSL{valid}
-   validSSL-->authenticate[authenticate]
+   validSSL-->|yes|authenticate[authenticate]
+   validSSL--> |no|errorLog
    authenticate-->authSuccess{successful}
    authSuccess-->|yes|updateRepo[("update package
     repository")]
+   authSuccess-->|no|errorLog
   updateRepo-->successRepo{successful}
   successRepo-->|yes|newPackages{"new Packages
   availible"}
+  successRepo-->|no|errorLog
   newPackages-->|no|waitForPackages["wait for 
   x hours/days"]:::wait
   waitForPackages-->connect
