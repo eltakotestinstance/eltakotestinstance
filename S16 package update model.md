@@ -6,8 +6,8 @@ flowchart LR
    managment server"]
    connect-->successConnect{successful}
    successConnect-->|yes|checkSSL["check ssl certificate
-   of connection"]:::wait
-   successConnect-->|no|waitConnect[wait for x seconds]
+   of connection"]
+   successConnect-->|no|waitConnect[wait for x seconds]:::wait
    waitConnect-->maxTries{"max number of
    tries reached"}
    maxTries-->|no|connect
@@ -51,7 +51,7 @@ flowchart LR
   data"]:::failed
   revertMigration-->revertUpdates
   reload-->successReload{successful}
-  successReload-->migrationMade{"migration
+  successReload-->|no|migrationMade{"migration
   cahnges made"}
   migrationMade-->|yes|revertMigration
   migrationMade-->|no|revertUpdates
