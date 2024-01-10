@@ -18,10 +18,12 @@ flowchart LR
    consent-->sendDiagData(["send dignostic
    data"]):::failed
    checkSSL-->validSSL{valid}
-   validSSL-->authenticate[authenticate]
+   validSSL-->|yes|authenticate[authenticate]
+   validSSL--> |no|errorLog
    authenticate-->authSuccess{successful}
    authSuccess-->|yes|updateRepo[("update Nuget 
    package repository")]
+   authSuccess-->|no|errorLog
   updateRepo-->successRepo{successful}
   successRepo-->|yes|newPackages{"new Packages
   availible"}
@@ -68,4 +70,5 @@ flowchart LR
   classDef success fill:#006400
   classDef failed fill:#cd0000
   classDef wait fill:#ffd700,color:#000000
+
 ```
