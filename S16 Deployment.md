@@ -1,7 +1,8 @@
 ---
-theme: gaia
-_class: lead
+marp: true
+color: 'white'
 paginate: true
+backgroundImage: url('auticon.png')
 ---
 
 # S16 deployment methods
