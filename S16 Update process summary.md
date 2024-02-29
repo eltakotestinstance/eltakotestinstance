@@ -2,7 +2,7 @@
 
 ## Update Models
 
-I created three update models. 
+I created three update models.
 
 - <a href="S16 image update model.md">System update using a new image created by yocto.</a>
 - <a href="S16 package update model.md">System update using a package manager.</a>

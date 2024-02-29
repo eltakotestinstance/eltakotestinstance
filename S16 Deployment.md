@@ -59,6 +59,34 @@ Modes of deployment for the Raspberry Pi 4b.
 ![image](native-cpu.png)
 
 ---
+# Details of hybrid deployment
+
+- Dotnet 8.0.1 package form a third-party Layer.
+- Docker from the official Yocto meta-virtualization  layer.
+- Docker compose file with postgres and otel-collector container
+- Systemd needed for docker.
+
+---
+
+# Pro/cons of hybrid deployment
+
+## **Pros**
+
+- Software stack can be updated with Nuget/Linux packages.
+- Setup of postgres database is much easier than in native
+
+## **Cons**
+
+- Has no defined state.
+- Updates can break/fail.
+- Can only be tested on the deployment platform.
+
+---
+# Hybrid deployment CPU usage
+
+![image](hybrid-cpu.png)
+
+---
 
 # Details of docker deployment
 
@@ -128,7 +156,7 @@ Modes of deployment for the Raspberry Pi 4b.
 
 # Comparison of CPU usage for user
 
-![image](all-cpu-user.png)
+![image](all-cpu-usr.png)
 
 ---
 
