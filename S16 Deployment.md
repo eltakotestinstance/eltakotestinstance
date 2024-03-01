@@ -178,6 +178,18 @@ Modes of deployment for the Raspberry Pi 4b.
 
 ---
 
+## Docker with/without empty container Memory comparision
+
+![image](docker-empty-memory.png)
+
+---
+
+## K3s with/without empty container Memory comparision
+
+![image](k3s-empty-memory.png)
+
+---
+
 # My recommendations
 
 - Depends on the device's resources.
