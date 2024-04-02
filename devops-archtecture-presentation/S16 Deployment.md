@@ -5,27 +5,35 @@ paginate: true
 backgroundImage: url('auticon.png')
 ---
 
-# S16 deployment methods
+# S16 DevOps and architecture
 
 Modes of deployment for the Raspberry Pi 4b.
 
 ---
 
-# Possibilities
-
-- Everything native deployed
-- Main application locally deployed, database and otel-collector containerized.
-- Everything deployed wia docker using docker compose or docker stack.
-- Using Suses Kubernetes implementation K3S.
-
----
-
 # Test deployment platform
 
-- Raspberry 4b with 4gb Ram.
+- Raspberry 4b with 4gb Ram 32gb micro-sd card.
 - Yocto Linux with poky distribution Nanbield branch.
 - With several necessary development tools like a ssh server, editor, systat e.g.
 - Every deployment method has their own image with the services needed installed
+
+
+---
+
+# Test deployment
+
+1. EltatoSoftwareDelpoymentMonitor(esdm)
+   - Small rest api written in C# using dotnet 8.0
+   - Uses Serilog and Opentelemetry
+   - Uses Metalama for aspect-oriented programming
+   - Build in Kestrel http server
+   - Uses https with self-generated certificate
+   - Swagger for api testing
+
+2. PostgreSQL relational database
+
+
 
 ---
 
@@ -35,6 +43,7 @@ Modes of deployment for the Raspberry Pi 4b.
 - Main application natively deployed, database and otel-collector containerized.
 - Everything deployed wia docker using docker compose or docker stack.
 - Using Suses Kubernetes implementation K3S.
+- Aspire Orchestration with docker compose deployment
 
 ---
 
@@ -59,12 +68,33 @@ Modes of deployment for the Raspberry Pi 4b.
 ![image](native-cpu.png)
 
 ---
+
+# Docker compared to other virtualization methods
+
+![image](docker-architecture.png)
+
+---
+
+# Sample Dockerfile
+
+![image](sample-dockerfile.png)
+
+---
+
+# Sample docker compose file
+
+![image](sample-dockercomposefile.png)
+
+---
+
 # Details of hybrid deployment
 
 - Dotnet 8.0.1 package form a third-party Layer.
 - Docker from the official Yocto meta-virtualization  layer.
 - Docker compose file with postgres and otel-collector container
 - Systemd needed for docker.
+
+
 
 ---
 
@@ -120,6 +150,42 @@ Modes of deployment for the Raspberry Pi 4b.
 
 ---
 
+## Docker with/without empty container memory comparision
+
+![image](docker-empty-container.png)
+
+---
+
+# Excursion Yocto package
+
+
+Yocto package               | Systemd startupfile
+:--------------------------:|:-------------------------:
+![image](yocto-package.png) | ![image](systemd-startup.png)
+
+---
+
+# How kubernetes works
+
+![image](k8-architecture.png)
+
+---
+
+# How k3s works
+
+![image](k3s-architecture.jpg)
+
+---
+# Sample k8s config files
+
+Sample pod config | Sample secret config | Sample service config
+:----------------:|:-------------------:|:-------------------------:
+![image](k8s-pod-config.png) | ![image](k8s-secret-config.png)  | ![image](k8s-service-config.png) 
+
+
+
+---
+
 # Details of the Kubernetes deployment
 
 - K3s from the official meta-virtualization layer.
@@ -154,6 +220,43 @@ Modes of deployment for the Raspberry Pi 4b.
 
 ---
 
+## K3s with/without empty container Memory comparision
+
+![image](k3s-empty-memory.png)
+
+---
+
+#  What is .net aspire
+
+- “.NET aspire is an opinionated, cloud ready stack for building observable, production ready, distributed applications”
+- It helps you with the start of development, because its very easy to develop a working prototype without much effort.
+- It comes with a aspire dashboard which is a very easy and good way to visualize logs, traces and metrics.
+- If you use azure cloud services, the deployment form your aspire app is streamlined.
+
+---
+
+# Sample orchestration file
+
+![image](aspire-orchestration.png)
+
+---
+
+# .net aspire pitfalls
+
+![image](aspire-pitfalls-database1.png)
+
+![image](aspire-pitfalls-database2.png)
+
+![image](aspire-pitfalls-httpclient.png)
+
+---
+
+# aspire CPU usage usr/sys
+
+![image](apire-cpu.png)
+
+---
+
 # Comparison of CPU usage for user
 
 ![image](all-cpu-usr.png)
@@ -175,18 +278,6 @@ Modes of deployment for the Raspberry Pi 4b.
 # Comparison of memory committed
 
 ![image](all-memory-committed.png)
-
----
-
-## Docker with/without empty container Memory comparision
-
-![image](docker-empty-memory.png)
-
----
-
-## K3s with/without empty container Memory comparision
-
-![image](k3s-empty-memory.png)
 
 ---
 
