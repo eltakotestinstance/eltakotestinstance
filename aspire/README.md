@@ -2,7 +2,8 @@
 
 ## Introductory notes
 
-.net aspire is currently only in preview and could be fundamentally changed or shelved by Microsoft
+.net aspire is currently only in preview and could be fundamentally changed or shelved by Microsoft.
+This document was made when aspire preview version 4 was released.
 
 ## Getting Started
 
@@ -15,7 +16,7 @@
 
 If you want the full aspire tooling provided by Microsoft you need to use the [Visual Studio 2022 Preview](https://visualstudio.microsoft.com/de/vs/preview/) version 17.10 or higher.
 
-Under the Visual Studio installer you need to select the .net aspire workload located under "ASP.net an web development".
+Under the Visual Studio installer you need to select the .net aspire workload located under "ASP.net and web development".
 
 ![Image](https://learn.microsoft.com/en-us/dotnet/aspire/docs/media/install-aspire-workload-visual-studio.png)
 
@@ -158,4 +159,26 @@ If you want to generate a kubernetes configure from this manifest, there is a to
 `aspirate generate` for generating the configuration files and `aspirate build` to build the respective containers.
 It currently also supports generating a docker compose deployment with `aspirate generate --output-format compose`, but the docker compose deployment isn't as 
 fully developed as the kubernetes deployment and requires a lot of fine tuning to get a working deployment.
+
+### aspire negatives
+
+I don't like that aspire manages the service discovery different from Kubernetes/Docker compose resulting in different codes for development and production.
+
+For example in aspire endpoints are mapped with:
+
+![Image](aspire-webapi-aspire.png)
+
+But if you use environment variables like you would in kubernetes/docker compose you need to do it like this:
+
+![Image](aspire-webapi-docker.png)
+
+And if you want to connect to a database there is no service discovery this code doesn't work:
+
+![Image](aspire-database-defunc.png)
+
+You need to do it with connection string or environment variables:
+
+![Image](aspire-database-func.png)
+
+Also the dashboard only detects http endpoints and no https.
 
