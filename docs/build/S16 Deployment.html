@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>S16 DevOps and architecture &mdash; Eltako-test  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="S16 Update process summary" href="S16%20Update%20process%20summary.html" />
+    <link rel="prev" title="Orchestrating with .net aspire" href="README.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Eltako-test
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="README.html">Orchestrating with .net aspire</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">S16 DevOps and architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#test-deployment-platform">Test deployment platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#test-deployment">Test deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#tested-deployment-methods">Tested Deployment methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#pro-cons-of-native-deployment">Pro/cons of native deployment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pros"><strong>Pros</strong></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cons"><strong>Cons</strong></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#native-deployment-cpu-usage">Native deployment CPU usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#docker-compared-to-other-virtualization-methods">Docker compared to other virtualization methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#sample-dockerfile">Sample Dockerfile</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#sample-docker-compose-file">Sample docker compose file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#details-of-hybrid-deployment">Details of hybrid deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#pro-cons-of-hybrid-deployment">Pro/cons of hybrid deployment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1"><strong>Pros</strong></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2"><strong>Cons</strong></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#hybrid-deployment-cpu-usage">Hybrid deployment CPU usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#details-of-docker-deployment">Details of docker deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#pro-cons-of-docker-deployment">Pro/cons of docker deployment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id3"><strong>Pros</strong></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id4"><strong>Cons</strong></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#docker-deployment-cpu-usage">Docker deployment CPU usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#docker-with-without-empty-container-memory-comparision">Docker with/without empty container memory comparision</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#excursion-yocto-package">Excursion Yocto package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#how-kubernetes-works">How kubernetes works</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#how-k3s-works">How k3s works</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#sample-k8s-config-files">Sample k8s config files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#details-of-the-kubernetes-deployment">Details of the Kubernetes deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#pro-cons-of-kubernetes-deployment">Pro/cons of kubernetes deployment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id5"><strong>Pros</strong></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id6"><strong>Cons</strong></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#kubernetes-deployment-cpu-usage">Kubernetes deployment CPU usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#k3s-with-without-empty-container-memory-comparision">K3s with/without empty container Memory comparision</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#what-is-net-aspire">What is .net aspire</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#sample-orchestration-file">Sample orchestration file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#net-aspire-pitfalls">.net aspire pitfalls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#aspire-cpu-usage-usr-sys">aspire CPU usage usr/sys</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#comparison-of-cpu-usage-for-user">Comparison of CPU usage for user</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#comparison-of-cpu-usage-for-system">Comparison of CPU usage for system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#comparison-of-memory-used">Comparison of memory used</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#comparison-of-memory-committed">Comparison of memory committed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#my-recommendations">My recommendations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Update%20process%20summary.html">S16 Update process summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="create_pdf_from_md_readme.html">create_pdf_from_md_readme.md</a></li>
+<li class="toctree-l1"><a class="reference internal" href="create_pdf_from_md_readme.html#excerpt-separator">excerpt_separator: <!--more--></a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Eltako-test</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">S16 DevOps and architecture</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/S16 Deployment.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="s16-devops-and-architecture">
+<h1>S16 DevOps and architecture<a class="headerlink" href="#s16-devops-and-architecture" title="Link to this heading"></a></h1>
+<p>Modes of deployment for the Raspberry Pi 4b.</p>
+</section>
+<hr class="docutils" />
+<section id="test-deployment-platform">
+<h1>Test deployment platform<a class="headerlink" href="#test-deployment-platform" title="Link to this heading"></a></h1>
+<ul class="simple">
+<li><p>Raspberry 4b with 4gb Ram 32gb micro-sd card.</p></li>
+<li><p>Yocto Linux with poky distribution Nanbield branch.</p></li>
+<li><p>With several necessary development tools like a ssh server, editor, systat e.g.</p></li>
+<li><p>Every deployment method has their own image with the services needed installed</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="test-deployment">
+<h1>Test deployment<a class="headerlink" href="#test-deployment" title="Link to this heading"></a></h1>
+<ol class="arabic simple">
+<li><p>EltatoSoftwareDelpoymentMonitor(esdm)</p>
+<ul class="simple">
+<li><p>Small rest api written in C# using dotnet 8.0</p></li>
+<li><p>Uses Serilog and Opentelemetry</p></li>
+<li><p>Uses Metalama for aspect-oriented programming</p></li>
+<li><p>Build in Kestrel http server</p></li>
+<li><p>Uses https with self-generated certificate</p></li>
+<li><p>Swagger for api testing</p></li>
+</ul>
+</li>
+<li><p>PostgreSQL relational database</p></li>
+</ol>
+</section>
+<hr class="docutils" />
+<section id="tested-deployment-methods">
+<h1>Tested Deployment methods<a class="headerlink" href="#tested-deployment-methods" title="Link to this heading"></a></h1>
+<ul class="simple">
+<li><p>Everything natively deployed.</p></li>
+<li><p>Main application natively deployed, database and otel-collector containerized.</p></li>
+<li><p>Everything deployed wia docker using docker compose or docker stack.</p></li>
+<li><p>Using Suses Kubernetes implementation K3S.</p></li>
+<li><p>Aspire Orchestration with docker compose deployment</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="pro-cons-of-native-deployment">
+<h1>Pro/cons of native deployment<a class="headerlink" href="#pro-cons-of-native-deployment" title="Link to this heading"></a></h1>
+<section id="pros">
+<h2><strong>Pros</strong><a class="headerlink" href="#pros" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Resources consumption is minimal.</p></li>
+<li><p>Can be updated with Nuget/Linux packages.</p></li>
+</ul>
+</section>
+<section id="cons">
+<h2><strong>Cons</strong><a class="headerlink" href="#cons" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Has no defined state.</p></li>
+<li><p>Updates can break/fail.</p></li>
+<li><p>Updating the database could be prone to errors.</p></li>
+<li><p>Can only be tested on the deployment platform.</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="native-deployment-cpu-usage">
+<h1>Native deployment CPU usage<a class="headerlink" href="#native-deployment-cpu-usage" title="Link to this heading"></a></h1>
+<p><img alt="image" src="native-cpu.png" /></p>
+</section>
+<hr class="docutils" />
+<section id="docker-compared-to-other-virtualization-methods">
+<h1>Docker compared to other virtualization methods<a class="headerlink" href="#docker-compared-to-other-virtualization-methods" title="Link to this heading"></a></h1>
+<p><img alt="image" src="docker-architecture.png" /></p>
+</section>
+<hr class="docutils" />
+<section id="sample-dockerfile">
+<h1>Sample Dockerfile<a class="headerlink" href="#sample-dockerfile" title="Link to this heading"></a></h1>
+<p><img alt="image" src="sample-dockerfile.png" /></p>
+</section>
+<hr class="docutils" />
+<section id="sample-docker-compose-file">
+<h1>Sample docker compose file<a class="headerlink" href="#sample-docker-compose-file" title="Link to this heading"></a></h1>
+<p><img alt="image" src="sample-dockercomposefile.png" /></p>
+</section>
+<hr class="docutils" />
+<section id="details-of-hybrid-deployment">
+<h1>Details of hybrid deployment<a class="headerlink" href="#details-of-hybrid-deployment" title="Link to this heading"></a></h1>
+<ul class="simple">
+<li><p>Dotnet 8.0.1 package form a third-party Layer.</p></li>
+<li><p>Docker from the official Yocto meta-virtualization  layer.</p></li>
+<li><p>Docker compose file with postgres and otel-collector container</p></li>
+<li><p>Systemd needed for docker.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="pro-cons-of-hybrid-deployment">
+<h1>Pro/cons of hybrid deployment<a class="headerlink" href="#pro-cons-of-hybrid-deployment" title="Link to this heading"></a></h1>
+<section id="id1">
+<h2><strong>Pros</strong><a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Software stack can be updated with Nuget/Linux packages.</p></li>
+<li><p>Setup of postgres database is much easier than in native</p></li>
+</ul>
+</section>
+<section id="id2">
+<h2><strong>Cons</strong><a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Has no defined state.</p></li>
+<li><p>Updates can break/fail.</p></li>
+<li><p>Can only be tested on the deployment platform.</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="hybrid-deployment-cpu-usage">
+<h1>Hybrid deployment CPU usage<a class="headerlink" href="#hybrid-deployment-cpu-usage" title="Link to this heading"></a></h1>
+<p><img alt="image" src="hybrid-cpu.png" /></p>
+</section>
+<hr class="docutils" />
+<section id="details-of-docker-deployment">
+<h1>Details of docker deployment<a class="headerlink" href="#details-of-docker-deployment" title="Link to this heading"></a></h1>
+<ul class="simple">
+<li><p>Docker from the official Yocto meta-virtualization  layer.</p></li>
+<li><p>Systemd for dependent docker services.</p></li>
+<li><p>One Deployment with docker Stack.</p></li>
+<li><p>One Deployment with docker compose.</p></li>
+<li><p>Both variants have the same resource profile.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="pro-cons-of-docker-deployment">
+<h1>Pro/cons of docker deployment<a class="headerlink" href="#pro-cons-of-docker-deployment" title="Link to this heading"></a></h1>
+<section id="id3">
+<h2><strong>Pros</strong><a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Has a defined state.</p></li>
+<li><p>Full testing is relatively easy(can be done on Development Computers).</p></li>
+<li><p>Deployment Process is easily be automated.</p></li>
+</ul>
+</section>
+<section id="id4">
+<h2><strong>Cons</strong><a class="headerlink" href="#id4" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Memory consumption, on 1 GB ram is already at limit capacity.</p></li>
+<li><p>The process of storing secrets is not very though out.</p></li>
+<li><p>Not as many fail saves as Kubernetes</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="docker-deployment-cpu-usage">
+<h1>Docker deployment CPU usage<a class="headerlink" href="#docker-deployment-cpu-usage" title="Link to this heading"></a></h1>
+<p><img alt="image" src="native-cpu.png" /></p>
+<hr class="docutils" />
+<section id="docker-with-without-empty-container-memory-comparision">
+<h2>Docker with/without empty container memory comparision<a class="headerlink" href="#docker-with-without-empty-container-memory-comparision" title="Link to this heading"></a></h2>
+<p><img alt="image" src="docker-empty-container.png" /></p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="excursion-yocto-package">
+<h1>Excursion Yocto package<a class="headerlink" href="#excursion-yocto-package" title="Link to this heading"></a></h1>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p>Yocto package</p></th>
+<th class="head text-center"><p>Systemd startupfile</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p><img alt="image" src="yocto-package.png" /></p></td>
+<td class="text-center"><p><img alt="image" src="systemd-startup.png" /></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<hr class="docutils" />
+<section id="how-kubernetes-works">
+<h1>How kubernetes works<a class="headerlink" href="#how-kubernetes-works" title="Link to this heading"></a></h1>
+<p><img alt="image" src="k8-architecture.png" /></p>
+</section>
+<hr class="docutils" />
+<section id="how-k3s-works">
+<h1>How k3s works<a class="headerlink" href="#how-k3s-works" title="Link to this heading"></a></h1>
+<p><img alt="image" src="k3s-architecture.jpg" /></p>
+</section>
+<hr class="docutils" />
+<section id="sample-k8s-config-files">
+<h1>Sample k8s config files<a class="headerlink" href="#sample-k8s-config-files" title="Link to this heading"></a></h1>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p>Sample pod config</p></th>
+<th class="head text-center"><p>Sample secret config</p></th>
+<th class="head text-center"><p>Sample service config</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p><img alt="image" src="k8s-pod-config.png" /></p></td>
+<td class="text-center"><p><img alt="image" src="k8s-secret-config.png" /></p></td>
+<td class="text-center"><p><img alt="image" src="k8s-service-config.png" /></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<hr class="docutils" />
+<section id="details-of-the-kubernetes-deployment">
+<h1>Details of the Kubernetes deployment<a class="headerlink" href="#details-of-the-kubernetes-deployment" title="Link to this heading"></a></h1>
+<ul class="simple">
+<li><p>K3s from the official meta-virtualization layer.</p></li>
+<li><p>Docker from the official meta-virtualization layer.</p></li>
+<li><p>Systemd needed for k3s.</p></li>
+<li><p>Some SE-Linux components needed from the official meta-security layer.</p></li>
+<li><p>Special startup parameters for Raspberry Pi 4b.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="pro-cons-of-kubernetes-deployment">
+<h1>Pro/cons of kubernetes deployment<a class="headerlink" href="#pro-cons-of-kubernetes-deployment" title="Link to this heading"></a></h1>
+<section id="id5">
+<h2><strong>Pros</strong><a class="headerlink" href="#id5" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Has a defined state.</p></li>
+<li><p>Deployment Process can easily be automated.</p></li>
+<li><p>The whole deployment process is very well-thought-out.</p></li>
+<li><p>Has many fail-safe mechanisms.</p></li>
+<li><p>You could duplicate your application during an update.</p></li>
+</ul>
+</section>
+<section id="id6">
+<h2><strong>Cons</strong><a class="headerlink" href="#id6" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Committed memory is already over limit capacity on 4gb Ram.</p></li>
+<li><p>Many functions of the software is not needed.</p></li>
+<li><p>Additional dependency on k3s developer (Suse Inc).</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="kubernetes-deployment-cpu-usage">
+<h1>Kubernetes deployment CPU usage<a class="headerlink" href="#kubernetes-deployment-cpu-usage" title="Link to this heading"></a></h1>
+<p><img alt="image" src="k3s-cpu.png" /></p>
+<hr class="docutils" />
+<section id="k3s-with-without-empty-container-memory-comparision">
+<h2>K3s with/without empty container Memory comparision<a class="headerlink" href="#k3s-with-without-empty-container-memory-comparision" title="Link to this heading"></a></h2>
+<p><img alt="image" src="k3s-empty-memory.png" /></p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="what-is-net-aspire">
+<h1>What is .net aspire<a class="headerlink" href="#what-is-net-aspire" title="Link to this heading"></a></h1>
+<ul class="simple">
+<li><p>“.NET aspire is an opinionated, cloud ready stack for building observable, production ready, distributed applications”</p></li>
+<li><p>It helps you with the start of development, because its very easy to develop a working prototype without much effort.</p></li>
+<li><p>It comes with a aspire dashboard which is a very easy and good way to visualize logs, traces and metrics.</p></li>
+<li><p>If you use azure cloud services, the deployment form your aspire app is streamlined.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="sample-orchestration-file">
+<h1>Sample orchestration file<a class="headerlink" href="#sample-orchestration-file" title="Link to this heading"></a></h1>
+<p><img alt="image" src="aspire-orchestration.png" /></p>
+</section>
+<hr class="docutils" />
+<section id="net-aspire-pitfalls">
+<h1>.net aspire pitfalls<a class="headerlink" href="#net-aspire-pitfalls" title="Link to this heading"></a></h1>
+<p><img alt="image" src="aspire-pitfalls-database1.png" /></p>
+<p><img alt="image" src="aspire-pitfalls-database2.png" /></p>
+<p><img alt="image" src="aspire-pitfalls-httpclient.png" /></p>
+</section>
+<hr class="docutils" />
+<section id="aspire-cpu-usage-usr-sys">
+<h1>aspire CPU usage usr/sys<a class="headerlink" href="#aspire-cpu-usage-usr-sys" title="Link to this heading"></a></h1>
+<p><img alt="image" src="apire-cpu.png" /></p>
+</section>
+<hr class="docutils" />
+<section id="comparison-of-cpu-usage-for-user">
+<h1>Comparison of CPU usage for user<a class="headerlink" href="#comparison-of-cpu-usage-for-user" title="Link to this heading"></a></h1>
+<p><img alt="image" src="all-cpu-usr.png" /></p>
+</section>
+<hr class="docutils" />
+<section id="comparison-of-cpu-usage-for-system">
+<h1>Comparison of CPU usage for system<a class="headerlink" href="#comparison-of-cpu-usage-for-system" title="Link to this heading"></a></h1>
+<p><img alt="image" src="all-cpu-sys.png" /></p>
+</section>
+<hr class="docutils" />
+<section id="comparison-of-memory-used">
+<h1>Comparison of memory used<a class="headerlink" href="#comparison-of-memory-used" title="Link to this heading"></a></h1>
+<p><img alt="image" src="all-memory-used.png" /></p>
+</section>
+<hr class="docutils" />
+<section id="comparison-of-memory-committed">
+<h1>Comparison of memory committed<a class="headerlink" href="#comparison-of-memory-committed" title="Link to this heading"></a></h1>
+<p><img alt="image" src="all-memory-committed.png" /></p>
+</section>
+<hr class="docutils" />
+<section id="my-recommendations">
+<h1>My recommendations<a class="headerlink" href="#my-recommendations" title="Link to this heading"></a></h1>
+<ul class="simple">
+<li><p>Depends on the device’s resources.</p></li>
+<li><p>Best developer experience is in my opinion k3s.</p></li>
+<li><p>If only 1 GB of ram is available native deployment would be my choice.</p></li>
+<li><p>If 2-4 GB of ram is available docker deployment would be my choice.</p></li>
+<li><p>If 8 GB of ram is available k3s would be my choice.</p></li>
+</ul>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="README.html" class="btn btn-neutral float-left" title="Orchestrating with .net aspire" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="S16%20Update%20process%20summary.html" class="btn btn-neutral float-right" title="S16 Update process summary" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

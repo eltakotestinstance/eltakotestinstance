@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>&lt;no title&gt; &mdash; Eltako-test  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="&lt;no title&gt;" href="S16%20package%20update%20model.html" />
+    <link rel="prev" title="&lt;no title&gt;" href="S16%20application%20stack%20update.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Eltako-test
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="README.html">Orchestrating with .net aspire</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html">S16 DevOps and architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#test-deployment-platform">Test deployment platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#test-deployment">Test deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#tested-deployment-methods">Tested Deployment methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#pro-cons-of-native-deployment">Pro/cons of native deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#native-deployment-cpu-usage">Native deployment CPU usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#docker-compared-to-other-virtualization-methods">Docker compared to other virtualization methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#sample-dockerfile">Sample Dockerfile</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#sample-docker-compose-file">Sample docker compose file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#details-of-hybrid-deployment">Details of hybrid deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#pro-cons-of-hybrid-deployment">Pro/cons of hybrid deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#hybrid-deployment-cpu-usage">Hybrid deployment CPU usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#details-of-docker-deployment">Details of docker deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#pro-cons-of-docker-deployment">Pro/cons of docker deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#docker-deployment-cpu-usage">Docker deployment CPU usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#excursion-yocto-package">Excursion Yocto package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#how-kubernetes-works">How kubernetes works</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#how-k3s-works">How k3s works</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#sample-k8s-config-files">Sample k8s config files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#details-of-the-kubernetes-deployment">Details of the Kubernetes deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#pro-cons-of-kubernetes-deployment">Pro/cons of kubernetes deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#kubernetes-deployment-cpu-usage">Kubernetes deployment CPU usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#what-is-net-aspire">What is .net aspire</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#sample-orchestration-file">Sample orchestration file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#net-aspire-pitfalls">.net aspire pitfalls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#aspire-cpu-usage-usr-sys">aspire CPU usage usr/sys</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#comparison-of-cpu-usage-for-user">Comparison of CPU usage for user</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#comparison-of-cpu-usage-for-system">Comparison of CPU usage for system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#comparison-of-memory-used">Comparison of memory used</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#comparison-of-memory-committed">Comparison of memory committed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#my-recommendations">My recommendations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Update%20process%20summary.html">S16 Update process summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="create_pdf_from_md_readme.html">create_pdf_from_md_readme.md</a></li>
+<li class="toctree-l1"><a class="reference internal" href="create_pdf_from_md_readme.html#excerpt-separator">excerpt_separator: <!--more--></a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Eltako-test</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">&lt;no title&gt;</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/S16 image update model.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="highlight-mermaid notranslate"><div class="highlight"><pre><span></span>flowchart LR
+   nSystem([normal system]) 
+   nSystem--&gt;connectRepo[&quot;connect to 
+   update server&quot;]
+   connectRepo--&gt;successConnect{successful}
+   successConnect--&gt;|yes|checkSSL[&quot;check ssl certificate
+   of connection&quot;]
+   successConnect--&gt;|no|waitConnect[wait for x seconds]:::wait
+   waitConnect--&gt;maxTries{&quot;max number of
+   tries reached&quot;}
+   maxTries--&gt;|no|connectRepo
+   maxTries--&gt;|yes|errorLog([&quot;error log/
+   message to app&quot;]):::failed
+   errorLog--&gt;consent{&quot;has user consented
+   for diagnostic data&quot;}:::failed
+   consent--&gt;sendDiagData([&quot;send dignostic
+   data&quot;]):::failed
+   checkSSL--&gt;validSSL{valid}
+   validSSL--&gt;|yes|authenticate[authenticate]
+   validSSL--&gt; |no|errorLog
+   authenticate--&gt;authSuccess{successful}
+   authSuccess--&gt;|yes|updateImageRepo[(&quot;update image
+    repository&quot;)]
+   authSuccess--&gt;|no|errorLog
+  updateImageRepo--&gt;successImageRepo{successful}
+  successImageRepo--&gt;|yes|newImage{&quot;new image
+  availible&quot;}
+  successImageRepo--&gt;|no|errorLog
+  newImage--&gt;|no|waitForImage[&quot;wait for 
+  x hours/days&quot;]:::wait
+  waitForImage--&gt;connectRepo
+  newImage--&gt;connectUpdate[&quot;connect to
+  update server&quot;]
+  connectUpdate--&gt;successConnectUpdate{sucessful}
+  successConnectUpdate--&gt;|yes|checkSSLUpdate[&quot;check ssl certificate
+  of connection&quot;]
+  successConnectUpdate--&gt;|no|waitForImageConnection[&quot;wait for x seconds&quot;]:::wait
+  waitForImageConnection--&gt;maxTriesImage{&quot;max number of
+  tries reached&quot;}
+  maxTriesImage--&gt;|yes|errorLog
+  maxTriesImage--&gt;|no|connectUpdate
+  checkSSLUpdate--&gt;validSSLUpdate{valid}
+  validSSLUpdate--&gt;|yes|receiveFile[(receive file)]
+  validSSLUpdate--&gt;|no|errorLog  
+  receiveFile--&gt;completeFile{&quot;received
+  complete file&quot;}
+  completeFile--&gt;|yes|makeChecksum[&quot;make checksum 
+  for recieved file&quot;]
+  completeFile--&gt;|no|waitForImageConnection
+  completeFile--&gt;|no|errorLog  
+  makeChecksum--&gt;checkChecksum[&quot;check sha sum
+  against sum 
+  received at initial
+  connection&quot;]
+  checkChecksum--&gt;checksumEqual{&quot;are equal&quot;}
+  checksumEqual--&gt;|yes|moveFile[&quot;move file to
+  partition for
+  updates and save
+  sha256 sum&quot;]
+  checksumEqual--&gt;|no|errorLog
+  moveFile--&gt;notify[&quot;notify the user
+  that an update
+  is availible&quot;]
+  notify--&gt;prioUpdate{priority Update}
+  prioUpdate--&gt;|no|waitForUser[&quot;wait for user to
+  initiate update&quot;]:::wait
+  waitForUser--&gt;reboot[&quot;reeboot to recovery
+  update environment&quot;]
+  prioUpdate--&gt;|yes|reboot
+  reboot--&gt;makeChecksumReboot[&quot;make sha sum
+  for update file&quot;]
+  makeChecksumReboot--&gt;checkChecksumReboot[&quot;check sha sum 
+  against saved sum&quot;]
+  checkChecksumReboot--&gt;checksumEqualReboot{are equal}
+  checksumEqualReboot--&gt;|yes|updateImage[(&quot;update system
+  image&quot;)]
+  checksumEqualReboot--&gt;|no|rebootOld[&quot;reboot to 
+  old system&quot;]:::failed
+  updateImage--&gt;successUpdate{successful}
+  successUpdate--&gt;|yes|needMigration{need migration}
+  successUpdate--&gt;|no|revertUpdates[revert to old image]:::failed
+  revertUpdates--&gt;rebootOld
+  rebootOld--&gt;errorLog
+  needMigration--&gt;|yes|backup[&quot;backup 
+  migration data&quot;]
+  needMigration--&gt;|no|reload
+  backup--&gt;pUMigration[&quot;post update
+  migration(db)&quot;]
+  pUMigration--&gt;successMigration{successful}
+  successMigration--&gt;|yes|reload[reload services]
+  successMigration--&gt;|no|revertMigration[&quot;revert migration
+  data&quot;]:::failed
+  revertMigration--&gt;revertUpdates
+  reload--&gt;successReload{successful}
+  successReload--&gt;|no|migrationMade{&quot;migration
+  cahnges made&quot;}
+  migrationMade--&gt;|yes|revertMigration
+  migrationMade--&gt;|no|revertUpdates
+  successReload--&gt;|yes|endSuccess([&quot;log success/
+  message to app&quot;]):::success
+  classDef success fill:#006400
+  classDef failed fill:#cd0000
+  classDef wait fill:#ffd700,color:#000000
+</pre></div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="S16%20application%20stack%20update.html" class="btn btn-neutral float-left" title="&lt;no title&gt;" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="S16%20package%20update%20model.html" class="btn btn-neutral float-right" title="&lt;no title&gt;" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

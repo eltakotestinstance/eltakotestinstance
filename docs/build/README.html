@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orchestrating with .net aspire &mdash; Eltako-test  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="S16 DevOps and architecture" href="S16%20Deployment.html" />
+    <link rel="prev" title="&lt;no title&gt;" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Eltako-test
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Orchestrating with .net aspire</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introductory-notes">Introductory notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#getting-started">Getting Started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#visual-studio">Visual Studio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#other">Other</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#net-command-line-client">.net command line client</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vs-studio-code">VS Studio code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#jetbrains-rider">Jetbrains Rider</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#development">Development</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#aspire-app-host">aspire app host</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aspire-service-defaults">aspire service defaults</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aspire-dashboard">aspire dashboard</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aspire-components">aspire components</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#publishing-your-application-outside-of-azure">Publishing your application outside of Azure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aspire-negatives">aspire negatives</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html">S16 DevOps and architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#test-deployment-platform">Test deployment platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#test-deployment">Test deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#tested-deployment-methods">Tested Deployment methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#pro-cons-of-native-deployment">Pro/cons of native deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#native-deployment-cpu-usage">Native deployment CPU usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#docker-compared-to-other-virtualization-methods">Docker compared to other virtualization methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#sample-dockerfile">Sample Dockerfile</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#sample-docker-compose-file">Sample docker compose file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#details-of-hybrid-deployment">Details of hybrid deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#pro-cons-of-hybrid-deployment">Pro/cons of hybrid deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#hybrid-deployment-cpu-usage">Hybrid deployment CPU usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#details-of-docker-deployment">Details of docker deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#pro-cons-of-docker-deployment">Pro/cons of docker deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#docker-deployment-cpu-usage">Docker deployment CPU usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#excursion-yocto-package">Excursion Yocto package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#how-kubernetes-works">How kubernetes works</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#how-k3s-works">How k3s works</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#sample-k8s-config-files">Sample k8s config files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#details-of-the-kubernetes-deployment">Details of the Kubernetes deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#pro-cons-of-kubernetes-deployment">Pro/cons of kubernetes deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#kubernetes-deployment-cpu-usage">Kubernetes deployment CPU usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#what-is-net-aspire">What is .net aspire</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#sample-orchestration-file">Sample orchestration file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#net-aspire-pitfalls">.net aspire pitfalls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#aspire-cpu-usage-usr-sys">aspire CPU usage usr/sys</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#comparison-of-cpu-usage-for-user">Comparison of CPU usage for user</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#comparison-of-cpu-usage-for-system">Comparison of CPU usage for system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#comparison-of-memory-used">Comparison of memory used</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#comparison-of-memory-committed">Comparison of memory committed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Deployment.html#my-recommendations">My recommendations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Update%20process%20summary.html">S16 Update process summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="create_pdf_from_md_readme.html">create_pdf_from_md_readme.md</a></li>
+<li class="toctree-l1"><a class="reference internal" href="create_pdf_from_md_readme.html#excerpt-separator">excerpt_separator: <!--more--></a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Eltako-test</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Orchestrating with .net aspire</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/README.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="orchestrating-with-net-aspire">
+<h1>Orchestrating with .net aspire<a class="headerlink" href="#orchestrating-with-net-aspire" title="Link to this heading"></a></h1>
+<section id="introductory-notes">
+<h2>Introductory notes<a class="headerlink" href="#introductory-notes" title="Link to this heading"></a></h2>
+<p>.net aspire is currently only in preview and could be fundamentally changed or shelved by Microsoft.
+This document was made when aspire preview version 4 was released.</p>
+</section>
+<section id="getting-started">
+<h2>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading"></a></h2>
+</section>
+<section id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://dotnet.microsoft.com/download/dotnet/8.0">.net 8.0</a></p></li>
+<li><p>Container runtime <a class="reference external" href="https://www.docker.com/products/docker-desktop/">Docker Desktop</a> or <a class="reference external" href="https://podman.io/docs/installation">Podman</a></p></li>
+</ul>
+</section>
+<section id="visual-studio">
+<h2>Visual Studio<a class="headerlink" href="#visual-studio" title="Link to this heading"></a></h2>
+<p>If you want the full aspire tooling provided by Microsoft you need to use the <a class="reference external" href="https://visualstudio.microsoft.com/de/vs/preview/">Visual Studio 2022 Preview</a> version 17.10 or higher.</p>
+<p>Under the Visual Studio installer you need to select the .net aspire workload located under “ASP.net and web development”.</p>
+<p><img alt="Image" src="https://learn.microsoft.com/en-us/dotnet/aspire/docs/media/install-aspire-workload-visual-studio.png" /></p>
+</section>
+<section id="other">
+<h2>Other<a class="headerlink" href="#other" title="Link to this heading"></a></h2>
+<p>The workload installation wia .net CLI is needed for all other editors.</p>
+<section id="net-command-line-client">
+<h3>.net command line client<a class="headerlink" href="#net-command-line-client" title="Link to this heading"></a></h3>
+<p>To install the .net aspire workload you need to use the .NET CLI which is par of the dotnet 8.0 installation.
+Then use <code class="docutils literal notranslate"><span class="pre">dotnet</span> <span class="pre">workload</span> <span class="pre">update</span></code> to ensure you install the latest preview of aspire.
+And then install it with <code class="docutils literal notranslate"><span class="pre">dotnet</span> <span class="pre">workload</span> <span class="pre">install</span> <span class="pre">aspire</span></code>.</p>
+</section>
+<section id="vs-studio-code">
+<h3>VS Studio code<a class="headerlink" href="#vs-studio-code" title="Link to this heading"></a></h3>
+<p>To develop .net aspire under VS Code you need to start a new solution with <code class="docutils literal notranslate"><span class="pre">dotnet</span> <span class="pre">new</span> <span class="pre">aspire</span></code> for a basic aspire project or
+<code class="docutils literal notranslate"><span class="pre">dotnet</span> <span class="pre">new</span> <span class="pre">aspire-starter</span></code> for the sample inspire project including a sample .net Blazor webUI and a .net core web api project.</p>
+<p>Then you can use the solution how you would use a normal .net application.</p>
+</section>
+<section id="jetbrains-rider">
+<h3>Jetbrains Rider<a class="headerlink" href="#jetbrains-rider" title="Link to this heading"></a></h3>
+<p>If you install the workloads with the commands above. The workloads should be under .net / .net core templates when you create a new solution there you can select the corresponding templates.</p>
+<p><img alt="Image" src="rider-new-solution.png" /></p>
+<p>If you want to Run/Debug the .net aspire project you need a third party <a class="reference external" href="https://plugins.jetbrains.com/plugin/23289--net-aspire">plugin form Rival Abdrakhmanov</a></p>
+<p><img alt="Image" src="rider-plugin.png" /></p>
+</section>
+</section>
+<section id="development">
+<h2>Development<a class="headerlink" href="#development" title="Link to this heading"></a></h2>
+<p>When you started a new solution or added orchestration support to your existing project. There a two aspire specific project in you solution.</p>
+<section id="aspire-app-host">
+<h3>aspire app host<a class="headerlink" href="#aspire-app-host" title="Link to this heading"></a></h3>
+<p>The aspire app host is for defining you application stack during development. It works similar to a docker compose or kubernetes deployment but is written in C# and has intellisense support.
+With the app host it is relatively easy to start a microservice based solution. You can add Container and pass references.
+This is a sample application with a postgresql container with a persistent volume and with the PgAdmin ui for easy database management.
+It adds then a asp .net web api and a Blazor webui with references to the database and the backend.</p>
+<div class="highlight-C# notranslate"><div class="highlight"><pre><span></span><span class="kt">var</span><span class="w"> </span><span class="n">builder</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DistributedApplication</span><span class="p">.</span><span class="n">CreateBuilder</span><span class="p">(</span><span class="n">args</span><span class="p">);</span>
+
+<span class="kt">var</span><span class="w"> </span><span class="n">database</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">builder</span><span class="p">.</span><span class="n">AddPostgresContainer</span><span class="p">(</span><span class="s">&quot;database&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">password</span><span class="p">:</span><span class="s">&quot;mysecretpassword&quot;</span><span class="p">,</span><span class="n">port</span><span class="p">:</span><span class="m">5432</span><span class="p">)</span>
+<span class="w">    </span><span class="p">.</span><span class="n">WithPgAdmin</span><span class="p">()</span>
+<span class="w">    </span><span class="p">.</span><span class="n">WithVolumeMount</span><span class="p">(</span><span class="s">&quot;database&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/var/lib/postgresql/data&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="p">.</span><span class="n">AddDatabase</span><span class="p">(</span><span class="s">&quot;streamedaudiobooks&quot;</span><span class="p">);</span>
+
+<span class="kt">var</span><span class="w"> </span><span class="n">backend</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">builder</span><span class="p">.</span><span class="n">AddProject</span><span class="o">&lt;</span><span class="n">Projects</span><span class="p">.</span><span class="n">StreamedAudioBooksBackend</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;StreamedAudiBooksBackend&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="p">.</span><span class="n">WithReference</span><span class="p">(</span><span class="n">database</span><span class="p">);</span>
+
+<span class="n">builder</span><span class="p">.</span><span class="n">AddProject</span><span class="o">&lt;</span><span class="n">Projects</span><span class="p">.</span><span class="n">StreamedAudioBooksBlazor</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;StreamedAudiBooksFrontend&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="p">.</span><span class="n">WithReference</span><span class="p">(</span><span class="n">backend</span><span class="p">);</span>
+
+
+<span class="n">builder</span><span class="p">.</span><span class="n">Build</span><span class="p">().</span><span class="n">Run</span><span class="p">();</span>
+</pre></div>
+</div>
+</section>
+<section id="aspire-service-defaults">
+<h3>aspire service defaults<a class="headerlink" href="#aspire-service-defaults" title="Link to this heading"></a></h3>
+<p>The aspire service defaults are where opentelemetry, health check, resilience and service discovery options are defined. Since aspire is an opinionated framework it make there many default settings, but if you want to have your personal/team options there you can change everything.</p>
+<p>Note if you want to build your container you need to copy the project file you want to build the container and the service defaults project file for the build process.</p>
+<p>I noticed that i had problems building the aspire orchestrated project an publish it for arm64 with the default dotnet build container, the <code class="docutils literal notranslate"><span class="pre">dotnet</span> <span class="pre">restore</span></code> i ran into a [https://gitlab.com/qemu-project/qemu/-/issues/249](known qemu bug) which the builder uses. So i needed to build inside a arm64 container for it to work but it slows down the building process significantly(from 100 seconds on my windows 11 machine to 300+ seconds).</p>
+<p>Sample Dockerfile for an aspire project for arm64</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>FROM mcr.microsoft.com/dotnet/aspnet:8.0-cbl-mariner2.0-arm64v8 AS base
+USER $APP_UID
+WORKDIR /app
+EXPOSE 5001
+
+FROM mcr.microsoft.com/dotnet/sdk:8.0-cbl-mariner2.0-arm64v8 AS build
+ARG BUILD_CONFIGURATION=Release
+WORKDIR /src
+COPY [&quot;EltakoSoftwareDeploymentMonitorApi/EltakoSoftwareDeploymentMonitorApi.csproj&quot;, &quot;EltakoSoftwareDeploymentMonitorApi/&quot;]
+COPY [&quot;EltakoSoftwareDeploymentMonitorApi.ServiceDefaults/EltakoSoftwareDeploymentMonitorApi.ServiceDefaults.csproj&quot;, &quot;EltakoSoftwareDeploymentMonitorApi.ServiceDefaults/&quot;]
+RUN dotnet restore &quot;EltakoSoftwareDeploymentMonitorApi/EltakoSoftwareDeploymentMonitorApi.csproj&quot;
+COPY . .
+WORKDIR &quot;/src/EltakoSoftwareDeploymentMonitorApi&quot;
+RUN dotnet build --runtime linux-arm64 &quot;EltakoSoftwareDeploymentMonitorApi.csproj&quot; -c $BUILD_CONFIGURATION -o /app/build
+
+FROM build AS publish
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish --runtime linux-arm64 &quot;EltakoSoftwareDeploymentMonitorApi.csproj&quot; -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+
+COPY EltakoSoftwareDeploymentMonitorApi/wait-for-postgres.sh /wait-for-postgres.sh
+
+# Use the script as an entrypoint
+ENTRYPOINT [&quot;/wait-for-postgres.sh&quot;]
+</pre></div>
+</div>
+</section>
+<section id="aspire-dashboard">
+<h3>aspire dashboard<a class="headerlink" href="#aspire-dashboard" title="Link to this heading"></a></h3>
+<p><img alt="Image" src="https://learn.microsoft.com/en-us/dotnet/aspire/docs/whats-new/media/preview-4/dashboard-face-lift.png" /></p>
+<p>The aspire dashboard is in my opinion the highlight of the development process with .net aspire because it functions as your opentelemetry collector in your development process and has a structured logging section which integrates logging with the traces and metrics so that you can better find errors for component overlapping processes. It is currently in the process to be separated from aspire and to become available for general use. There is a docker container:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">--</span><span class="n">rm</span> <span class="o">-</span><span class="n">it</span> \
+  <span class="o">-</span><span class="n">p</span> <span class="mi">18888</span><span class="p">:</span><span class="mi">18888</span> \
+  <span class="o">-</span><span class="n">p</span> <span class="mi">4317</span><span class="p">:</span><span class="mi">18889</span> \
+  <span class="o">-</span><span class="n">d</span> <span class="o">--</span><span class="n">name</span> <span class="n">aspire</span><span class="o">-</span><span class="n">dashboard</span> \
+  <span class="n">mcr</span><span class="o">.</span><span class="n">microsoft</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">dotnet</span><span class="o">/</span><span class="n">nightly</span><span class="o">/</span><span class="n">aspire</span><span class="o">-</span><span class="n">dashboard</span><span class="p">:</span><span class="mf">8.0.0</span><span class="o">-</span><span class="n">preview</span><span class="mf">.4</span>
+</pre></div>
+</div>
+<p>but it is very unstable at the moment.</p>
+</section>
+<section id="aspire-components">
+<h3>aspire components<a class="headerlink" href="#aspire-components" title="Link to this heading"></a></h3>
+<p><img alt="image" src="https://learn.microsoft.com/en-us/dotnet/aspire/docs/media/visual-studio-add-aspire-comp-nuget.png" /></p>
+<p>Aspire components are nuget packages specially developed for an aspire orchestrated application, it helps you to add certain components like databases, orms, caching, Azure services among others to your application. The components make it easier to integrate these services because they add your configuration options from your service default project to these components and make things like database migrations in the Microsoft entity framework automatically. Currently(as of 03.04.24) the selection of aspire components is limited to services which are very often used and Azure components.</p>
+<p>For example this line is all that is needed to integrate your entity framework connection with your aspire solution with your service default configuration and database migration:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>builder.AddNpgsqlDbContext&lt;EltakoSoftwareDeploymentMonitorDbContext&gt;(&quot;database&quot;,
+                         settings =&gt; settings.ConnectionString = $&quot;Host={builder.Configuration[&quot;POSTGRES_HOST&quot;]};Password=Dlq7oHLBqI;Username=postgres;Database=esdm;&quot;);
+</pre></div>
+</div>
+</section>
+<section id="publishing-your-application-outside-of-azure">
+<h3>Publishing your application outside of Azure<a class="headerlink" href="#publishing-your-application-outside-of-azure" title="Link to this heading"></a></h3>
+<p>Currently the aspire framework works best with Microsoft Azure cloud services, which have tooling to publish your aspire solution to the Azure cloud.
+But the framework is build independently from Azure so in the future other cloud services could replicate these tooling for there respected services.
+The aspire framework can generate you a deployment manifest, which other tools can use to deploy your aspire solution.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>dotnet run --project AspireApp.AppHost\AspireApp.AppHost.csproj `
+    -- `
+    --publisher manifest `
+    --output-path ../aspire-manifest.json
+</pre></div>
+</div>
+<p>If you want to generate a kubernetes configure from this manifest, there is a tool called <a class="reference external" href="https://github.com/prom3theu5/aspirational-manifests">Aspirate (Aspir8)</a> which automates this process you only need to run these two commands:
+<code class="docutils literal notranslate"><span class="pre">aspirate</span> <span class="pre">generate</span></code> for generating the configuration files and <code class="docutils literal notranslate"><span class="pre">aspirate</span> <span class="pre">build</span></code> to build the respective containers.
+It currently also supports generating a docker compose deployment with <code class="docutils literal notranslate"><span class="pre">aspirate</span> <span class="pre">generate</span> <span class="pre">--output-format</span> <span class="pre">compose</span></code>, but the docker compose deployment isn’t as
+fully developed as the kubernetes deployment and requires a lot of fine tuning to get a working deployment.</p>
+</section>
+<section id="aspire-negatives">
+<h3>aspire negatives<a class="headerlink" href="#aspire-negatives" title="Link to this heading"></a></h3>
+<p>I don’t like that aspire manages the service discovery different from Kubernetes/Docker compose resulting in different codes for development and production.</p>
+<p>For example in aspire endpoints are mapped with:</p>
+<p><img alt="Image" src="aspire-webapi-aspire.png" /></p>
+<p>But if you use environment variables like you would in kubernetes/docker compose you need to do it like this:</p>
+<p><img alt="Image" src="aspire-webapi-docker.png" /></p>
+<p>And if you want to connect to a database there is no service discovery this code doesn’t work:</p>
+<p><img alt="Image" src="aspire-database-defunc.png" /></p>
+<p>You need to do it with connection string or environment variables:</p>
+<p><img alt="Image" src="aspire-database-func.png" /></p>
+<p>Also the dashboard only detects http endpoints and no https.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="&lt;no title&gt;" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="S16%20Deployment.html" class="btn btn-neutral float-right" title="S16 DevOps and architecture" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
