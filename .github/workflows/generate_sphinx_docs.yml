@@ -39,12 +39,7 @@ jobs:
           for file in temp/*.md; do
             echo "   $(basename "$file" .md)" >> temp/index.rst
           done
-          echo "Indices and tables\n  
-                ==================\n
-                \n
-                * :ref:`genindex`\n
-                * :ref:`modindex`\n
-                * :ref:`search`" >> temp/index.rst
+          echo "\n\nIndices and tables\n==================\n\n* :ref:`genindex`\n* :ref:`modindex`\n* :ref:`search`" >> temp/index.rst
 
       - name: Generate Sphinx documentation
         run: |
