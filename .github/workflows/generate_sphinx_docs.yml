@@ -4,6 +4,8 @@ on:
   push:
     paths:
       - '**.md'
+    paths-ignore:
+      - '**.marp.md'
 
 jobs:
   build:
