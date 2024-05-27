@@ -52,14 +52,13 @@ jobs:
           cp temp/* docs/
           cp python/conf.py docs/
           sphinx-build -b html docs/ docs/build/
-      - name: Commit and push if changes
+      - name: Setup git
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add docs/build/
-          if git diff --quiet --cached; then
-            echo 'No changes to commit'
-          else
-            git commit -m "Update Sphinx documentation"
-            git push
-          fi
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs/build
