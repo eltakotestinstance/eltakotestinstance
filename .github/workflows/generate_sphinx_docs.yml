@@ -48,6 +48,6 @@ jobs:
       - name: Generate Sphinx documentation
         run: |
           sphinx-quickstart -q -p "EltakoTestInstance" -a "Jochen" -v "1.0" docs
-          cp temp/* docs/source/
-          cp python/conf.py docs/source/
-          sphinx-build -b html docs/source/ docs/build/
+          cp temp/* docs/
+          cp python/conf.py docs/
+          sphinx-build -b html docs/ docs/build/
