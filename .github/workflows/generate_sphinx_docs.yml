@@ -4,8 +4,6 @@ on:
   push:
     paths:
       - '**.md'
-    paths-ignore:
-      - '**.marp.md'
 
 jobs:
   build:
@@ -30,7 +28,7 @@ jobs:
       - name: Copy markdown files to temp location
         run: |
           mkdir temp
-          find . -name "*.md" -exec cp {} temp \;
+          find . -name "*.md" ! -name "*.marp.md" -exec cp {} temp \;
 
       - name: Generate index.rst
         run: |
