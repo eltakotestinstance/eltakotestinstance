@@ -1,0 +1,53 @@
+name: Generate Sphinx Documentation
+
+on:
+  push:
+    paths:
+      - '**.md'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+          cache: 'pip' # caching pip dependencies
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install sphinx m2r2 sphinx_rtd_theme myst_parser
+
+      - name: Copy markdown files to temp location
+        run: |
+          mkdir temp
+          find . -name "*.md" -exec cp {} temp \;
+
+      - name: Generate index.rst
+        run: |
+          echo ".. toctree::" > temp/index.rst
+          echo "   :maxdepth: 2" >> temp/index.rst
+          echo "   :caption: Contents:" >> temp/index.rst
+          echo "" >> temp/index.rst
+          for file in temp/*.md; do
+            echo "   $(basename "$file" .md)" >> temp/index.rst
+          done
+          echo "Indices and tables\n  
+                ==================\n
+                \n
+                * :ref:`genindex`\n
+                * :ref:`modindex`\n
+                * :ref:`search`" >> temp/index.rst
+
+      - name: Generate Sphinx documentation
+        run: |
+          sphinx-quickstart -q -p "EltakoTestInstance" -a "Jochen" -v "1.0" docs
+          cp temp/* docs/source/
+          cp python/conf.py docs/source/
+          sphinx-build -b html docs/source/ docs/build/
