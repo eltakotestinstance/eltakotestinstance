@@ -3,7 +3,6 @@
    :caption: Contents:
 
    README
-   S16 Deployment
    S16 Update process summary
    S16 application stack update
    S16 image update model
