@@ -68,5 +68,5 @@ html_context = {
     "github_user": "saige-jochen-auticon", # Username
     "github_repo": "eltakotestinstance", # Repo name
     "github_version": "master", # Version
-    "conf_py_path": "/docs/source/", # Path in the checkout to the docs root
+    "conf_py_path": "/", # Path in the checkout to the docs root
 }
