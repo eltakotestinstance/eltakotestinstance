@@ -62,3 +62,11 @@ source_suffix = {
 
 html_show_copyright = False
 html_show_sphinx = False
+
+html_context = {
+    "display_github": True, # Integrate GitHub
+    "github_user": "saige-jochen-auticon", # Username
+    "github_repo": "eltakotestinstance", # Repo name
+    "github_version": "master", # Version
+    "conf_py_path": "/docs/source/", # Path in the checkout to the docs root
+}
