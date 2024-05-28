@@ -32,6 +32,8 @@ extensions = [
         'sphinxcontrib.mermaid'
 ]
 
+myst_fence_as_directive = ["mermaid"]
+
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
