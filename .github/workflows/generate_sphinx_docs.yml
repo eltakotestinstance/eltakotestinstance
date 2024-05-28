@@ -32,16 +32,14 @@ jobs:
 
       - name: Generate index.rst
         run: |
+          echo ".. toctree::" > temp/index.rst
+          echo "   :maxdepth: 2" >> temp/index.rst
+          echo "   :caption: Contents:" >> temp/index.rst
           echo "" >> temp/index.rst
-          echo "Indices and tables\n==================\n\n* :ref:\\`genindex\\`\n* :ref:\\`modindex\\`\n* :ref:\\`search\\`\n\n.. toctree::\n   :maxdepth: 2\n   :caption: Contents:\n" > temp/index.rst
-         # echo ".. toctree::" > temp/index.rst
-         # echo "   :maxdepth: 2" >> temp/index.rst
-         # echo "   :caption: Contents:" >> temp/index.rst
-          echo "" >> temp/index.rst
-          
           for file in temp/*.md; do
             echo "   $(basename "$file" .md)" >> temp/index.rst
           done
+          echo "\n\nIndices and tables\n==================\n\n* :ref:`genindex`\n* :ref:`modindex`\n* :ref:`search`" >> temp/index.rst
 
       - name: Generate Sphinx documentation
         run: |
