@@ -8,9 +8,4 @@
    S16 image update model
    S16 package update model
    create_pdf_from_md_readme
-Indices and tables\n  
-      ==================\n
-      \n
-      * :ref:\n
-      * :ref:\n
-      * :ref:
+\n\nIndices and tables\n==================\n\n* :ref:\n* :ref:\n* :ref:
