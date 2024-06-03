@@ -1,6 +1,7 @@
 Welcome to Eltako-test's documentation!
 =======================================
 
+.. note:: This is a test note
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
