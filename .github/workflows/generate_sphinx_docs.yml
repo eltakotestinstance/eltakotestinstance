@@ -35,6 +35,8 @@ jobs:
           echo "Welcome to Eltako-test's documentation!" > temp/index.rst
           echo "=======================================" >> temp/index.rst
           echo "" >> temp/index.rst
+          echo ".. note:: This is a test note" >> temp/index.rst
+
           echo ".. toctree::" >> temp/index.rst
           echo "   :maxdepth: 2" >> temp/index.rst
           echo "   :caption: Contents:" >> temp/index.rst
