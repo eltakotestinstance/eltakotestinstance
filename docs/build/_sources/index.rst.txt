@@ -16,4 +16,4 @@ Welcome to Eltako-test's documentation!
 Indices and tables
 ==================
 
-.. _test label: 
+.. _test label: Test link
