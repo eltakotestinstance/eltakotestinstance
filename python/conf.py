@@ -67,7 +67,7 @@ html_show_sphinx = False
 
 html_context = {
     "display_github": True, # Integrate GitHub
-    "github_user": "saige-jochen-auticon", # Username
+    "github_user": "eltakotestinstance", # Username
     "github_repo": "eltakotestinstance", # Repo name
     "github_version": "main", # Version
     "conf_py_path": "/", # Path in the checkout to the docs root
