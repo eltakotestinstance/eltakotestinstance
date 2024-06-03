@@ -1,5 +1,7 @@
 # S16 package update model
 
+.. note:: This is a test note
+
 ```mermaid
 flowchart TD
    nSystem([normal system]) 
