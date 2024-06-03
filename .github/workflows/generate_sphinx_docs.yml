@@ -45,10 +45,10 @@ jobs:
           echo "" >> temp/index.rst
           echo "Indices and tables" >> temp/index.rst
           echo "==================" >> temp/index.rst
-          echo "" >> temp/index.rst"
-          echo "" >> temp/index.rst"
-          echo "* :ref:`genindex`" >> temp/index.rst"
-          echo "* :ref:`modindex`" >> temp/index.rst"
+          echo "" >> temp/index.rst
+          echo "" >> temp/index.rst
+          echo "* :ref:`genindex`" >> temp/index.rst
+          echo "* :ref:`modindex`" >> temp/index.rst
           echo "* :ref:`search`" >> temp/index.rst
 
       - name: Generate Sphinx documentation
