@@ -35,7 +35,7 @@ jobs:
           echo "Welcome to Eltako-test's documentation!" > temp/index.rst
           echo "=======================================" >> temp/index.rst
           echo "" >> temp/index.rst
-          echo ".. note:: This is a test note" >> temp/index.rst
+          echo ".. note:: This is a test note: :ref:\`test\`" >> temp/index.rst
 
           echo ".. toctree::" >> temp/index.rst
           echo "   :maxdepth: 2" >> temp/index.rst
@@ -48,7 +48,8 @@ jobs:
           echo "Indices and tables" >> temp/index.rst
           echo "==================" >> temp/index.rst
           echo "" >> temp/index.rst
-          echo "" >> temp/index.rst
+          echo ".. _test label: " >> temp/index.rst
+
          
 
       - name: Generate Sphinx documentation
