@@ -48,7 +48,7 @@ jobs:
           echo "Indices and tables" >> temp/index.rst
           echo "==================" >> temp/index.rst
           echo "" >> temp/index.rst
-          echo ".. _test label: " >> temp/index.rst
+          echo ".. _test label: Test link" >> temp/index.rst
 
          
 
