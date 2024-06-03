@@ -1,7 +1,7 @@
 # S16 application stack update.
 
 ```mermaid
-flowchart LR
+flowchart TD
    nSystem([normal system]) 
    nSystem-->connect["connect to 
    the package 

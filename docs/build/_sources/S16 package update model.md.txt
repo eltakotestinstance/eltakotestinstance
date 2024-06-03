@@ -1,7 +1,7 @@
 # S16 package update model
 
 ```mermaid
-flowchart LR
+flowchart TD
    nSystem([normal system]) 
    nSystem-->connect["connect to 
    the package 
