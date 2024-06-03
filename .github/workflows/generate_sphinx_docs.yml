@@ -32,7 +32,7 @@ jobs:
 
       - name: Generate index.rst
         run: |
-          echo "Welcome to Eltako-test's documentation!" > temp/index.rst"
+          echo "Welcome to Eltako-test's documentation!" > temp/index.rst
           echo "=======================================" >> temp/index.rst
           echo "" >> temp/index.rst
           echo ".. toctree::" >> temp/index.rst
