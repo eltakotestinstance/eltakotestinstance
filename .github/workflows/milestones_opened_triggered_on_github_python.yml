@@ -22,6 +22,7 @@ jobs:
           env:
             MILESTONE_NUMBER: ${{ github.event.milestone.number }}
             GITHUB_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
+            GITHUB_REPOSITORY: ${{ github.repository }}
         
     outputs: 
       result: ${{ steps.compare_changes.outputs.result }}
