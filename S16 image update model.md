@@ -1,7 +1,7 @@
 # S16 image update model
 
 ```mermaid
-flowchart LR
+flowchart TD
    nSystem([normal system]) 
    nSystem-->connectRepo["connect to 
    update server"]
