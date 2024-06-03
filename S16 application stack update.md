@@ -1,8 +1,5 @@
 # S16 application stack update.
 
-## Note
-This is a test Note
-
 ```mermaid
 flowchart TD
    nSystem([normal system]) 
