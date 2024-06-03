@@ -1,7 +1,7 @@
 Welcome to Eltako-test's documentation!
 =======================================
 
-.. note:: This is a test note
+.. note:: This is a test note: :ref:`test`
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
@@ -16,4 +16,4 @@ Welcome to Eltako-test's documentation!
 Indices and tables
 ==================
 
-
+.. _test label: 
