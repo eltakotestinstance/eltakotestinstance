@@ -1,3 +1,6 @@
+Welcome to Eltako-test's documentation!
+=======================================
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
@@ -8,4 +11,11 @@
    S16 image update model
    S16 package update model
    create_pdf_from_md_readme
-\n\nIndices and tables\n==================\n\n* :ref:\n* :ref:\n* :ref:
+
+Indices and tables
+==================
+
+
+* :ref:
+* :ref:
+* :ref:
