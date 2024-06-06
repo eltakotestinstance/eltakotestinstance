@@ -22,12 +22,7 @@ jobs:
           env:
             ISSUE_NUMBER: ${{ github.event.issue.number }}
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        - name: Check secrets
-          run: |
-            if [[ -z "${{ secrets.JIRA_${{ github.actor }}" ]]; then
-                echo "JIRA secret for ${{ github.actor }} is not set"
-                exit 1
-            fi
+
         - name: Login
           uses: atlassian/gajira-login@master
           env:

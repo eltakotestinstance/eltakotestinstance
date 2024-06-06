@@ -49,7 +49,7 @@ jobs:
           echo "==================" >> temp/index.rst
           echo "" >> temp/index.rst
           echo ".. _test label: Test link" >> temp/index.rst
-
+          echo "" >> temp/index.rst
          
 
       - name: Generate Sphinx documentation
