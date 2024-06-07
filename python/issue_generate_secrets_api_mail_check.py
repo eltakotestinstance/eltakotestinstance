@@ -1,6 +1,6 @@
 import os
 
-USER_NAME = int(os.getenv('USER_NAME'))
+USER_NAME = os.getenv('USER_NAME')
 
 action_content = f"""
         if [[ -z "${{{{ secrets.JIRA_USER_EMAIL_{user_name}" }}}} ]]; then
