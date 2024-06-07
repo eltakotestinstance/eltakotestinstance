@@ -27,6 +27,7 @@ jobs:
           run: |
             OUTPUT=$(python python/issue_generate_secrets_api_key_check.py);
             echo result=$OUTPUT >> $GITHUB_OUTPUT;
+            echo $OUTPUT;
         - name: run_check_secrets
           id: run_check_secrets
           run: |
