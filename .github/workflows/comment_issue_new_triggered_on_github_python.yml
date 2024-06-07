@@ -30,10 +30,11 @@ jobs:
             echo $OUTPUT;
           env:
             USER_NAME: ${{ github.event.comment.user.login  }}
+            GITHUB_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
         - name: run_check_secrets
           id: run_check_secrets
           run: |
-            if [[ -z "${{steps.check_secrets.outputs.result }}"  ]]; then
+            if [[ -z "${{ steps.check_secrets.outputs.result }}"  ]]; then
             echo "JIRA secret for ${{ github.event.comment.user.login }} is not set"
             OUTPUT="${{secrets.JIRA_USER_EMAIL}}"
             else
