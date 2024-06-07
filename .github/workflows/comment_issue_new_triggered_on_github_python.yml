@@ -23,11 +23,16 @@ jobs:
             ISSUE_NUMBER: ${{ github.event.issue.number }}
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         - name: Check secrets
+          id: check_secrets
           run: |
-            if [[ -z "${{ secrets.JIRA_${{ github.actor }}" ]]; then
-                echo "JIRA secret for ${{ github.actor }} is not set"
-                exit 1
-            fi
+            OUTPUT=$(python python/issue_generate_secrets_api_key_check.py);
+            echo result=$OUTPUT >> $GITHUB_OUTPUT;
+        - name: run_check_secrets
+          id: run_check_secrets
+          run: |
+            ${{ steps.check_secrets.outputs.result == 'True' }}
+            echo result=$OUTPUT >> $GITHUB_OUTPUT;
+            echo $OUTPUT;
         - name: Login
           uses: atlassian/gajira-login@master
           env:
