@@ -28,11 +28,12 @@ jobs:
             OUTPUT=$(python python/issue_generate_secrets_api_key_check.py);
             echo result=$OUTPUT >> $GITHUB_OUTPUT;
             echo $OUTPUT;
+          env:
+            USER_NAME: ${{ github.event.comment.user.login  }}
         - name: run_check_secrets
           id: run_check_secrets
           run: |
-            ${{ steps.check_secrets.outputs.result == 'True' }}
-            echo result=$OUTPUT >> $GITHUB_OUTPUT;
+            ${{ steps.check_secrets.outputs.result }}
             echo $OUTPUT;
         - name: Login
           uses: atlassian/gajira-login@master
