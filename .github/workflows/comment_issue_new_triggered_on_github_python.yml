@@ -33,8 +33,13 @@ jobs:
         - name: run_check_secrets
           id: run_check_secrets
           run: |
-            ${{ steps.check_secrets.outputs.result }}
-            echo $OUTPUT;
+            if [[ -z "${{steps.check_secrets }}"  ]]; then
+            echo "JIRA secret for ${{ github.event.comment.user.login }} is not set"
+            OUTPUT="${{secrets.JIRA_USER_EMAIL}}"
+            else
+              echo "JIRA secret for {USER_NAME} is set"
+              OUTPUT="${{steps.check_secrets}}"
+            fi
         - name: Login
           uses: atlassian/gajira-login@master
           env:
