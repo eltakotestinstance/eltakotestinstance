@@ -22,25 +22,25 @@ jobs:
           env:
             ISSUE_NUMBER: ${{ github.event.issue.number }}
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        - name: Check secrets
-          id: check_secrets
+        - name: case_secrets
+          id: case_secrets
           run: |
-            OUTPUT=$(python python/issue_generate_secrets_api_key_check.py);
-            echo result=$OUTPUT >> $GITHUB_OUTPUT;
-            echo $OUTPUT;
-          env:
-            USER_NAME: ${{ github.event.comment.user.login  }}
-            GITHUB_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
-        - name: run_check_secrets
-          id: run_check_secrets
-          run: |
-            if [[ -z "${{ steps.check_secrets.outputs.result }}"  ]]; then
-            echo "JIRA secret for ${{ github.event.comment.user.login }} is not set"
-            OUTPUT="${{secrets.JIRA_USER_EMAIL}}"
-            else
-              echo "JIRA secret for {USER_NAME} is set"
-              OUTPUT="${{steps.check_secrets.outputs.result}}"
-            fi
+            case "${{ github.event.comment.user.login }}" in
+            "saige-jochen-auticon")
+              echo "saige-jochen-auticon selected"
+              echo token=${{ secrets.SAIGE_JOCHEN_AUTICON_JIRA_TOKEN }} >> $GITHUB_OUTPUT
+              echo email=${{ secrets.SAIGE_JOCHEN_AUTICON_JIRA_EMAIL }} >> $GITHUB_OUTPUT
+              echo generic="false" >> $GITHUB_OUTPUT
+              ;;
+            
+            *)
+              echo "No option selected"
+              echo token=${{ secrets.JIRA_API_TOKEN }} >> $GITHUB_OUTPUT
+              echo email=${{ secrets.JIRA_USER_EMAIL }} >> $GITHUB_OUTPUT
+              echo generic="true" >> $GITHUB_OUTPUT
+              ;;
+            esac
+        
         - name: Login
           uses: atlassian/gajira-login@master
           env:
@@ -60,8 +60,9 @@ jobs:
             python python/issue_post_comment_to_Jira.py;
           env:
               JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
-              JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
-              JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+              JIRA_USER_EMAIL: ${{ steps.case_secrets.outputs.email }}
+              JIRA_API_TOKEN: ${{ steps.case_secrets.outputs.token }}
+              GENERIC: ${{ steps.case_secrets.outputs.generic }}
               ISSUE_KEY: ${{ steps.extract_issue_key.outputs.issue }}
               COMMENT_TEXT: ${{ github.event.comment.body }}
               USER_NAME: ${{ github.event.comment.user.login }}

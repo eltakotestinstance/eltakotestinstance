@@ -10,8 +10,12 @@ comment_text = os.getenv('COMMENT_TEXT')  # get the comment text
 jira_url = os.getenv('JIRA_BASE_URL')  # get the Jira base URL
 jira_email = os.getenv('JIRA_USER_EMAIL')  # get the Jira user email
 jira_token = os.getenv('JIRA_API_TOKEN')  # get the Jira API token
+generic = os.getenv('GENERIC')  # get the generic value
 
-comment = f"{user_name} posted :\n{comment_text}\n*Posted from GitHub*"
+if( generic == "true" ):
+    comment = f"{user_name} posted :\n{comment_text}\n*Posted from GitHub*"
+else:
+    comment = f"{comment_text}\n*Posted from GitHub*"
 
 # create the JSON data
 data = {
