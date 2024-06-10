@@ -1,0 +1,91 @@
+name: Compare milestone changes
+on:
+  milestone:
+    types: [edited]
+
+jobs:
+  compare_changes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Compare changes
+        uses: actions/github-script@v6 
+        id: compare_changes
+        with:
+            result-encoding: string
+            github-token: ${{ secrets.PERSONAL_TOKEN }}
+            script: |
+                const currentDescription = context.payload.milestone.description;
+                const sender = context.payload.sender.login;
+                console.log('The edit was made by', sender);
+                if (sender === 'github-actions') { // Ignore edits made by a workflow
+                  console.log('Skipping workflow because the edit was made by', sender);
+                  return "false"
+                }
+                if(currentDescription.includes('[skip]')) { //Ignore edits made from Jira and delete the [skip] tag
+                  github.rest.issues.updateMilestone({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    milestone_number: context.payload.milestone.number,
+                    title: context.payload.milestone.title,
+                    description: currentDescription.split('[skip]')[0]
+                  });  
+                  return "false"
+                }
+                const previousDescription = context.payload.changes.description.from;
+
+                // Split the descriptions at the dividing string
+                const currentDescriptionSplit = currentDescription.split('AUTOMATICALLY GENERATED CONTENT DO NOT EDIT/DELETE BEYOND THIS POINT')[0];
+                const previousDescriptionSplit = previousDescription.split('AUTOMATICALLY GENERATED CONTENT DO NOT EDIT/DELETE BEYOND THIS POINT')[0];
+                
+                // Compare the descriptions
+                if (currentDescriptionSplit.trim() != previousDescriptionSplit.trim()) { //compares the descriptions before the phrase: "AUTOMATICALLY GENERATED CONTENT DO NOT EDIT/DELETE BEYOND THIS POINT"
+                    console.log('The descriptions are different');
+                    return currentDescriptionSplit;
+                } 
+                console.log('The descriptions are the same');
+                return "false";
+    outputs: 
+      result: ${{ steps.compare_changes.outputs.result }}
+  change_description: 
+   runs-on: ubuntu-latest
+   needs: compare_changes
+   if: needs.compare_changes.outputs.result != 'false'  
+   steps: 
+    - name: login Jira
+      uses: atlassian/gajira-login@master
+      env:
+        JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+        JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+        JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+    - name: find issue key
+      uses: atlassian/gajira-find-issue-key@v3
+      with: 
+        string: ${{ github.event.milestone.description }}
+      id: find_issue_key  
+    - name: change description #uses the Jira api to change the description of the Epic
+      if: steps.find_issue_key.outputs.issue != '' 
+      run: |
+        JSON=$(jq -n \
+        --arg new_description "${{ needs.compare_changes.outputs.result }}" \
+        '{
+          "fields": {
+            "description": $new_description,
+            "duedate": due_date,
+            "customfield_10041" : 1
+          }
+        }')
+        RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" \
+          -u ${{ secrets.JIRA_USER_EMAIL }}:${{ secrets.JIRA_API_TOKEN }} \
+          -X PUT \
+          --data "$JSON" \
+          -H "Content-Type: application/json" \
+          ${{ secrets.JIRA_BASE_URL }}rest/api/2/issue/${{ steps.find_issue_key.outputs.issue }})
+        if [ $RESPONSE -ne 204 ]; then
+          echo "Error: HTTP status code $RESPONSE"
+          exit 1
+        fi
+    
+

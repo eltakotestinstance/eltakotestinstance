@@ -1,0 +1,50 @@
+name: Update milestone description
+
+on:
+    workflow_dispatch:
+        inputs:
+            issue_key:
+                description: 'Jira issue key'
+                required: true
+            author:
+                description: 'Author'
+                required: true
+            text:
+                description: 'Text'
+                required: true
+
+jobs:
+    update_description:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Update milestone description
+              uses: actions/github-script@v6 # Adds the Comment from Jira to the Description of the Milestone
+              env:
+                TEXT: ${{ github.event.inputs.text }}
+              with:
+                    github-token: ${{ secrets.PERSONAL_TOKEN }}
+                    script: |
+                        const issueKey = "${{ github.event.inputs.issue_key }}";
+                        const author = "${{ github.event.inputs.author }}";
+                        const {TEXT} = process.env;
+                        const timestamp = new Date().toISOString();
+
+                        const milestones = await github.rest.issues.listMilestones({
+                            owner: context.repo.owner,
+                            repo: context.repo.repo,
+                            state: 'open',
+                        });
+
+                        for (const milestone of milestones.data) {
+                            if (milestone.description.includes(issueKey)) {
+                                const newDescription = `${milestone.description}\n---\n### ${author}: \n${TEXT}\n(${timestamp})`;
+                                await github.rest.issues.updateMilestone({
+                                    owner: context.repo.owner,
+                                    repo: context.repo.repo,
+                                    milestone_number: milestone.number,
+                                    description: newDescription,
+                                });
+                                break;
+                            }
+                        }
+              

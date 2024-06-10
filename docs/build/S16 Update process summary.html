@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>S16 Update process summary &mdash; Eltako-test  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="S16 application stack update." href="S16%20application%20stack%20update.html" />
+    <link rel="prev" title="Orchestrating with .net aspire" href="README.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Eltako-test
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="README.html">Orchestrating with .net aspire</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">S16 Update process summary</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#update-models">Update Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#thoughts-on-the-update-process">Thoughts on the update process</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#different-update-channels">Different update channels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#distributed-updates">Distributed updates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#what-happens-if-an-update-reroll-fails">What happens if an update reroll fails</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20application%20stack%20update.html">S16 application stack update.</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20image%20update%20model.html">S16 image update model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20package%20update%20model.html">S16 package update model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="create_pdf_from_md_readme.html">create_pdf_from_md_readme.md</a></li>
+<li class="toctree-l1"><a class="reference internal" href="create_pdf_from_md_readme.html#excerpt-separator">excerpt_separator: <!--more--></a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Eltako-test</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">S16 Update process summary</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/eltakotestinstance/eltakotestinstance/blob/main/S16 Update process summary.md" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="s16-update-process-summary">
+<h1>S16 Update process summary<a class="headerlink" href="#s16-update-process-summary" title="Link to this heading"></a></h1>
+<section id="update-models">
+<h2>Update Models<a class="headerlink" href="#update-models" title="Link to this heading"></a></h2>
+<p>I created three update models.</p>
+<ul class="simple">
+<li><p><a href="S16 image update model.md">System update using a new image created by yocto.</a></p></li>
+<li><p><a href="S16 package update model.md">System update using a package manager.</a></p></li>
+<li><p><a href="S16 application stack update.md">Application stack update using nuget package manager.</a></p></li>
+</ul>
+</section>
+<section id="thoughts-on-the-update-process">
+<h2>Thoughts on the update process<a class="headerlink" href="#thoughts-on-the-update-process" title="Link to this heading"></a></h2>
+<p>When using a package manager we need to decide if we want to use packages provided by a distribution, or we want to create our own managed package repository. If we want to use packages by a distribution we need to consider using this distribution as base and not Yocto, because Yocto is more of an image based system. And i don’t know how that mingles with distribution packages. I think i read somewhere that with yocto you can use debian as a base instead of their own poky distribution. But more research is needed.
+Yocto has support for 3 types of package managers.</p>
+<ul class="simple">
+<li><p>‘package_deb’ for debian style deb files</p></li>
+<li><p>‘package_ipk’ for ipk files are used by opkg (a debian style embedded package manager)</p></li>
+<li><p>‘package_rpm’ for rpm style packages</p></li>
+</ul>
+</section>
+<section id="different-update-channels">
+<h2>Different update channels<a class="headerlink" href="#different-update-channels" title="Link to this heading"></a></h2>
+<p>We should consider creating different update channels for different purposes. For example a beta channel for testing new features, a normal channel, and perhaps different channels for certain products.</p>
+</section>
+<section id="distributed-updates">
+<h2>Distributed updates<a class="headerlink" href="#distributed-updates" title="Link to this heading"></a></h2>
+<p>We should consider using an uneven update distribution. For example first deploy the update for 1% of devices with dignostics enabled. Then when there are no problems go to 10% and so on. This way we can catch problems early and not deploy a broken update to all devices.</p>
+</section>
+<section id="what-happens-if-an-update-reroll-fails">
+<h2>What happens if an update reroll fails<a class="headerlink" href="#what-happens-if-an-update-reroll-fails" title="Link to this heading"></a></h2>
+<p>These modeled cases are not considering what to do if a reroll of an update fails. I didn’t include it because we need to decide
+if in this case we want to make a factory reset, or just inform the user.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="README.html" class="btn btn-neutral float-left" title="Orchestrating with .net aspire" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="S16%20application%20stack%20update.html" class="btn btn-neutral float-right" title="S16 application stack update." accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

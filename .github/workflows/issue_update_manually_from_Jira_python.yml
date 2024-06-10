@@ -1,0 +1,35 @@
+on:
+    workflow_dispatch:
+        inputs:
+            issue_key:
+                description: 'Jira issue key'
+                required: true
+            body:
+                description: 'Description of the issue'
+                required: false
+            title:
+                description: 'Title of the issue'
+                required: true
+
+jobs:
+    update_issue:
+        permissions: write-all
+        runs-on: ubuntu-latest
+        steps: 
+            
+            - uses: actions/checkout@v4
+            - uses: actions/setup-python@v4
+              with:
+                python-version: '3.9'
+                cache: 'pip' # caching pip dependencies
+            - name: Update Github Issue    
+              run: |
+                pip install -r python/requirements.txt;
+                python python/issue_update_from_Jira.py;
+              env:
+                ISSUE_KEY: ${{ github.event.inputs.issue_key }}
+                ISSUE_TITLE: ${{ github.event.inputs.title }}
+                ISSUE_BODY: ${{ github.event.inputs.body }}
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+         

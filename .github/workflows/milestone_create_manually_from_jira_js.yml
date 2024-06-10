@@ -1,0 +1,65 @@
+name: create an issue from Jira with a Milestone
+
+on:
+    workflow_dispatch:
+        inputs:
+            issue_key:
+                description: 'Jira issue key'
+                required: true
+            body:
+                description: 'Description of the issue'
+                required: false
+            title:
+                description: 'Title of the issue'
+                required: true
+            due_date:
+                description: 'Due date of the issue'
+                required: false
+jobs:
+    create_issue:
+        permissions: write-all
+        runs-on: ubuntu-latest
+        steps:
+            - name: Create milestone
+              uses: actions/github-script@v6
+              env:
+                BODY: ${{ github.event.inputs.body }}
+              id: create_issue
+              with:
+                github-token: ${{ secrets.PERSONAL_TOKEN }}
+                script: |
+                    
+                    const {BODY} = process.env;
+                    let description = '';
+                    let milestone;
+                    if( !BODY || BODY == '') {
+                        description = `\n---\nAUTOMATICALLY GENERATED CONTENT DO NOT EDIT/DELETE BEYOND THIS POINT\n[Issue in Jira](https://eltakotestinstance.atlassian.net/browse/${{ github.event.inputs.issue_key }})[skip]`
+                    }
+                    else {
+                        description = `${BODY}\n---\nAUTOMATICALLY GENERATED CONTENT DO NOT EDIT/DELETE BEYOND THIS POINT\n[Issue in Jira](https://eltakotestinstance.atlassian.net/browse/${{ github.event.inputs.issue_key }})[skip]`
+                    }
+                    if('${{ github.event.inputs.due_date }}' != '') {
+                        milestone = await github.rest.issues.createMilestone({
+                                owner: context.repo.owner,
+                                repo: context.repo.repo,
+                                title: '${{ github.event.inputs.title }}', 
+                                description: description,
+                                due_on: '${{ github.event.inputs.due_date }}'
+                        });    
+                    }
+                    else {
+                        milestone = await github.rest.issues.createMilestone({
+                                owner: context.repo.owner,
+                                repo: context.repo.repo,
+                                title: '${{ github.event.inputs.title }}', 
+                                description: description
+                        });    
+                    }
+                    
+
+                    if(milestone) {
+                        console.log('Milestone created');
+                    }
+                    else {
+                        throw new Error('Error: Milestone not created');
+                    }

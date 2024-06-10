@@ -1,0 +1,81 @@
+name: on_milestone_create_with_python
+on:
+  milestone:
+    types: [created]
+permissions: write-all
+jobs:
+  check_for_skipped :
+    runs-on: ubuntu-latest
+    name: checks if issue comes from Jira
+    steps:
+        - uses: actions/checkout@v4
+        - uses: actions/setup-python@v4
+          with:
+            python-version: '3.9'
+            cache: 'pip' # caching pip dependencies
+        - name: Check for [skiped] in description
+          id: compare_changes
+          run: |
+            pip install -r python/requirements.txt;
+            OUTPUT=$(python python/milestones_opened_skip_github.py);
+            echo result=$OUTPUT >> $GITHUB_OUTPUT;
+          env:
+            MILESTONE_NUMBER: ${{ github.event.milestone.number }}
+            GITHUB_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
+            GITHUB_REPOSITORY: ${{ github.repository }}
+        
+    outputs: 
+      result: ${{ steps.compare_changes.outputs.result }}
+  create_issue_on_jira:
+    runs-on: ubuntu-latest
+    name: opens Jira issue on Github milestone creation
+    needs: check_for_skipped
+    if: needs.check_for_skipped.outputs.result != 'false'  
+    steps:
+    - name: Git checkout
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: '0'
+    - name: Login
+      uses: atlassian/gajira-login@master
+      env:
+        JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+        JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+        JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+        
+    - name: Extract branch name
+      shell: bash
+      run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+      id: extract_branch
+
+    - name: Create
+      id: create
+      uses: atlassian/gajira-create@v3
+      with:
+        project: ES1
+        issuetype: Epic
+        summary: ${{ github.event.milestone.title }} 
+        description: "in ${{ github.repository }} branch ${{ steps.extract_branch.outputs.branch }}\nDescription: ${{ github.event.milestone.description }}"
+        fields: '{"duedate": "${{ github.event.milestone.due_on }}",
+                  "customfield_10041" : 1}' #customfield fromGithub in Jira
+
+            
+    - name: Log created issue
+      run: echo "Epic ${{ steps.create.outputs.issue }} was created"
+
+        
+    
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+        cache: 'pip' # caching pip dependencies
+    - name: Update milestone description    
+      run: |
+            pip install -r python/requirements.txt;
+            python python/milestones_opened_comment_github.py;
+      env:
+        MILESTONE_NUMBER: ${{ github.event.milestone.number }}
+        JIRA_ISSUE: ${{ steps.create.outputs.issue }}
+        GITHUB_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
+      

@@ -1,0 +1,72 @@
+name: create an issue from Jira with a Milestone
+
+on:
+    workflow_dispatch:
+        inputs:
+            issue_key:
+                description: 'Jira issue key'
+                required: true
+            body:
+                description: 'Description of the issue'
+                required: false
+            title:
+                description: 'Title of the issue'
+                required: true
+jobs:
+    create_issue:
+        permissions: write-all
+        runs-on: ubuntu-latest
+        steps:
+            - name: Create issue with milestone
+              uses: actions/github-script@v6
+              env:
+                BODY: ${{ github.event.inputs.body }}
+              id: create_issue
+              with:
+                result-encoding: string
+                github-token: ${{ secrets.GITHUB_TOKEN }}
+                script: |
+                    let issue;
+                    const {BODY} = process.env;
+                    if( !BODY || BODY == '') {
+                        issue = await github.rest.issues.create({
+                                owner: context.repo.owner,
+                                repo: context.repo.repo,
+                                title: '${{ github.event.inputs.title }}', 
+                                body: "*Posted from Jira*"
+                        });    
+                    }
+                    else {
+                        issue = await github.rest.issues.create({
+                                owner: context.repo.owner,
+                                repo: context.repo.repo,
+                                title: '${{ github.event.inputs.title }}', 
+                                body: `${BODY}\n*Posted from Jira*`,
+                        });    
+                    }
+                    if(issue) {
+                        console.log('Issue created');
+                        return issue.data.number;
+                    }
+                    else {
+                        throw new Error('Error: Issue not created');
+                        return "";
+                    }
+            - name: Create commment
+              uses: actions/github-script@v6
+              if: steps.create_issue.outputs.result != ''
+              with:
+                github-token: ${{ secrets.GITHUB_TOKEN }}
+                script: |
+                    const commentBody = '${{ github.event.inputs.issue_key }}'; 
+                    await github.rest.issues.createComment({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        issue_number: ${{steps.create_issue.outputs.result}},
+                        body: commentBody,
+                    });
+                    
+
+                    
+                    
+                    

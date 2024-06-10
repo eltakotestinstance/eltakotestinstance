@@ -1,0 +1,71 @@
+on:
+    issue_comment:
+      types: [created]
+
+jobs:
+    new_comment:
+      permissions: write-all
+      if: ${{ !contains(github.event.comment.body, '*Posted from Jira*') && github.event.comment.user.login != 'github-actions[bot]'}}
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v4
+        - uses: actions/setup-python@v4
+          with:
+            python-version: '3.9'
+            cache: 'pip' # caching pip dependencies
+        - name: join all issue comments
+          id: join_comments
+          run: |
+            pip install -r python/requirements.txt;
+            OUTPUT=$(python python/issue_join_comments.py);
+            echo result=$OUTPUT >> $GITHUB_OUTPUT;
+          env:
+            ISSUE_NUMBER: ${{ github.event.issue.number }}
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        - name: case_secrets
+          id: case_secrets
+          run: |
+            case "${{ github.event.comment.user.login }}" in
+            "saige-jochen-auticon")
+              echo "saige-jochen-auticon selected"
+              echo token=${{ secrets.SAIGE_JOCHEN_AUTICON_JIRA_TOKEN }} >> $GITHUB_OUTPUT
+              echo email=${{ secrets.SAIGE_JOCHEN_AUTICON_JIRA_EMAIL }} >> $GITHUB_OUTPUT
+              echo generic="false" >> $GITHUB_OUTPUT
+              ;;
+            
+            *)
+              echo "No option selected"
+              echo token=${{ secrets.JIRA_API_TOKEN }} >> $GITHUB_OUTPUT
+              echo email=${{ secrets.JIRA_USER_EMAIL }} >> $GITHUB_OUTPUT
+              echo generic="true" >> $GITHUB_OUTPUT
+              ;;
+            esac
+        
+        - name: Login
+          uses: atlassian/gajira-login@master
+          env:
+            JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+            JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+            JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+
+        - name: Find in comments
+          id: extract_issue_key
+          uses: atlassian/gajira-find-issue-key@v3
+          with:
+            string: ${{ steps.join_comments.outputs.result }}
+        
+        - name: change description in Jira
+          if: ${{ steps.extract_issue_key.outputs.issue != '' }}
+          run: | 
+            python python/issue_post_comment_to_Jira.py;
+          env:
+              JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+              JIRA_USER_EMAIL: ${{ steps.case_secrets.outputs.email }}
+              JIRA_API_TOKEN: ${{ steps.case_secrets.outputs.token }}
+              GENERIC: ${{ steps.case_secrets.outputs.generic }}
+              ISSUE_KEY: ${{ steps.extract_issue_key.outputs.issue }}
+              COMMENT_TEXT: ${{ github.event.comment.body }}
+              USER_NAME: ${{ github.event.comment.user.login }}
+              
+              
+    

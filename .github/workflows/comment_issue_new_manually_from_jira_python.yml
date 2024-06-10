@@ -1,0 +1,36 @@
+name: new Comment from Jira
+
+on:
+    workflow_dispatch:
+        inputs:
+            issue_key:
+                description: 'Jira issue key'
+                required: true
+            author:
+                description: 'Author'
+                required: true
+            text:
+                description: 'Text'
+                required: true
+
+jobs:
+    new_comment:
+        permissions: write-all
+        runs-on: ubuntu-latest
+        steps:
+            
+            - uses: actions/checkout@v4
+            - uses: actions/setup-python@v4
+              with:
+                  python-version: '3.9'
+                  cache: 'pip' # caching pip dependencies
+            - name: Post comment
+              run: |
+                  pip install -r python/requirements.txt;
+                  python python/issue_new_comment.py;
+                  
+              env:
+                  ISSUE_KEY: ${{ github.event.inputs.issue_key }}
+                  AUTHOR: ${{ github.event.inputs.author }}
+                  TEXT: ${{ github.event.inputs.text }}
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

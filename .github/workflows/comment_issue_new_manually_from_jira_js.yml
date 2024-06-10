@@ -1,0 +1,67 @@
+name: new Comment from Jira
+
+on:
+    workflow_dispatch:
+        inputs:
+            issue_key:
+                description: 'Jira issue key'
+                required: true
+            author:
+                description: 'Author'
+                required: true
+            text:
+                description: 'Text'
+                required: true
+
+jobs:
+    new_comment:
+        permissions: write-all
+        runs-on: ubuntu-latest
+        steps:
+            - name: Post comment
+              uses: actions/github-script@v6 # searches for the issue key and posts the comment under the issue
+              env:
+               TEXT:  ${{ github.event.inputs.text }}
+              with:
+                github-token: ${{ secrets.GITHUB_TOKEN }} 
+                script: |
+                  const issueKey = "${{ github.event.inputs.issue_key }}";
+                  const owner = context.repo.owner;
+                  const repo = context.repo.repo;
+                  const {TEXT} = process.env; 
+                  const author = "${{ github.event.inputs.author }}";
+                  const commentFinal = `*Comment from ${author}*\n\n${TEXT}\n\n*Posted from Jira*`;
+
+                  const issues = await github.rest.issues.listForRepo({
+                    owner,
+                    repo,
+                    state: 'all',
+                  });
+
+                  let issueNumber;
+
+                  for (const issue of issues.data) {
+                    const comments = await github.rest.issues.listComments({
+                      owner,
+                      repo,
+                      issue_number: issue.number,
+                    });
+
+                    const commentWithKey = comments.data.find(comment => comment.body.includes(issueKey));
+
+                    if (commentWithKey) {
+                      issueNumber = issue.number;
+                      break;
+                    }
+                  }
+
+                  if (issueNumber) {
+                    await github.rest.issues.createComment({
+                      owner,
+                      repo,
+                      issue_number: issueNumber,
+                      body: commentFinal
+                    });
+                  } else {
+                    console.log(`No issue found with key: ${issueKey}`);
+                  }

@@ -1,0 +1,119 @@
+on:
+    pull_request:
+      types: [edited, milestoned]
+  
+jobs:
+    delete_posted_from_Jira: 
+        permissions: write-all
+        runs-on: ubuntu-latest #checks if [skip] is in the description and deletes it
+        if: ${{ contains(github.event.pull_request.body, '[skip]') }} 
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-python@v4
+              with:
+                python-version: '3.9'
+                cache: 'pip' # caching pip dependencies
+            - name: delete [skip] from Jira    
+              run: |
+                pip install -r python/requirements.txt;
+                python python/issue_delete_skip.py;
+              env:
+                ISSUE_NUMBER: ${{ github.event.pull_request.number }}
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                    
+    change_in_jira_without_parent:
+        permissions: write-all
+        runs-on: ubuntu-latest
+        if: ${{ github.event.pull_request.milestone == null && !contains(github.event.pull_request.body, '[skip]') }}
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - uses: actions/setup-python@v4
+              with:
+                python-version: '3.9'
+                cache: 'pip' # caching pip dependencies
+            - name: join all issue comments
+              id: join_comments
+              run: |
+                pip install -r python/requirements.txt;
+                OUTPUT=$(python python/issue_join_comments.py);
+                echo result=$OUTPUT >> $GITHUB_OUTPUT;
+              env:
+                ISSUE_NUMBER: ${{ github.event.pull_request.number }}
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            - name: Login
+              uses: atlassian/gajira-login@master
+              env:
+                JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+                JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+                JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+            - name: find issue key
+              uses: atlassian/gajira-find-issue-key@v3
+              id: find_issue_key  
+              with: 
+                string: ${{ steps.join_comments.outputs.result }}
+            
+            - name: change description in Jira
+              if: ${{ steps.find_issue_key.outputs.issue != '' }}
+              run: | 
+                  python python/issue_post_changes_to_jira.py.py;
+              env:
+                  JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+                  JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+                  JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+                  ISSUE_KEY: ${{ steps.find_issue_key.outputs.issue }}
+                  NEW_DESCRIPTION: ${{ github.event.pull_request.body }}
+                  NEW_SUMMARY: ${{ github.event.pull_request.title }}
+                  CUSTOM_FIELD: "customfield_10046"
+    change_in_jira_with_parent:
+        permissions: write-all
+        runs-on: ubuntu-latest
+        if: ${{ github.event.pull_request.milestone != null && !contains(github.event.pull_request.body, '[skip]') }}
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-python@v4
+              with:
+                python-version: '3.9'
+                cache: 'pip' # caching pip dependencies
+            - name: join all issue comments
+              id: join_comments
+              run: |
+                    pip install -r python/requirements.txt;
+                    OUTPUT=$(python python/issue_join_comments.py);
+                    echo result=$OUTPUT >> $GITHUB_OUTPUT;
+              env:
+                ISSUE_NUMBER: ${{ github.event.pull_request.number }}
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Login
+              uses: atlassian/gajira-login@master
+              env:
+                JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+                JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+                JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+            - name: find issue key
+              uses: atlassian/gajira-find-issue-key@v3
+              id: find_issue_key  
+              with: 
+                string: ${{ steps.join_comments.outputs.result }}
+            - name: Find in Epic description
+              id: find_epic
+              uses: atlassian/gajira-find-issue-key@v3
+              with:
+                string: ${{ github.event.pull_request.milestone.description }}
+
+            - name: change description in Jira
+              if: ${{ steps.find_issue_key.outputs.issue != '' && steps.find_epic.outputs.issue != ''}}
+              run: | 
+                python python/issue_post_changes_to_jira.py.py;
+              env:
+                JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+                JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+                JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+                ISSUE_KEY: ${{ steps.find_issue_key.outputs.issue }}
+                NEW_DESCRIPTION: ${{ github.event.pull_request.body }}
+                NEW_SUMMARY: ${{ github.event.pull_request.title }}
+                EPIC_KEY: ${{ steps.find_epic.outputs.issue }}
+                CUSTOM_FIELD: "customfield_10046"
+                

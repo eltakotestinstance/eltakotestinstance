@@ -1,0 +1,83 @@
+name: on_milestone_create
+on:
+  milestone:
+    types: [created]
+permissions: write-all
+jobs:
+  check_for_skipped :
+    runs-on: ubuntu-latest
+    name: checks if issue comes from Jira
+    steps:
+      - name: Check for [skiped] in description
+        uses: actions/github-script@v6
+        id: compare_changes
+        with:
+            result-encoding: string
+            github-token: ${{ secrets.PERSONAL_TOKEN }} #needs a pesonal token for changing the milestone description
+            script: |
+                const currentDescription = context.payload.milestone.description;
+                if(currentDescription.includes('[skip]')) {
+                  github.rest.issues.updateMilestone({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    milestone_number: context.payload.milestone.number,
+                    title: context.payload.milestone.title,
+                    description: currentDescription.split('[skip]')[0]
+                  });  
+                  return "false"
+                }
+                return "true";
+    outputs: 
+      result: ${{ steps.compare_changes.outputs.result }}
+  create_issue_on_jira:
+    runs-on: ubuntu-latest
+    name: opens Jira issue on Github milestone creation
+    needs: check_for_skipped
+    if: needs.check_for_skipped.outputs.result != 'false'  
+    steps:
+    - name: Git checkout
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: '0'
+    - name: Login
+      uses: atlassian/gajira-login@master
+      env:
+        JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+        JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+        JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+        
+    - name: Extract branch name
+      shell: bash
+      run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+      id: extract_branch
+
+    - name: Create
+      id: create
+      uses: atlassian/gajira-create@v3
+      with:
+        project: ES1
+        issuetype: Epic
+        summary: ${{ github.event.milestone.title }} 
+        description: "in ${{ github.repository }} branch ${{ steps.extract_branch.outputs.branch }}\nDescription: ${{ github.event.milestone.description }}"
+        fields: '{"duedate": "${{ github.event.milestone.due_on }}",
+                  "customfield_10041" : 1}' #customfield fromGithub in Jira
+
+            
+    - name: Log created issue
+      run: echo "Epic ${{ steps.create.outputs.issue }} was created"
+
+        
+    - name: Update milestone description
+      uses: actions/github-script@v6 #updates the milestone description with the Jira issue link and a warning not to edit/delete 
+      with:
+          github-token: ${{ secrets.PERSONAL_TOKEN }}
+          script: |       
+                const newDescription = `${context.payload.milestone.description}\n---\nAUTOMATICALLY GENERATED CONTENT DO NOT EDIT/DELETE BEYOND THIS POINT\n[Issue in Jira](https://eltakotestinstance.atlassian.net/browse/${{ steps.create.outputs.issue }})`;
+                await github.rest.issues.updateMilestone({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    milestone_number: context.payload.milestone.number,
+                    description: newDescription,
+                });
+      
+

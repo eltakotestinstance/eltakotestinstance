@@ -1,0 +1,95 @@
+on:
+    issues:
+      types: [opened]
+  
+jobs:
+    create_issue_without_parent:
+      permissions: write-all
+      runs-on: ubuntu-latest
+      if:  ${{ github.event.issue.milestone == null && !contains(github.event.issue.body, '*Posted from Jira*') }}
+      steps:
+      - name: Extract branch name
+        shell: bash
+        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+        id: extract_branch 
+      - name: Login
+        uses: atlassian/gajira-login@master
+        env:
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+          JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+      - name: Create
+        id: create
+        uses: atlassian/gajira-create@v3
+        with:
+          project: ES1 #the project key on the Jira side
+          issuetype: issue #i created the issue type "issue" on the Jira side
+          summary:  ${{ github.event.issue.title }} 
+          description: "New Issue from ${{ github.actor}} in ${{ github.repository }} branch ${{ steps.extract_branch.outputs.branch }}\nDescription:\n${{ github.event.issue.body }}"
+          fields: '{"customfield_10045" : 1}' #the custom field is issueFromGithub on the Jira side, you need to create it and get the id https://confluence.atlassian.com/jirakb/how-to-find-any-custom-field-s-ids-744522503.html
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+           python-version: '3.9'
+           cache: 'pip' # caching pip dependencies
+      - name: post comment with issue number    
+        run: |
+            pip install -r python/requirements.txt;
+            python python/issue_post_comment.py;
+        env:
+            ISSUE_NUMBER: ${{ github.event.issue.number }}
+            JIRA_ISSUE: ${{ steps.create.outputs.issue }}
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+               
+      - name: Log created issue
+        run: echo "Issue ${{ steps.create.outputs.issue }} without parent was created"
+  
+    create_issue_with_parent:
+      permissions: write-all
+      runs-on: ubuntu-latest
+      if:  ${{ github.event.issue.milestone != null && !contains(github.event.issue.body, '*Posted from Jira*') }} 
+      steps:
+      - name: Extract branch name
+        shell: bash
+        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+        id: extract_branch   
+      - name: Login
+        uses: atlassian/gajira-login@master
+        env:
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+          JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+      - name: Find in description
+        id: find
+        uses: atlassian/gajira-find-issue-key@v3
+        with:
+          string: ${{ github.event.issue.milestone.description }}
+        
+      - name: Create
+        id: create
+        uses: atlassian/gajira-create@v3
+        with:
+          project: ES1 #the project key on the Jira side
+          issuetype: issue #i created the issue type "issue" on the Jira side
+          summary:  named ${{ github.event.issue.title }} 
+          description: "New Issue from ${{ github.actor}} in ${{ github.repository }} branch ${{ steps.extract_branch.outputs.branch }}\nDescription:\n${{ github.event.issue.body }}"
+          fields: '{"parent":{"key":"${{ steps.find.outputs.issue }}"},
+                    "customfield_10045" : 1}' #the custom field is issueFromGithub on the Jira side, you need to create it and get the id https://confluence.atlassian.com/jirakb/how-to-find-any-custom-field-s-ids-744522503.html
+          
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+            python-version: '3.9'
+            cache: 'pip' # caching pip dependencies
+      - name: post comment with issue number
+        run: |
+            pip install -r python/requirements.txt;
+            python python/issue_post_comment.py;
+        env:
+            ISSUE_NUMBER: ${{ github.event.issue.number }}
+            JIRA_ISSUE: ${{ steps.create.outputs.issue }}
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+               
+      - name: Log created issue
+        run: echo "Issue ${{ steps.create.outputs.issue }} with parent ${{ steps.find.outputs.issue }} was created"
+  

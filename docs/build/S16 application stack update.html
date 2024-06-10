@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>S16 application stack update. &mdash; Eltako-test  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="S16 image update model" href="S16%20image%20update%20model.html" />
+    <link rel="prev" title="S16 Update process summary" href="S16%20Update%20process%20summary.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Eltako-test
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="README.html">Orchestrating with .net aspire</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20Update%20process%20summary.html">S16 Update process summary</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">S16 application stack update.</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20image%20update%20model.html">S16 image update model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="S16%20package%20update%20model.html">S16 package update model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="create_pdf_from_md_readme.html">create_pdf_from_md_readme.md</a></li>
+<li class="toctree-l1"><a class="reference internal" href="create_pdf_from_md_readme.html#excerpt-separator">excerpt_separator: <!--more--></a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Eltako-test</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">S16 application stack update.</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/eltakotestinstance/eltakotestinstance/blob/main/S16 application stack update.md" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="s16-application-stack-update">
+<h1>S16 application stack update.<a class="headerlink" href="#s16-application-stack-update" title="Link to this heading"></a></h1>
+<div class="mermaid">
+            flowchart TD
+   nSystem([normal system]) 
+   nSystem--&gt;connect[&quot;connect to 
+   the package 
+   managment server&quot;]
+   connect--&gt;successConnect{successful}
+   successConnect--&gt;|yes|checkSSL[&quot;check ssl certificate
+   of connection&quot;]
+   successConnect--&gt;|no|waitConnect[wait for x seconds]:::wait
+   waitConnect--&gt;maxTries{&quot;max number of
+   tries reached&quot;}
+   maxTries--&gt;|no|connect
+   maxTries--&gt;|yes|errorLog([&quot;error log/
+   message to app&quot;]):::failed
+   errorLog--&gt;consent{&quot;has user consented
+   for diagnostic data&quot;}:::failed
+   consent--&gt;sendDiagData([&quot;send dignostic
+   data&quot;]):::failed
+   checkSSL--&gt;validSSL{valid}
+   validSSL--&gt;|yes|authenticate[authenticate]
+   validSSL--&gt; |no|errorLog
+   authenticate--&gt;authSuccess{successful}
+   authSuccess--&gt;|yes|updateRepo[(&quot;update Nuget 
+   package repository&quot;)]
+   authSuccess--&gt;|no|errorLog
+  updateRepo--&gt;successRepo{successful}
+  successRepo--&gt;|yes|newPackages{&quot;new Packages
+  availible&quot;}
+  newPackages--&gt;|no|waitForPackages[&quot;wait for 
+  x hours/days&quot;]:::wait
+  waitForPackages--&gt;connect
+  newPackages--&gt;|yes|notify[&quot;notify the user
+  that updates
+  are availible&quot;]
+  notify--&gt;prioUpdate{priority Update}
+  prioUpdate--&gt;|no|waitForUser[&quot;wait for user to
+  initiate update&quot;]:::wait
+  waitForUser--&gt;updatePackages[(update packages)]
+  prioUpdate--&gt;|yes|updatePackages
+  updatePackages--&gt;successPackages{successful}
+  successPackages--&gt;|yes|needMigration{need migration}
+  successPackages--&gt;|no|revertUpdates[revert updates]:::failed
+  revertUpdates--&gt;errorLog
+  needMigration--&gt;|yes|backup[&quot;backup 
+  migration data&quot;]
+  needMigration--&gt;|no|reload
+  backup--&gt;pUMigration[&quot;post update
+  migration(db)&quot;]
+  pUMigration--&gt;successMigration{successful}
+  successMigration--&gt;|yes|reload[&quot;reload modules/
+  services/plugins&quot;]
+  successMigration--&gt;|no|revertMigration[&quot;revert migration
+  data&quot;]:::failed
+  revertMigration--&gt;revertUpdates
+  reload--&gt;successReload{successful}
+  successReload--&gt;|no|migrationMade{&quot;migration
+  cahnges made&quot;}
+  migrationMade--&gt;|yes|revertMigration
+  migrationMade--&gt;|no|revertUpdates
+  successReload--&gt;|yes|needAppRestart{&quot;application stack
+  need restarting&quot;}
+  needAppRestart--&gt;|no|endSuccess([&quot;log success/
+  message to app&quot;]):::success
+  needAppRestart--&gt;|yes|appRestart[&quot;restart application
+  stack&quot;]
+  appRestart--&gt;successRestart{successful}
+  successRestart--&gt;|yes|endSuccess
+  successRestart--&gt;|no|migrationMade
+  classDef success fill:#006400
+  classDef failed fill:#cd0000
+  classDef wait fill:#ffd700,color:#000000
+
+        </div></section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="S16%20Update%20process%20summary.html" class="btn btn-neutral float-left" title="S16 Update process summary" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="S16%20image%20update%20model.html" class="btn btn-neutral float-right" title="S16 image update model" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

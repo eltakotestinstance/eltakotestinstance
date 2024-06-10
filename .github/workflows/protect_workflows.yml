@@ -1,0 +1,32 @@
+name: protect_workflows
+on: 
+  push:
+    paths:
+      - '.github/workflows/**'
+      - 'python/protected_*'
+
+jobs:
+  check_modified_files_and_revert:
+    runs-on: ubuntu-latest
+    permissions: write-all
+    if: github.event.pusher.username != 'allowed_user'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: check commits
+        run: |
+            pip install -r python/requirements.txt;
+            python python/protected_check_commits_and_revert.py;
+        env:
+            PERSONAL_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
+            BEFORE_HASH: ${{ github.event.before }}
+            BRANCH: ${{ github.ref }}
+    env:
+      GH_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
+               
+        
+    

@@ -1,0 +1,192 @@
+on:
+    issues:
+      types: [edited, milestoned] #Be aware: milestoned will be triggered by issues and Pull Requests
+  
+jobs:
+    delete_posted_from_Jira:
+        permissions: write-all
+        runs-on: ubuntu-latest #checks if [skip] is in the description and deletes it
+        if: ${{ contains(github.event.issue.body, '[skip]') &&  github.event.issue.pull_request == null }}
+        steps:
+            - name: delete posted from Jira
+              uses: actions/github-script@v6
+              with:
+                script: |
+                    const currentDescription = context.payload.issue.body;
+                    if(currentDescription.includes('[skip]')) {
+                        github.rest.issues.update({
+                            owner: context.repo.owner,
+                            repo: context.repo.repo,
+                            issue_number: context.issue.number;,
+                            title: context.issue.title,
+                            description: currentDescription.split('[skip]')[0]
+                        });
+                    }  
+                    
+    change_in_jira_without_parent:
+        permissions: write-all
+        runs-on: ubuntu-latest
+        if: ${{ github.event.issue.milestone == null && !contains(github.event.issue.body, '[skip]')  &&  github.event.issue.pull_request == null}}
+        steps:
+            - name: join all issue comments
+              id: join_comments
+              uses: actions/github-script@v6 #joins all comments into one string for the find issue key action
+              with:
+                result-encoding: string
+                github-token: ${{ secrets.GITHUB_TOKEN }}
+                script: |
+                    const owner = context.repo.owner;
+                    const repo = context.repo.repo;
+                    const issue_number = context.issue.number;
+                    const comments = await github.rest.issues.listComments({
+                        owner,
+                        repo,
+                        issue_number: issue_number,
+                    });
+                    const result = comments.data.map(comment => comment.body).join('\n');
+                    
+                    return result;
+            - name: Login
+              uses: atlassian/gajira-login@master
+              env:
+                JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+                JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+                JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+            - name: find issue key
+              uses: atlassian/gajira-find-issue-key@v3
+              id: find_issue_key  
+              with: 
+                string: ${{ steps.join_comments.outputs.result }}
+            
+            - name: change description in Jira
+              uses: actions/github-script@v6 #uses the Jira API to change the description and summary of the issue
+              with:
+                github-token: ${{ secrets.GITHUB_TOKEN }}
+                script: |
+                    const issueKey = `${{ steps.find_issue_key.outputs.issue }}`; // get issue key from previous step
+                    const jiraBaseURL = `${{ secrets.JIRA_BASE_URL }}`; // replace with your Jira instance URL
+                    const jiraEmail = `${{ secrets.JIRA_USER_EMAIL }}`; // get Jira email from secrets
+                    const jiraToken = `${{ secrets.JIRA_API_TOKEN }}`; // get Jira API token from secrets
+                    const newSummary = `${{ github.event.issue.title }}`; // replace with your new summary
+                    const newDescription = {
+                        version: 1,
+                        type: 'doc',
+                        content: [
+                        {
+                            type: 'paragraph',
+                            content: [
+                            {
+                                type: 'text',
+                                text: `${{ github.event.issue.body }}\n\n*Posted from Github*`,
+                            },
+                            ],
+                        },
+                        ],
+                    };
+                    const response = await fetch(`${jiraBaseURL}/rest/api/3/issue/${issueKey}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Authorization': `Basic ${Buffer.from(jiraEmail + ':' + jiraToken).toString('base64')}`,
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            fields: {
+                                summary: newSummary,
+                                description: newDescription,
+                                customfield_10045: 1,
+                            },
+                        }),
+                    });
+                    console.log(await response.text());
+                    if (!response.ok) {
+                        throw new Error(`Failed to update issue on Jira: ${response.statusText}`);
+                    }
+
+    change_in_jira_with_parent:
+        permissions: write-all
+        runs-on: ubuntu-latest
+        if: ${{ github.event.issue.milestone != null && !contains(github.event.issue.body, '[skip]') &&  github.event.issue.pull_request == null }}
+        steps:
+            - name: join all issue comments
+              id: join_comments
+              uses: actions/github-script@v6
+              with:
+                result-encoding: string
+                github-token: ${{ secrets.GITHUB_TOKEN }}
+                script: |
+                    const owner = context.repo.owner;
+                    const repo = context.repo.repo;
+                    const issue_number = context.issue.number;
+                    const comments = await github.rest.issues.listComments({
+                        owner,
+                        repo,
+                        issue_number: issue_number,
+                    });
+                    const result = comments.data.map(comment => comment.body).join('\n');
+                                    
+                    return result;
+            - name: Login
+              uses: atlassian/gajira-login@master
+              env:
+                JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+                JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+                JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+            - name: find issue key
+              uses: atlassian/gajira-find-issue-key@v3
+              id: find_issue_key  
+              with: 
+                string: ${{ steps.join_comments.outputs.result }}
+            - name: Find in Epic description
+              id: find_epic
+              uses: atlassian/gajira-find-issue-key@v3
+              with:
+                string: ${{ github.event.issue.milestone.description }}
+                                
+            - name: change description in Jira
+              uses: actions/github-script@v6
+              with:
+                github-token: ${{ secrets.GITHUB_TOKEN }}
+                script: |
+                    const issueKey = `${{ steps.find_issue_key.outputs.issue }}`; // get issue key from previous step
+                    const jiraBaseURL = `${{ secrets.JIRA_BASE_URL }}`; // replace with your Jira instance URL
+                    const jiraEmail = `${{ secrets.JIRA_USER_EMAIL }}`; // get Jira email from secrets
+                    const jiraToken = `${{ secrets.JIRA_API_TOKEN }}`; // get Jira API token from secrets
+                    const newSummary = `${{ github.event.issue.title }}`; // replace with your new summary
+                    const newDescription = {
+                        version: 1,
+                        type: 'doc',
+                        content: [
+                            {
+                                type: 'paragraph',
+                                content: [
+                                    {
+                                        type: 'text',
+                                        text: `${{ github.event.issue.body }}\n\n*Posted from Github*`,
+                                    },
+                                ],
+                            },
+                        ],
+                    };
+                    const response = await fetch(`${jiraBaseURL}/rest/api/3/issue/${issueKey}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Authorization': `Basic ${Buffer.from(jiraEmail + ':' + jiraToken).toString('base64')}`,
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            fields: {
+                                summary: newSummary,
+                                description: newDescription,
+                                customfield_10045: 1,
+                                "parent":{"key":"${{ steps.find_epic.outputs.issue }}"}
+                            },
+                        }),
+                    });
+                    console.log(await response.text());
+                    if (!response.ok) {
+                        throw new Error(`Failed to update issue on Jira: ${response.statusText}`);
+                    }
+                
+                
